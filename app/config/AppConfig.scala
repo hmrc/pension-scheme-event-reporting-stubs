@@ -1,4 +1,4 @@
-package uk.gov.hmrc.pensionschemeeventreportingstubs.config
+package config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration

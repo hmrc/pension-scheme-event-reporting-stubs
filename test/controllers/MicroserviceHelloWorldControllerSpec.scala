@@ -1,4 +1,4 @@
-package uk.gov.hmrc.pensionschemeeventreportingstubs.controllers
+package controllers
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
