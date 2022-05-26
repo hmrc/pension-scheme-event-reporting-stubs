@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package config
+package utils
 
-import com.google.inject.AbstractModule
+import base.SpecBase
 
-class Module extends AbstractModule {
+import java.io.File
 
-  override def configure(): Unit = {
+class JsonUtilsSpec extends SpecBase {
+  private val jsonUtils = new JsonUtils(environment)
 
-    bind(classOf[AppConfig]).asEagerSingleton()
+  "readJsonFromFile" must {
+    "with return value when file found" in {
+
+      val path = new File("./conf/resources/data/validEventReportRequest.json").getPath
+
+     val result= jsonUtils.readJsonFromFile(path)
+      assert(result.toString().nonEmpty)
+
+    }
   }
 }

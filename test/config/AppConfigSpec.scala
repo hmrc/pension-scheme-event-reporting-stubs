@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package config
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+class AppConfigSpec extends PlaySpec
+  with Matchers
+  with GuiceOneAppPerSuite {
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject()(cc: ControllerComponents)
-    extends BackendController(cc) {
+  implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
-  def hello(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Hello world"))
+  "AppConfig" should {
+
+    "check app Name" in {
+      appConfig.appName must be("pension-scheme-event-reporting-stubs")
+    }
+
   }
 }
