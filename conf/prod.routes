@@ -1,5 +1,6 @@
-# Add all the application routes to the app.routes file
-->         /pension-scheme-event-reporting-stubs              app.Routes
+
 ->         /                          health.Routes
 
-GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
+GET        /admin/metrics                                   com.kenshoo.play.metrics.MetricsController.metrics
+
+POST       /pension-online/event-reports/pods/:pstr         controllers.EventReportController.compileEventReportSummary(pstr: String)

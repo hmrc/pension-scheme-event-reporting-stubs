@@ -10,6 +10,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     majorVersion                     := 0,
     scalaVersion                     := "2.12.15",
+    PlayKeys.playDefaultPort := 8217,
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
     // ***************
     // Use the silencer plugin to suppress warnings
@@ -25,3 +26,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(
+    Test / parallelExecution := false,
+    Test / fork  := true,
+    Test / javaOptions  += "-Dconfig.file=conf/test.application.conf"
+  )
