@@ -17,6 +17,7 @@
 package utils
 
 import base.SpecBase
+import uk.gov.hmrc.http.NotFoundException
 
 import java.io.File
 
@@ -28,9 +29,16 @@ class JsonUtilsSpec extends SpecBase {
 
       val path = new File("./conf/resources/data/validEventReportRequest.json").getPath
 
-     val result= jsonUtils.readJsonFromFile(path)
+      val result = jsonUtils.readJsonFromFile(path)
       assert(result.toString().nonEmpty)
 
+    }
+
+    "with throw file found exception " in {
+      val path = new File("./conf/notFound/resources/data/validEventReportRequest.json").getPath
+      intercept[NotFoundException] {
+        jsonUtils.readJsonFromFile(path)
+      }
     }
   }
 }
