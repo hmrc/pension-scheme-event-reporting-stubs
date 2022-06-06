@@ -36,5 +36,13 @@ class EventReportController @Inject()(
         case _ => Future.successful(BadRequest(invalidPayload))
       }
   }
+
+  def compileEventOneReport(pstr: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      request.body.asJson match {
+        case Some(_) => Future.successful(Ok(createCompileEventOneReportSuccessResponse))
+        case _ => Future.successful(BadRequest(invalidPayload))
+      }
+  }
 }
 
