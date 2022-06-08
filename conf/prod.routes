@@ -1,6 +1,9 @@
 
-->         /                          health.Routes
+->          /                                                                        health.Routes
 
-GET        /admin/metrics                                   com.kenshoo.play.metrics.MetricsController.metrics
+GET         /admin/metrics                                                           com.kenshoo.play.metrics.MetricsController.metrics
+GET         /pension-online/event-reports/pods/:pstr                                 controllers.EventReportController.compileEventReportSummary(pstr: String)
+GET         /pension-online/reports/overview/pods/:pstr/ER                           controllers.EventReportController.getErOverview(pstr: String, fromDate: String, toDate: String)
+GET         /pension-online/reports/overview/pods/:pstr/ER20A                        controllers.EventReportController.getEr20AOverview(pstr: String, fromDate: String, toDate: String)
 
-POST       /pension-online/event-reports/pods/:pstr         controllers.EventReportController.compileEventReportSummary(pstr: String)
+POST        /pension-online/event-reports/pods/:pstr                                 controllers.EventReportController.compileEventReportSummary(pstr: String)
