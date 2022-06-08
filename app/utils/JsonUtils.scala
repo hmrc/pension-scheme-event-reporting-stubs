@@ -21,7 +21,8 @@ import play.api.Environment
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.NotFoundException
 
-import java.io.FileInputStream
+import java.io.{FileInputStream, InputStream}
+import scala.io.Source
 
 class JsonUtils @Inject()(environment: Environment) {
 
@@ -34,5 +35,22 @@ class JsonUtils @Inject()(environment: Environment) {
       case _ =>
         throw new NotFoundException("No Response file found: " + filePath)
     }
+  }
+
+  def readJsonIfFileFound(filePath: String): Option[JsValue] = {
+    val jsonSchemaFile = environment.getExistingFile(filePath)
+    jsonSchemaFile match {
+      case Some(schemaFile) =>
+        val inputStream = new FileInputStream(schemaFile)
+        val jsonString: String = DateHelper.replacePlaceholderJson(readStreamToString(inputStream))
+        Some(Json.parse(jsonString))
+      case _ =>
+        None
+    }
+  }
+
+  private def readStreamToString(is: InputStream): String = {
+    try Source.fromInputStream(is).mkString
+    finally is.close()
   }
 }

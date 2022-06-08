@@ -17,13 +17,20 @@
 package controllers
 
 import com.google.inject.Inject
+import controllers.EventReportController.NotFoundResponse
+import play.api.libs.json._
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import utils.{APIResponses, JsonUtils}
 
 import java.time.LocalDate
 import javax.inject.Singleton
+import scala.concurrent.Future
 
 @Singleton()
 class EventReportController @Inject()(
-                                       cc: ControllerComponents
+                                       cc: ControllerComponents,
+                                       jsonUtils: JsonUtils,
                                      ) extends BackendController(cc) with APIResponses {
 
   def compileEventReportSummary(pstr: String): Action[AnyContent] = Action.async {
@@ -34,13 +41,13 @@ class EventReportController @Inject()(
       }
   }
 
-  def getEROverview(pstr: String, startDate: String, endDate: String): Action[AnyContent] = Action.async {
+  def getEROverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
 
     def defaultOverview = {
       Json.arr(
         Json.obj(
-          "periodStartDate" -> startDate,
-          "periodEndDate" -> endDate,
+          "periodStartDate" -> fromDate,
+          "periodEndDate" -> toDate,
           "numberOfVersions" -> 1,
           "submittedVersionAvailable" -> "No",
           "compiledVersionAvailable" -> "Yes"
@@ -58,7 +65,7 @@ class EventReportController @Inject()(
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
         .getOrElse(defaultOverview)
 
-      Future.successful(Ok(filterOverview(jsValue, startDate, endDate)))
+      Future.successful(Ok(filterOverview(jsValue, fromDate, toDate)))
     }
   }
 
@@ -114,5 +121,12 @@ class EventReportController @Inject()(
       case JsError(_) => throw new RuntimeException("Unable to read json")
     }
   }
+}
+
+object EventReportController {
+  val NotFoundResponse: JsObject = Json.obj(
+    "code" -> "NO_REPORT_FOUND",
+    "reason" -> "The remote endpoint has indicated No Scheme report was found for the given period."
+  )
 }
 
