@@ -27,7 +27,7 @@ class JsonUtilsSpec extends SpecBase {
   "readJsonFromFile" must {
     "with return value when file found" in {
 
-      val path = new File("./conf/resources/data/validEventReportRequest.json").getPath
+      val path = new File("./conf/resources/data/validEventReportSummaryRequest.json").getPath
 
       val result = jsonUtils.readJsonFromFile(path)
       assert(result.toString().nonEmpty)
@@ -35,7 +35,7 @@ class JsonUtilsSpec extends SpecBase {
     }
 
     "with throw file found exception " in {
-      val path = new File("./conf/notFound/resources/data/validEventReportRequest.json").getPath
+      val path = new File("./conf/notFound/resources/data/validEventReportSummaryRequest.json").getPath
       intercept[NotFoundException] {
         jsonUtils.readJsonFromFile(path)
       }
