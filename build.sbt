@@ -1,3 +1,4 @@
+import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
@@ -26,6 +27,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(ScoverageKeys.coverageMinimumStmtTotal := 80)
   .settings(
     Test / parallelExecution := false,
     Test / fork  := true,

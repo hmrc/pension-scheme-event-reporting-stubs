@@ -25,6 +25,8 @@ import java.time.LocalDate
 
 class EventReportControllerSpec extends SpecBase {
 
+  import  EventReportController._
+
   private val fakeRequest = FakeRequest("POST", "/").withHeaders(("CorrelationId", "testId"),
     "Authorization" -> "test Bearer token", ("Environment", "local"))
 
@@ -63,6 +65,32 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
+  "getErOverview" must {
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getOverview/24000015IN.json")
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEROverview(pstr = "24000015IN", fromDate = "2021-04-06", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "must return a Bad Request in fromDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEROverview(pstr = "24000015IN", fromDate = "", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe missingFromDateResponse
+
+      }
+    }
+
+  }
 
 }
 
