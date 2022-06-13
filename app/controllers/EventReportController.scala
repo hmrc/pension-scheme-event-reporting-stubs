@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, missingFromDateResponse, missingToDateResponse}
+import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, fromDateNotInRangeResponse, missingFromDateResponse, missingToDateResponse, toDateNotInRangeResponse}
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -68,13 +68,19 @@ class EventReportController @Inject()(
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(BadRequest(InvalidPstrResponse))
     }
     else if (!fromDate.matches(datePattern)) {
       Future.successful(BadRequest(InvalidFromDateResponse))
     }
     else if (!toDate.matches(datePattern)) {
       Future.successful(BadRequest(InvalidToDateResponse))
+    }
+    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))){
+      Future.successful(BadRequest(toDateNotInRangeResponse))
+    }
+    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())){
+      Future.successful(BadRequest(fromDateNotInRangeResponse))
     }
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
@@ -177,6 +183,14 @@ object EventReportController {
   val missingToDateResponse: JsObject = Json.obj(
     "code" -> "MISSING_TO_DATE",
     "reason" -> "Submission has not passed validation. Required query parameter toDate has not been supplied."
+  )
+  val toDateNotInRangeResponse: JsObject = Json.obj(
+    "code" -> "TO_DATE_NOT_IN_RANGE",
+    "reason" -> "The remote endpoint has indicated Date To must be greater than date from."
+  )
+  val fromDateNotInRangeResponse: JsObject = Json.obj(
+    "code" -> "FROM_DATE_NOT_IN_RANGE",
+    "reason" -> "The remote endpoint has indicated From Date cannot be in the future."
   )
 }
 

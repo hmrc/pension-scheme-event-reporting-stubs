@@ -122,14 +122,14 @@ class EventReportControllerSpec extends SpecBase {
       }
     }
 
-    "must return Not Found if invalid PSTR response" in {
+    "must return Bad Request if invalid PSTR response" in {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
         val invalidPstr = "24000001IN"
         val result = controller.getEROverview(pstr = invalidPstr , fromDate = "2022-04-05", toDate = "2022-04-04")(getRequest)
 
-        status(result) mustBe NOT_FOUND
+        status(result) mustBe BAD_REQUEST
         contentAsJson(result) mustBe InvalidPstrResponse
       }
     }
