@@ -192,5 +192,13 @@ object EventReportController {
     "code" -> "FROM_DATE_NOT_IN_RANGE",
     "reason" -> "The remote endpoint has indicated From Date cannot be in the future."
   )
+
+  def compileEventOneReport(pstr: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      request.body.asJson match {
+        case Some(_) => Future.successful(Ok(compileEventOneReportSuccessResponse))
+        case _ => Future.successful(BadRequest(invalidPayload))
+      }
+  }
 }
 
