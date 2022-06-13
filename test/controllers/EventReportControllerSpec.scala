@@ -65,7 +65,7 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
-  "getErOverview" must {
+  "getEROverview" must {
     "return 200 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/getOverview/24000015IN.json")
       val getRequest = fakeRequest
@@ -78,7 +78,7 @@ class EventReportControllerSpec extends SpecBase {
       }
     }
 
-    "must return a Bad Request in fromDate is empty" in {
+    "must return a Bad Request if fromDate is empty" in {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
@@ -86,11 +86,123 @@ class EventReportControllerSpec extends SpecBase {
 
         status(result) mustBe BAD_REQUEST
         contentAsJson(result) mustBe missingFromDateResponse
-
       }
     }
 
+    "must return a Bad Request if toDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEROverview(pstr = "24000015IN", fromDate = "2022-04-05", toDate = "")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe missingToDateResponse
+      }
+    }
+
+    "must return a Bad Request if fromDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEROverview(pstr = "24000015IN", fromDate = "Invalid fromDate", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe InvalidFromDateResponse
+      }
+    }
+
+    "must return a Bad Request if toDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEROverview(pstr = "24000015IN", fromDate = "2022-04-05", toDate = "Invalid toDate")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe InvalidToDateResponse
+      }
+    }
+
+    "must return Not Found if invalid PSTR response" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val invalidPstr = "24000001IN"
+        val result = controller.getEROverview(pstr = invalidPstr , fromDate = "2022-04-05", toDate = "2022-04-04")(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe InvalidPstrResponse
+      }
+    }
   }
 
+  "getER20AOverview" must {
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getOverview/24000015IN.json")
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AOverview(pstr = "24000015IN", fromDate = "2021-04-06", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "must return a Bad Request if fromDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AOverview(pstr = "24000015IN", fromDate = "", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe missingFromDateResponse
+      }
+    }
+
+    "must return a Bad Request if toDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AOverview(pstr = "24000015IN", fromDate = "2022-04-05", toDate = "")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe missingToDateResponse
+      }
+    }
+
+    "must return a Bad Request if fromDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AOverview(pstr = "24000015IN", fromDate = "Invalid fromDate", toDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe InvalidFromDateResponse
+      }
+    }
+
+    "must return a Bad Request if toDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AOverview(pstr = "24000015IN", fromDate = "2022-04-05", toDate = "Invalid toDate")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe InvalidToDateResponse
+      }
+    }
+
+    "must return Not Found if invalid PSTR response" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val invalidPstr = "24000001IN"
+        val result = controller.getER20AOverview(pstr = invalidPstr , fromDate = "2022-04-05", toDate = "2022-04-08")(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe InvalidPstrResponse
+      }
+    }
+  }
 }
 
