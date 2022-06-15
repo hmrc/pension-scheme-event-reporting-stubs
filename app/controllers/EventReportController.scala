@@ -41,9 +41,19 @@ class EventReportController @Inject()(
       }
   }
 
+  def compileEventOneReport(pstr: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      request.body.asJson match {
+        case Some(_) => Future.successful(Ok(compileEventOneReportSuccessResponse))
+        case _ => Future.successful(BadRequest(invalidPayload))
+      }
+  }
+
   def getEROverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
 
-    def defaultOverview = {
+
+    // TODO: Consider DRY principle here? This is repeated and could probably be abstracted?
+    def defaultOverview: JsArray = {
       Json.arr(
         Json.obj(
           "periodStartDate" -> fromDate,
@@ -92,7 +102,8 @@ class EventReportController @Inject()(
 
   def getER20AOverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
 
-    def defaultOverview = {
+    // TODO: as above.
+    def defaultOverview: JsArray = {
       Json.arr(
         Json.obj(
           "periodStartDate" -> fromDate,
@@ -125,6 +136,12 @@ class EventReportController @Inject()(
     else if (!toDate.matches(datePattern)) {
       Future.successful(BadRequest(InvalidToDateResponse))
     }
+    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))){
+      Future.successful(BadRequest(toDateNotInRangeResponse))
+    }
+    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())){
+      Future.successful(BadRequest(fromDateNotInRangeResponse))
+    }
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
         .getOrElse(defaultOverview)
@@ -133,10 +150,10 @@ class EventReportController @Inject()(
     }
   }
 
-  def compileEventOneReport(pstr: String): Action[AnyContent] = Action.async {
+  def submitEventDeclarationReport(pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
-        case Some(_) => Future.successful(Ok(compileEventOneReportSuccessResponse))
+        case Some(_) => Future.successful(Ok(submitEventDeclarationReportSuccessResponse))
         case _ => Future.successful(BadRequest(invalidPayload))
       }
   }
@@ -194,7 +211,7 @@ object EventReportController {
   )
   val toDateNotInRangeResponse: JsObject = Json.obj(
     "code" -> "TO_DATE_NOT_IN_RANGE",
-    "reason" -> "The remote endpoint has indicated Date To must be greater than date from."
+    "reason" -> "The remote endpoint has indicated To Date must be greater than date from."
   )
   val fromDateNotInRangeResponse: JsObject = Json.obj(
     "code" -> "FROM_DATE_NOT_IN_RANGE",
