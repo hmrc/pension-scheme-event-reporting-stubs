@@ -51,20 +51,6 @@ class EventReportController @Inject()(
 
   def getEROverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
 
-
-    // TODO: Consider DRY principle here? This is repeated and could probably be abstracted?
-    def defaultOverview: JsArray = {
-      Json.arr(
-        Json.obj(
-          "periodStartDate" -> fromDate,
-          "periodEndDate" -> toDate,
-          "numberOfVersions" -> 1,
-          "submittedVersionAvailable" -> "No",
-          "compiledVersionAvailable" -> "Yes"
-        )
-      )
-    }
-
     val path = "conf/resources/data/getOverview"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
@@ -94,26 +80,13 @@ class EventReportController @Inject()(
     }
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-        .getOrElse(defaultOverview)
+        .getOrElse(defaultOverview(fromDate, toDate))
 
       Future.successful(Ok(filterOverview(jsValue, fromDate, toDate)))
     }
   }
 
   def getER20AOverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
-
-    // TODO: as above.
-    def defaultOverview: JsArray = {
-      Json.arr(
-        Json.obj(
-          "periodStartDate" -> fromDate,
-          "periodEndDate" -> toDate,
-          "numberOfVersions" -> 1,
-          "submittedVersionAvailable" -> "No",
-          "compiledVersionAvailable" -> "Yes"
-        )
-      )
-    }
 
     val path = "conf/resources/data/getOverview"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
@@ -144,8 +117,8 @@ class EventReportController @Inject()(
     }
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-        .getOrElse(defaultOverview)
-
+        .getOrElse(defaultOverview(fromDate, toDate))
+      
       Future.successful(Ok(filterOverview(jsValue, fromDate, toDate)))
     }
   }

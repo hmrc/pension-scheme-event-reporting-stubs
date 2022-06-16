@@ -16,11 +16,23 @@
 
 package utils
 
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsArray, JsObject, Json}
 
 import java.time.LocalDate
 
 trait APIResponses {
+
+  def defaultOverview(fromDate: String, toDate: String): JsArray = {
+    Json.arr(
+      Json.obj(
+        "periodStartDate" -> fromDate,
+        "periodEndDate" -> toDate,
+        "numberOfVersions" -> 1,
+        "submittedVersionAvailable" -> "No",
+        "compiledVersionAvailable" -> "Yes"
+      )
+    )
+  }
 
   val invalidPayload: JsObject = Json.obj(
     "code" -> "INVALID_PAYLOAD",
