@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import play.api.http.Status.FORBIDDEN
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers._
 import play.api.test._
@@ -229,6 +230,124 @@ class EventReportControllerSpec extends SpecBase {
         val controller = app.injector.instanceOf[EventReportController]
         val invalidPstr = "24000001IN"
         val result = controller.getER20AOverview(pstr = invalidPstr, fromDate = "2022-04-05", toDate = "2022-04-08")(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe InvalidPstrResponse
+      }
+    }
+  }
+
+  "getERVersions" must {
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getVersions/24000015IN/2020-04-01.json")
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getERVersions(pstr = "24000015IN", startDate = "2020-04-01")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request for default value" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getERVersions(pstr = "24000015IN", startDate = "2022-04-01")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe Json.parse(defaultVersions("2022-04-01").toString())
+      }
+    }
+
+    "must return a FORBIDDEN if startDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getERVersions(pstr = "24000015IN", startDate = "")(getRequest)
+
+        status(result) mustBe FORBIDDEN
+        contentAsJson(result) mustBe mandatoryStartDateResponse
+      }
+    }
+
+    "must return a Bad Request if startDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getERVersions(pstr = "24000015IN", startDate = "Invalid fromDate")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe invalidStartDateResponse
+      }
+    }
+
+    "must return Not Found if invalid PSTR response" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val invalidPstr = "24000001IN"
+        val result = controller.getERVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe InvalidPstrResponse
+      }
+    }
+  }
+
+  "getER20AVersions" must {
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getVersions/24000015IN/2021-04-01.json")
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "2021-04-01")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request for default value" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "2022-04-01")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe Json.parse(defaultVersions("2022-04-01").toString())
+      }
+    }
+
+    "must return a FORBIDDEN if startDate is empty" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "")(getRequest)
+
+        status(result) mustBe FORBIDDEN
+        contentAsJson(result) mustBe mandatoryStartDateResponse
+      }
+    }
+
+    "must return a Bad Request if startDate invalid" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "Invalid fromDate")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe invalidStartDateResponse
+      }
+    }
+
+    "must return Not Found if invalid PSTR response" in {
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val invalidPstr = "24000001IN"
+        val result = controller.getER20AVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
         contentAsJson(result) mustBe InvalidPstrResponse

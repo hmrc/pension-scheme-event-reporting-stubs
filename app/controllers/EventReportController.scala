@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, fromDateNotInRangeResponse, missingFromDateResponse, missingToDateResponse, toDateNotInRangeResponse}
+import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -61,10 +61,10 @@ class EventReportController @Inject()(
     val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
 
-    if(fromDate.isEmpty){
+    if (fromDate.isEmpty) {
       Future.successful(BadRequest(missingFromDateResponse))
     }
-    else if (toDate.isEmpty){
+    else if (toDate.isEmpty) {
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
@@ -76,10 +76,10 @@ class EventReportController @Inject()(
     else if (!toDate.matches(datePattern)) {
       Future.successful(BadRequest(InvalidToDateResponse))
     }
-    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))){
+    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       Future.successful(BadRequest(toDateNotInRangeResponse))
     }
-    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())){
+    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
       Future.successful(BadRequest(fromDateNotInRangeResponse))
     }
     else {
@@ -107,13 +107,13 @@ class EventReportController @Inject()(
     val path = "conf/resources/data/getOverview"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
-    val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
 
-    if(fromDate.isEmpty){
+
+    if (fromDate.isEmpty) {
       Future.successful(BadRequest(missingFromDateResponse))
     }
-    else if (toDate.isEmpty){
+    else if (toDate.isEmpty) {
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
@@ -139,6 +139,45 @@ class EventReportController @Inject()(
         case Some(_) => Future.successful(Ok(compileEventOneReportSuccessResponse))
         case _ => Future.successful(BadRequest(invalidPayload))
       }
+  }
+
+  def getERVersions(pstr: String, startDate: String): Action[AnyContent] = Action.async {
+
+    val path = "conf/resources/data/getVersions"
+    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+
+    if (startDate.isEmpty) {
+      Future.successful(Forbidden(mandatoryStartDateResponse))
+    } else if (!startDate.matches(datePattern)) {
+      Future.successful(BadRequest(invalidStartDateResponse))
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+      Future.successful(NotFound(InvalidPstrResponse))
+    else {
+      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
+        .getOrElse(defaultVersions(startDate))
+
+      Future.successful(Ok(jsValue))
+    }
+  }
+
+  def getER20AVersions(pstr: String, startDate: String): Action[AnyContent] = Action.async {
+    val path = "conf/resources/data/getVersions"
+    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+
+    if (startDate.isEmpty) {
+      Future.successful(Forbidden(mandatoryStartDateResponse))
+    } else if (!startDate.matches(datePattern)) {
+      Future.successful(BadRequest(invalidStartDateResponse))
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+      Future.successful(NotFound(InvalidPstrResponse))
+    else {
+      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
+        .getOrElse(defaultVersions(startDate))
+
+      Future.successful(Ok(jsValue))
+    }
   }
 
   private case class Overview(
@@ -168,6 +207,7 @@ class EventReportController @Inject()(
 }
 
 object EventReportController {
+  val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
   val NoReportFoundResponse: JsObject = Json.obj(
     "code" -> "NO_REPORT_FOUND",
     "reason" -> "The remote endpoint has indicated No Scheme report was found for the given period."
@@ -200,5 +240,33 @@ object EventReportController {
     "code" -> "FROM_DATE_NOT_IN_RANGE",
     "reason" -> "The remote endpoint has indicated From Date cannot be in the future."
   )
+  val invalidStartDateResponse: JsObject = Json.obj(
+    "code" -> "INVALID_START_DATE",
+    "reason" -> "Submission has not passed validation. Invalid query parameter startDate."
+  )
+  val mandatoryStartDateResponse: JsObject = Json.obj(
+    "code" -> "PERIOD_START_DATE_MANDATORY",
+    "reason" -> "The remote endpoint has indicated that Period Start Date must be provided."
+  )
+  def defaultVersions(startDate: String): JsArray =
+    Json.arr(
+      Json.obj(
+        "reportFormBundleNumber" -> "123456789012",
+        "reportVersion" -> 1,
+        "reportStatus" -> "Compiled",
+        "compilationOrSubmissionDate" -> s"${startDate}T09:30:47Z",
+        "reportSubmitterDetails" -> Json.obj(
+          "reportSubmittedBy" -> "PSP",
+          "orgOrPartnershipDetails" -> Json.obj(
+            "orgOrPartnershipName" -> "ABC Limited"
+          )
+        ),
+        "psaDetails" -> Json.obj(
+          "psaOrgOrPartnershipDetails" -> Json.obj(
+            "orgOrPartnershipName" -> "XYZ Limited"
+          )
+        )
+      )
+    )
 }
 

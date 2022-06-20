@@ -6,6 +6,11 @@ GET         /pension-online/event-reports/pods/:pstr                            
 GET         /pension-online/reports/overview/pods/:pstr/ER                           controllers.EventReportController.getEROverview(pstr: String, fromDate: String, toDate: String)
 GET         /pension-online/reports/overview/pods/:pstr/ER20A                        controllers.EventReportController.getER20AOverview(pstr: String, fromDate: String, toDate: String)
 
+GET         /pension-online/reports/:pstr/ER/versions                                controllers.EventReportController.getERVersions(pstr: String, startDate: String)
+GET         /pension-online/reports/:pstr/ER20A/versions                             controllers.EventReportController.getER20AVersions(pstr: String, startDate: String)
+
+
+
 POST       /pension-online/event-reports/pods/:pstr         controllers.EventReportController.compileEventReportSummary(pstr: String)
 POST       /pension-online/event1-report/pods/:pstr         controllers.EventReportController.compileEventOneReport(pstr: String)
 
