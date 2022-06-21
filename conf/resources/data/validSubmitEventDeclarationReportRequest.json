@@ -1,0 +1,17 @@
+{
+  "declarationDetails": {
+    "erDetails": {
+      "pSTR": "27176941JF",
+      "reportStartDate": "2020-04-06",
+      "reportEndDate": "2021-04-05"
+    },
+    "erDeclarationDetails": {
+      "submittedBy": "PSA",
+      "submittedID": "A2345678"
+    },
+    "psaDeclaration": {
+      "psaDeclaration1": true,
+      "psaDeclaration2": true
+    }
+  }
+}

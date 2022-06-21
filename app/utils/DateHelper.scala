@@ -106,11 +106,6 @@ object DateHelper {
     date.withMonth(date.get(IsoFields.QUARTER_OF_YEAR) * 3).`with`(TemporalAdjusters.lastDayOfMonth)
   }
 
-  private def lastDayOfNextQuarter(date: LocalDate): LocalDate = {
-    val lastDayDate = lastDayOfQuarter(date).plusDays(1)
-    lastDayOfQuarter(lastDayDate)
-  }
-
   private def lastDayOfPreviousQuarter(date: LocalDate): LocalDate = {
     val previousDayDate = firstDayOfQuarter(date).minusDays(1)
     lastDayOfQuarter(previousDayDate)
