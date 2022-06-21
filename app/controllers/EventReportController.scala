@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, fromDateNotInRangeResponse, missingFromDateResponse, missingToDateResponse, toDateNotInRangeResponse}
+import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, fromDateNotInRangeResponse, missingFromDateResponse, missingReportTypeResponse, missingToDateResponse, toDateNotInRangeResponse}
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -49,15 +49,17 @@ class EventReportController @Inject()(
       }
   }
 
-  def getEROverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
+  def getOverview(pstr: String, fromDate: String, toDate: String, reportType: String): Action[AnyContent] = Action.async {
 
     val path = "conf/resources/data/getOverview"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
-
-    if(fromDate.isEmpty){
+    if(reportType.isEmpty){
+      Future.successful(BadRequest(missingReportTypeResponse))
+    }
+    else if(fromDate.isEmpty){
       Future.successful(BadRequest(missingFromDateResponse))
     }
     else if (toDate.isEmpty){
@@ -82,44 +84,7 @@ class EventReportController @Inject()(
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
         .getOrElse(defaultOverview(fromDate, toDate))
 
-      Future.successful(Ok(filterOverview(jsValue, fromDate, toDate)))
-    }
-  }
-
-  def getER20AOverview(pstr: String, fromDate: String, toDate: String): Action[AnyContent] = Action.async {
-
-    val path = "conf/resources/data/getOverview"
-    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
-    val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
-    val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
-
-
-    if(fromDate.isEmpty){
-      Future.successful(BadRequest(missingFromDateResponse))
-    }
-    else if (toDate.isEmpty){
-      Future.successful(BadRequest(missingToDateResponse))
-    }
-    else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
-      Future.successful(NotFound(InvalidPstrResponse))
-    }
-    else if (!fromDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidFromDateResponse))
-    }
-    else if (!toDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidToDateResponse))
-    }
-    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))){
-      Future.successful(BadRequest(toDateNotInRangeResponse))
-    }
-    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())){
-      Future.successful(BadRequest(fromDateNotInRangeResponse))
-    }
-    else {
-      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-        .getOrElse(defaultOverview(fromDate, toDate))
-      
-      Future.successful(Ok(filterOverview(jsValue, fromDate, toDate)))
+      Future.successful(Ok(filterOverview(jsValue, fromDate, toDate, reportType)))
     }
   }
 
@@ -140,7 +105,7 @@ class EventReportController @Inject()(
                                compiledVersionAvailable: Option[String]
                              )
 
-  private def filterOverview(jsValue: JsValue, startDate: String, endDate: String): JsValue = {
+  private def filterOverview(jsValue: JsValue, startDate: String, endDate: String, reportType: String): JsValue = {
     implicit val formats: Format[Overview] = Json.format[Overview]
     jsValue.validate[Seq[Overview]] match {
       case JsSuccess(seqOverview, _) =>
@@ -189,6 +154,10 @@ object EventReportController {
   val fromDateNotInRangeResponse: JsObject = Json.obj(
     "code" -> "FROM_DATE_NOT_IN_RANGE",
     "reason" -> "The remote endpoint has indicated From Date cannot be in the future."
+  )
+  val missingReportTypeResponse: JsObject = Json.obj(
+    "code" -> "MISSING_REPORT_TYPE",
+    "reason" -> "Submission has not passed validation. Required query parameter reportType has not been supplied."
   )
 }
 
