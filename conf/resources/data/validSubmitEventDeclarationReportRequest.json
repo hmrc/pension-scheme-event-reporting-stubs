@@ -10,8 +10,8 @@
       "submittedID": "A2345678"
     },
     "psaDeclaration": {
-      "psaDeclaration1": true,
-      "psaDeclaration2": true
+      "psaDeclaration1": "Selected",
+      "psaDeclaration2": "Selected"
     }
   }
 }
