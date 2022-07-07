@@ -137,8 +137,6 @@ class EventReportController @Inject()(
   }
 
   def getMemberEventStatusReports(pstr: String): Action[AnyContent] = Action.async {
-
-    val defaultEventStatusReports = Json.obj("test" -> "default")
     val path = "conf/resources/data/getEvent1823"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
@@ -147,7 +145,7 @@ class EventReportController @Inject()(
       Future.successful(NotFound(InvalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-        .getOrElse(defaultEventStatusReports)
+        .getOrElse(defaultGetEvent1823(pstr))
       Future.successful(Ok(jsValue))
     }
   }
@@ -244,5 +242,54 @@ object EventReportController {
         )
       )
     )
+
+  private def defaultGetEvent1823(pstr: String):JsValue = Json.parse(
+    s"""
+      |{
+      |  "success": {
+      |    "headerDetails": {
+      |      "processingDate": "2023-12-15T12:30:46Z"
+      |    },
+      |    "schemeDetails": {
+      |      "pSTR": "$pstr",
+      |      "schemeName": "Abc Ltd"
+      |    },
+      |    "eventReportDetails": {
+      |      "fbNumber": "123456789012",
+      |      "reportStartDate": "2023-04-06",
+      |      "reportEndDate": "2024-04-05",
+      |      "reportStatus": "Compiled",
+      |      "reportVersion": "001",
+      |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
+      |    },
+      |    "eventDetails": [
+      |      {
+      |        "memberDetails": {
+      |          "eventType": "Event2",
+      |          "amendedVersion": "001",
+      |          "memberStatus": "New",
+      |          "title": "0001",
+      |          "firstName": "John",
+      |          "middleName": "S",
+      |          "lastName": "Smith",
+      |          "ninoRef": "AS123456A"
+      |        },
+      |        "paymentDetails": {
+      |          "amountPaidBenefitLumpsum": 100.34,
+      |          "eventDateOrTaxYear": "2023-04-13"
+      |        },
+      |        "personReceivedThePayment": {
+      |          "title": "0001",
+      |          "firstName": "Andrew",
+      |          "middleName": "D",
+      |          "lastName": "Collin",
+      |          "ninoRef": "AS123456A"
+      |        }
+      |      }
+      |    ]
+      |  }
+      |}
+      |
+      |""".stripMargin
 }
 
