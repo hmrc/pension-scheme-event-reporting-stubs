@@ -139,7 +139,6 @@ class EventReportController @Inject()(
   def getMemberEventStatusReports(pstr: String): Action[AnyContent] = Action.async {
 
     val defaultEventStatusReports = Json.obj("test" -> "default")
-//24000015IN
     val path = "conf/resources/data/getEvent1823"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
