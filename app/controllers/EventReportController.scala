@@ -136,18 +136,27 @@ class EventReportController @Inject()(
     }
   }
 
-  def getMemberEventStatusReports(pstr: String): Action[AnyContent] = Action.async {
-    val path = "conf/resources/data/getEvent1823"
+  def api1823GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1823"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
-    if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
-    else {
-      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-        .getOrElse(defaultGetEvent1823(pstr))
-      Future.successful(Ok(jsValue))
+    (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+      case (Some(eventType), Some(version), Some(startDate)) =>
+        if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+          Future.successful(NotFound(InvalidPstrResponse))
+        else {
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+            .getOrElse(defaultGetEvent1823(pstr, eventType, version, startDate))
+          Future.successful(Ok(jsValue))
+        }
+      case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
+      case (_, _, None) => Future.successful(BadRequest(InvalidStartDateResponse))
+      case _ => Future.successful(BadRequest(Json.obj()))
     }
+
+
   }
 
   private case class Overview(
@@ -185,6 +194,20 @@ object EventReportController {
   val InvalidPstrResponse: JsObject = Json.obj(
     "code" -> "INVALID_PSTR",
     "reason" -> "Submission has not passed validation. Invalid parameter pstr."
+  )
+
+  val InvalidEventTypeResponse: JsObject = Json.obj(
+    "code" -> "INVALID_EVENTTYPE",
+    "reason" -> "Invalid event type"
+  )
+  val InvalidVersionResponse: JsObject = Json.obj(
+    "code" -> "INVALID_VERSIONNUMBER",
+    "reason" -> "Invalid version"
+  )
+
+  val InvalidStartDateResponse: JsObject = Json.obj(
+    "code" -> "INVALID_STARTDATE",
+    "reason" -> "Invalid start date"
   )
   val InvalidFromDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_FROM_DATE",
@@ -243,7 +266,7 @@ object EventReportController {
       )
     )
 
-  private def defaultGetEvent1823(pstr: String):JsValue = Json.parse(
+  private def defaultGetEvent1823(pstr: String, eventType: String, version: String, startDate: String):JsValue = Json.parse(
     s"""
       |{
       |  "success": {
@@ -256,16 +279,16 @@ object EventReportController {
       |    },
       |    "eventReportDetails": {
       |      "fbNumber": "123456789012",
-      |      "reportStartDate": "2023-04-06",
+      |      "reportStartDate": "$startDate",
       |      "reportEndDate": "2024-04-05",
       |      "reportStatus": "Compiled",
-      |      "reportVersion": "001",
+      |      "reportVersion": "$version",
       |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
       |    },
       |    "eventDetails": [
       |      {
       |        "memberDetails": {
-      |          "eventType": "Event2",
+      |          "eventType": "$eventType",
       |          "amendedVersion": "001",
       |          "memberStatus": "New",
       |          "title": "0001",
@@ -290,6 +313,6 @@ object EventReportController {
       |  }
       |}
       |
-      |""".stripMargin
+      |""".stripMargin)
 }
 
