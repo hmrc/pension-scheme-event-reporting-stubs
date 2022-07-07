@@ -136,6 +136,28 @@ class EventReportController @Inject()(
     }
   }
 
+
+
+//  def getMemberEventStatusReports(pstr: String): Action[AnyContent] = Action.async {
+//
+//    val path = "conf/resources/data/getMemberEventStatusReports"
+//    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+//    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+//
+//    if (startDate.isEmpty) {
+//      Future.successful(Forbidden(mandatoryStartDateResponse))
+//    } else if (!startDate.matches(datePattern)) {
+//      Future.successful(BadRequest(invalidStartDateResponse))
+//    } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+//      Future.successful(NotFound(InvalidPstrResponse))
+//    else {
+//      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
+//        .getOrElse(defaultVersions(startDate))
+//
+//      Future.successful(Ok(jsValue))
+//    }
+//  }
+
   private case class Overview(
                                periodStartDate: LocalDate,
                                periodEndDate: LocalDate,
