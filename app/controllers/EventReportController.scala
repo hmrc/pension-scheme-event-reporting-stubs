@@ -17,7 +17,6 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController.{InvalidFromDateResponse, InvalidPstrResponse, InvalidToDateResponse, fromDateNotInRangeResponse, missingFromDateResponse, missingReportTypeResponse, missingToDateResponse, toDateNotInRangeResponse}
 import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -152,8 +151,7 @@ class EventReportController @Inject()(
         }
       case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
       case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
-      case (_, _, None) => Future.successful(BadRequest(InvalidStartDateResponse))
-      case _ => Future.successful(BadRequest(Json.obj()))
+      case _ => Future.successful(BadRequest(InvalidStartDateResponse))
     }
 
 
