@@ -165,6 +165,10 @@ class EventReportController @Inject()(
 
   }
 
+  def api1833GET(pstr: String): Action[AnyContent] = {
+    ???
+  }
+
   private case class Overview(
                                periodStartDate: LocalDate,
                                periodEndDate: LocalDate,

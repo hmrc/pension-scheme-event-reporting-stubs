@@ -30,6 +30,7 @@ class EventReportControllerSpec extends SpecBase {
 
   private val fakeRequest = FakeRequest("POST", "/").withHeaders(("CorrelationId", "testId"),
     "Authorization" -> "test Bearer token", ("Environment", "local"))
+  private val controller = app.injector.instanceOf[EventReportController]
 
   private val invalidPayload: JsObject = Json.obj(
     "code" -> "INVALID_PAYLOAD",
@@ -257,6 +258,39 @@ class EventReportControllerSpec extends SpecBase {
         contentAsJson(result) mustBe validData
       }
     }
+  }
+
+  "api1833GET" must {
+    "return 200 OK for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/api1833/validEventOneGetRequest.json")
+
+      //TODO: Refactor package to have a subfolder for events in resources
+      //TODO: Think about naming conventions - confusing that it's a POST request then being used as a GET
+      //TODO: Refactor controller vals to use global variable
+
+      val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> "Event1",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+
+      val getRequest = fakeRequest
+
+      running() { _ =>
+        val result = controller.api1833GET(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 400 BAD REQUEST for a invalid request" in {
+
+    }
+
   }
 
   "submitEventDeclarationReport" must {
