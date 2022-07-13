@@ -10,6 +10,7 @@ POST       /pension-online/event1-report/pods/:pstr                             
 POST       /pension-online/member-event-reports/:pstr                                controllers.EventReportController.compileMemberEventReport(pstr: String)
 
 POST       /pension-online/event-declaration-reports/:pstr                           controllers.EventReportController.submitEventDeclarationReport(pstr: String)
+POST       /pension-online/event-20a-declaration-reports/:pstr                       controllers.EventReportController.submitEvent20ADeclarationReport(pstr: String)
 
 GET         /pension-online/reports/:pstr/ER/versions                                controllers.EventReportController.getERVersions(pstr: String, startDate: String)
 GET         /pension-online/reports/:pstr/ER20A/versions                             controllers.EventReportController.getER20AVersions(pstr: String, startDate: String)

@@ -1,0 +1,21 @@
+{
+  "eventReportDetails": {
+    "er20aDetails": {
+      "pSTR": "27660890RW",
+      "reportStartDate": "2020-04-06",
+      "reportEndDate": "2021-04-05"
+    },
+    "schemeMasterTrustDetails": {
+      "startDate": "2021-03-14"
+    },
+    "erDeclarationDetails": {
+      "submittedBy": "PSP",
+      "submittedID": "20123456"
+    },
+    "psaDeclaration": {
+      "authorisedPSAID": "A3824264",
+      "psaDeclaration1": true,
+      "psaDeclaration2": true
+    }
+  }
+}

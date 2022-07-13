@@ -83,4 +83,9 @@ trait APIResponses {
     "formBundleNumber" -> "12345678999"
   )
 
+  val submitEvent20ADeclarationReportSuccessResponse: JsObject = Json.obj(
+    "processingDate" -> LocalDate.now(),
+    "formBundleNumber" -> "12345670811"
+  )
+
 }

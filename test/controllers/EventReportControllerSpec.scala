@@ -55,6 +55,11 @@ class EventReportControllerSpec extends SpecBase {
     "formBundleNumber" -> "12345678933"
   )
 
+  private val submitEvent20ADeclarationReportSuccessResponse: JsObject = Json.obj(
+    "processingDate" -> LocalDate.now(),
+    "formBundleNumber" -> "12345670811"
+  )
+
   "compileEventReportSummary" must {
 
     "return 200 for a valid request" in {
@@ -270,6 +275,32 @@ class EventReportControllerSpec extends SpecBase {
 
         status(result) mustBe OK
         contentAsJson(result) mustBe submitEventDeclarationReportSuccessResponse
+      }
+    }
+
+    "return 400 for a bad request" in {
+      val postRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.compileEventReportSummary(pstr = "test-pstr")(postRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe invalidPayload
+      }
+    }
+  }
+
+  "submitEvent20ADeclarationReport" must {
+
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/validSubmitEvent20ADeclarationReportRequest.json")
+      val postRequest = fakeRequest.withJsonBody(validData)
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.submitEvent20ADeclarationReport(pstr = "test-pstr")(postRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe submitEvent20ADeclarationReportSuccessResponse
       }
     }
 
