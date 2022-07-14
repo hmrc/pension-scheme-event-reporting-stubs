@@ -74,13 +74,13 @@ class EventReportController @Inject()(
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
-      Future.successful(BadRequest(InvalidPstrResponse))
+      Future.successful(BadRequest(invalidPstrResponse))
     }
     else if (!fromDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidFromDateResponse))
+      Future.successful(BadRequest(invalidFromDateResponse))
     }
     else if (!toDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidToDateResponse))
+      Future.successful(BadRequest(invalidToDateResponse))
     }
     else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       Future.successful(BadRequest(toDateNotInRangeResponse))
@@ -115,7 +115,7 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
         .getOrElse(defaultVersions(startDate))
@@ -134,7 +134,7 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
         .getOrElse(defaultVersions(startDate))
@@ -151,15 +151,15 @@ class EventReportController @Inject()(
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some(eventType), Some(version), Some(startDate)) =>
         if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-          Future.successful(NotFound(InvalidPstrResponse))
+          Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1823(pstr, eventType, version, startDate))
           Future.successful(Ok(jsValue))
         }
       case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
-      case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
-      case _ => Future.successful(BadRequest(InvalidStartDateResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
 
 
@@ -174,15 +174,15 @@ class EventReportController @Inject()(
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some("Event1"), Some(version), Some(startDate)) =>
         if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-          Future.successful(NotFound(InvalidPstrResponse))
+          Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1833(pstr, version, startDate))
           Future.successful(Ok(jsValue))
         }
         case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
-        case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
-        case (_, _, None) => Future.successful(BadRequest(InvalidStartDateResponse))
+        case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+        case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
         case _            => Future.successful(InternalServerError(internalServerErrorResponse))
       }
     }
@@ -217,12 +217,11 @@ class EventReportController @Inject()(
 object EventReportController {
   val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
-  // TODO: refactor vals for consistency
-  val NoReportFoundResponse: JsObject = Json.obj(
+  val noReportFoundResponse: JsObject = Json.obj(
     "code" -> "NO_REPORT_FOUND",
     "reason" -> "The remote endpoint has indicated No Scheme report was found for the given period."
   )
-  val InvalidPstrResponse: JsObject = Json.obj(
+  val invalidPstrResponse: JsObject = Json.obj(
     "code" -> "INVALID_PSTR",
     "reason" -> "Submission has not passed validation. Invalid parameter pstr."
   )
@@ -231,20 +230,20 @@ object EventReportController {
     "code" -> "INVALID_EVENTTYPE",
     "reason" -> "Invalid event type"
   )
-  val InvalidVersionResponse: JsObject = Json.obj(
+  val invalidVersionResponse: JsObject = Json.obj(
     "code" -> "INVALID_VERSIONNUMBER",
     "reason" -> "Invalid version"
   )
 
-  val InvalidStartDateResponse: JsObject = Json.obj(
+  val invalidStartDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_STARTDATE",
     "reason" -> "Invalid start date"
   )
-  val InvalidFromDateResponse: JsObject = Json.obj(
+  val invalidFromDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_FROM_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter fromDate."
   )
-  val InvalidToDateResponse: JsObject = Json.obj(
+  val invalidToDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_TO_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter toDate."
   )
@@ -267,10 +266,6 @@ object EventReportController {
   val missingReportTypeResponse: JsObject = Json.obj(
     "code" -> "MISSING_REPORT_TYPE",
     "reason" -> "Submission has not passed validation. Required query parameter reportType has not been supplied."
-  )
-  val invalidStartDateResponse: JsObject = Json.obj(
-    "code" -> "INVALID_START_DATE",
-    "reason" -> "Submission has not passed validation. Invalid query parameter startDate."
   )
   val mandatoryStartDateResponse: JsObject = Json.obj(
     "code" -> "PERIOD_START_DATE_MANDATORY",

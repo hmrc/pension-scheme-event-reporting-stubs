@@ -179,7 +179,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getOverview(pstr = "24000015IN", fromDate = "Invalid fromDate", toDate = "2022-04-05", reportType = "ER")(getRequest)
 
         status(result) mustBe BAD_REQUEST
-        contentAsJson(result) mustBe InvalidFromDateResponse
+        contentAsJson(result) mustBe invalidFromDateResponse
       }
     }
 
@@ -190,7 +190,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getOverview(pstr = "24000015IN", fromDate = "2022-04-05", toDate = "Invalid toDate", reportType = "ER")(getRequest)
 
         status(result) mustBe BAD_REQUEST
-        contentAsJson(result) mustBe InvalidToDateResponse
+        contentAsJson(result) mustBe invalidToDateResponse
       }
     }
 
@@ -202,7 +202,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getOverview(pstr = invalidPstr, fromDate = "2022-04-05", toDate = "2022-04-04", reportType = "ER")(getRequest)
 
         status(result) mustBe BAD_REQUEST
-        contentAsJson(result) mustBe InvalidPstrResponse
+        contentAsJson(result) mustBe invalidPstrResponse
       }
     }
 
@@ -383,7 +383,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getERVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
-        contentAsJson(result) mustBe InvalidPstrResponse
+        contentAsJson(result) mustBe invalidPstrResponse
       }
     }
   }
@@ -442,7 +442,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getER20AVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
-        contentAsJson(result) mustBe InvalidPstrResponse
+        contentAsJson(result) mustBe invalidPstrResponse
       }
     }
   }
