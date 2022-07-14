@@ -57,6 +57,14 @@ class EventReportController @Inject()(
       }
   }
 
+  def submitEvent20ADeclarationReport(pstr: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      request.body.asJson match {
+        case Some(_) => Future.successful(Ok(submitEvent20ADeclarationReportSuccessResponse))
+        case _ => Future.successful(BadRequest(invalidPayload))
+      }
+  }
+
   def getOverview(pstr: String, fromDate: String, toDate: String, reportType: String): Action[AnyContent] = Action.async {
 
     val path = "conf/resources/data/getOverview"
