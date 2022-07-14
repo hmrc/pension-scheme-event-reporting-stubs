@@ -262,7 +262,7 @@ class EventReportControllerSpec extends SpecBase {
 
   "api1833GET" must {
     "return 200 OK for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1833/validEventOneGetRequest.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1833/24000015IN.json")
 
       //TODO: Refactor package to have a subfolder for events in resources
       //TODO: Think about naming conventions - confusing that it's a POST request then being used as a GET
@@ -306,7 +306,7 @@ class EventReportControllerSpec extends SpecBase {
         contentAsJson(result) mustBe submitEventDeclarationReportSuccessResponse
       }
     }
-
+    
     "return 400 for a bad request" in {
       val postRequest = fakeRequest
       running() { app =>
