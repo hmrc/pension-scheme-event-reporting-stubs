@@ -19,10 +19,12 @@ package controllers
 import base.SpecBase
 import play.api.http.Status.FORBIDDEN
 import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.{Action, AnyContent, Result}
 import play.api.test.Helpers._
 import play.api.test._
 
 import java.time.LocalDate
+import scala.concurrent.Future
 
 class EventReportControllerSpec extends SpecBase {
 
@@ -288,6 +290,14 @@ class EventReportControllerSpec extends SpecBase {
     }
 
     "return 400 BAD REQUEST for a invalid request" in {
+      val badRequest = fakeRequest
+
+      running() { _ =>
+        val result: Future[Result] = controller.api1833GET(pstr = "test-pstr")(badRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe invalidEventTypeResponse
+      }
 
     }
 
@@ -306,7 +316,7 @@ class EventReportControllerSpec extends SpecBase {
         contentAsJson(result) mustBe submitEventDeclarationReportSuccessResponse
       }
     }
-    
+
     "return 400 for a bad request" in {
       val postRequest = fakeRequest
       running() { app =>

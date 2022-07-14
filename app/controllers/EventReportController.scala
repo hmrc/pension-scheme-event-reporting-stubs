@@ -157,7 +157,7 @@ class EventReportController @Inject()(
             .getOrElse(defaultGetEvent1823(pstr, eventType, version, startDate))
           Future.successful(Ok(jsValue))
         }
-      case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
       case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
       case _ => Future.successful(BadRequest(InvalidStartDateResponse))
     }
@@ -180,7 +180,7 @@ class EventReportController @Inject()(
             .getOrElse(defaultGetEvent1833(pstr, version, startDate))
           Future.successful(Ok(jsValue))
         }
-        case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
+        case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
         case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
         case (_, _, None) => Future.successful(BadRequest(InvalidStartDateResponse))
         case _            => Future.successful(InternalServerError(internalServerErrorResponse))
@@ -227,7 +227,7 @@ object EventReportController {
     "reason" -> "Submission has not passed validation. Invalid parameter pstr."
   )
 
-  val InvalidEventTypeResponse: JsObject = Json.obj(
+  val invalidEventTypeResponse: JsObject = Json.obj(
     "code" -> "INVALID_EVENTTYPE",
     "reason" -> "Invalid event type"
   )
