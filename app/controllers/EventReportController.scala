@@ -146,11 +146,10 @@ class EventReportController @Inject()(
   def api1823GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1823"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
-    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some(eventType), Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
@@ -168,12 +167,10 @@ class EventReportController @Inject()(
   def api1833GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1833"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
-    // TODO: Rename this to something more appropriate - not in AFT any more.
-    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some("Event1"), Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
@@ -215,7 +212,8 @@ class EventReportController @Inject()(
 }
 
 object EventReportController {
-  val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
+  private val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
+  private val perfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
   val noReportFoundResponse: JsObject = Json.obj(
     "code" -> "NO_REPORT_FOUND",
