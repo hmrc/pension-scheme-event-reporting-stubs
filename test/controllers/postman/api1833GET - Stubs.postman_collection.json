@@ -154,6 +154,72 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "400 BAD REQUEST - Invalid Event Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 BAD REQUEST - Invalid Event Type\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.have.jsonBody({",
+							"    \"code\": \"INVALID_EVENTTYPE\",",
+							"    \"reason\": \"Invalid event type\"",
+							"});",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer BXQ3/Treo4kQCZvVcCqKPmr/VH/WbHFfjUIpLdxQ9wfaaTSdrPbsTjRzRuFJu95CXDGHeWES1d7EusuAgaGECcgKEeFZh24I8munERZgEg1rJQAjUIsCbAXePU0jlq3EswWlodgP2qGNoww+VL4ls1RS4gTG1qo/t0bkReOvM4H9KwIkeIPK/mMlBESjue4V",
+						"type": "default"
+					},
+					{
+						"key": "eventType",
+						"value": "Event1",
+						"type": "default",
+						"disabled": true
+					},
+					{
+						"key": "reportVersionNumber",
+						"value": "001",
+						"type": "default"
+					},
+					{
+						"key": "reportStartDate",
+						"value": "2021-04-06",
+						"type": "default"
+					},
+					{
+						"key": "pstr",
+						"value": "24000001IN",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8217/pension-online/event1-status-reports/pstr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8217",
+					"path": [
+						"pension-online",
+						"event1-status-reports",
+						"pstr"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
