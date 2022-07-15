@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import play.api.http.Status.FORBIDDEN
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.api.test._
 
@@ -250,8 +250,6 @@ class EventReportControllerSpec extends SpecBase {
     "return 200 OK for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/api1833/24000015IN.json")
 
-      //TODO: Refactor resources files to have consistent naming?
-
       val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -280,9 +278,28 @@ class EventReportControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
         contentAsJson(result) mustBe invalidEventTypeResponse
       }
-
     }
 
+    "return 404 NOT FOUND for a not found PSTR" in {
+      val notFoundPstr = "24000001IN"
+      val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> "Event1",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+
+      val getRequest = fakeRequest
+
+      running() { _ =>
+        val result: Future[Result] = controller.api1833GET(pstr = notFoundPstr)(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe invalidPstrResponse
+      }
+    }
   }
 
   "submitEventDeclarationReport" must {

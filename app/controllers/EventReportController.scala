@@ -350,13 +350,13 @@ object EventReportController {
        | {
        |   "processingDate": "2023-12-15T12:30:46Z",
        |   "schemeDetails": {
-       |     "pSTR": $pstr,
+       |     "pSTR": "$pstr",
        |     "schemeName": "Abc Ltd"
        |   },
        |   "er1Details": {
-       |     "reportStartDate": $startDate,
+       |     "reportStartDate": "$startDate",
        |     "reportEndDate": "2022-04-05",
-       |     "reportVersionNumber": $version,
+       |     "reportVersionNumber": "$version",
        |     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
        |   },
        |   "schemeMasterTrustDetails": {
