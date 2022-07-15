@@ -48,6 +48,14 @@ trait APIResponses {
     "code" -> "SERVICE_UNAVAILABLE",
     "reason" -> "Dependent systems are currently not responding."
   )
+  val serverError: JsObject = Json.obj(
+    "code" -> "SERVER_ERROR",
+    "reason" -> "IF is currently experiencing problems that require live service intervention."
+  )
+  val unprocessableEntity: JsObject = Json.obj(
+    "code" -> "REQUEST_NOT_PROCESSED",
+    "reason" -> "The remote endpoint has indicated that request could not be processed."
+  )
 
   val duplicateSubmission: JsObject = Json.obj(
     "code" -> "DUPLICATE_SUBMISSION",

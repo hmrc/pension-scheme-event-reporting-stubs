@@ -1,0 +1,30 @@
+{
+  "processingDate": "2021-01-30T23:00:00.0Z",
+  "schemeDetails": {
+    "pSTR": "24000015IN",
+    "schemeName": "Open Scheme Variations Test - Scheme D1.1"
+  },
+  "er20aDetails": {
+    "periodStartDate": "2021-01-01",
+    "periodEndDate": "2021-12-31",
+    "reportVersionNumber": "1",
+    "reportSubmittedDateAndTime": "2021-01-08T20:14:18Z"
+  },
+  "schemeMasterTrustDetails": {
+    "ceaseDate": "2022-12-31"
+  },
+  "erDeclarationDetails": {
+    "submittedBy": "PSP",
+    "submittedID": "VibYf1iB",
+    "submittedName": "Martin Brookes",
+    "psaDeclaration": {
+      "psaDeclaration1": "Selected",
+      "psaDeclaration2": "Selected"
+    },
+    "pspDeclaration": {
+      "authorisedPSAID": "A2100005",
+      "pspDeclaration1": "Selected",
+      "pspDeclaration2": "Selected"
+    }
+  }
+}
