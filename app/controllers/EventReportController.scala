@@ -177,12 +177,12 @@ class EventReportController @Inject()(
             .getOrElse(defaultGetEvent1833(pstr, version, startDate))
           Future.successful(Ok(jsValue))
         }
-        case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
-        case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
-        case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
-        case _            => Future.successful(InternalServerError(internalServerErrorResponse))
-      }
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
+      case _ => Future.successful(InternalServerError(internalServerErrorResponse))
     }
+  }
 
 
   private case class Overview(
