@@ -95,13 +95,13 @@ object DefaultGetResponse {
        |{
        |  "processingDate": "2021-08-19T23:00:00.0Z",
        |  "schemeDetails": {
-       |    "pSTR": $pstr,
+       |    "pSTR": "$pstr",
        |    "schemeName": "Test Scheme"
        |  },
        |  "er20aDetails": {
-       |    "periodStartDate": $startDate,
+       |    "periodStartDate": "$startDate",
        |    "periodEndDate": "2021-12-31",
-       |    "reportVersionNumber": $version,
+       |    "reportVersionNumber": "$version",
        |    "reportSubmittedDateAndTime": "2021-10-05T22:10:09Z"
        |  },
        |  "schemeMasterTrustDetails": {
