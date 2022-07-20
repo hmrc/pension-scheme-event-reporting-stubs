@@ -21,7 +21,8 @@ import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.{APIResponses, DefaultGetResponse, JsonUtils, PstrIDs}
+import utils.DefaultGetResponse.{defaultGetEvent1831, defaultGetEvent1832, defaultGetEvent1833, defaultVersions}
+import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
 import javax.inject.Singleton
@@ -72,23 +73,23 @@ class EventReportController @Inject()(
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
-    if(reportType.isEmpty){
+    if (reportType.isEmpty) {
       Future.successful(BadRequest(missingReportTypeResponse))
     }
-    else if(fromDate.isEmpty){
+    else if (fromDate.isEmpty) {
       Future.successful(BadRequest(missingFromDateResponse))
     }
     else if (toDate.isEmpty) {
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
-      Future.successful(BadRequest(InvalidPstrResponse))
+      Future.successful(BadRequest(invalidPstrResponse))
     }
     else if (!fromDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidFromDateResponse))
+      Future.successful(BadRequest(invalidFromDateResponse))
     }
     else if (!toDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidToDateResponse))
+      Future.successful(BadRequest(invalidToDateResponse))
     }
     else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       Future.successful(BadRequest(toDateNotInRangeResponse))
@@ -123,10 +124,10 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
-        .getOrElse(DefaultGetResponse.defaultVersions(startDate))
+        .getOrElse(defaultVersions(startDate))
 
       Future.successful(Ok(jsValue))
     }
@@ -142,35 +143,54 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
-        .getOrElse(DefaultGetResponse.defaultVersions(startDate))
+        .getOrElse(defaultVersions(startDate))
 
       Future.successful(Ok(jsValue))
     }
   }
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "conf/resources/data/api1823"
+    val path = "conf/resources/data/api1832"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
-    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some(eventType), Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-          Future.successful(NotFound(InvalidPstrResponse))
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
+          Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-            .getOrElse(DefaultGetResponse.defaultGetEvent1832(pstr, eventType, version, startDate))
+            .getOrElse(defaultGetEvent1832(pstr, eventType, version, startDate))
           Future.successful(Ok(jsValue))
         }
-      case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
-      case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
-      case _ => Future.successful(BadRequest(InvalidStartDateResponse))
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
 
 
+  }
+
+  def api1833GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1833"
+    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+
+    (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+      case (Some("Event1"), Some(version), Some(startDate)) =>
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
+          Future.successful(NotFound(invalidPstrResponse))
+        else {
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+            .getOrElse(defaultGetEvent1833(pstr, version, startDate))
+          Future.successful(Ok(jsValue))
+        }
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
+      case _ => Future.successful(InternalServerError(internalServerErrorResponse))
+    }
   }
 
   def getEvent20A(pstr: String): Action[AnyContent] = Action.async { implicit request =>
@@ -182,8 +202,8 @@ class EventReportController @Inject()(
         eventResponseByPstr(pstr, path, version, startDate)
       case (None, None,Some(_)) =>
         eventResponseByPstr(pstr, path, "1", "2021-01-01")
-      case (None, _,_) => Future.successful(BadRequest(InvalidVersionResponse))
-      case _ => Future.successful(BadRequest(InvalidStartDateResponse))
+      case (None, _,_) => Future.successful(BadRequest(invalidVersionResponse))
+      case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
   }
 
@@ -195,13 +215,14 @@ class EventReportController @Inject()(
       case PstrIDs.DUPLICATE_SUBMISSION => Future.successful(Conflict(duplicateSubmission))
       case PstrIDs.INVALID_PAYLOAD => Future.successful(BadRequest(invalidPayload))
       case PstrIDs.REQUEST_NOT_PROCESSED => Future.successful(UnprocessableEntity(unprocessableEntity))
-      case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(InvalidPstrResponse))
+      case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(invalidPstrResponse))
       case _ =>
         val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-          .getOrElse(DefaultGetResponse.defaultGetEvent1831(pstr, version, startDate))
+          .getOrElse(defaultGetEvent1831(pstr, version, startDate))
         Future.successful(Ok(jsValue))
     }
   }
+
 
   private case class Overview(
                                periodStartDate: LocalDate,
@@ -230,34 +251,36 @@ class EventReportController @Inject()(
 }
 
 object EventReportController {
-  val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
-  val NoReportFoundResponse: JsObject = Json.obj(
+  private val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
+  private val perfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+
+  val noReportFoundResponse: JsObject = Json.obj(
     "code" -> "NO_REPORT_FOUND",
     "reason" -> "The remote endpoint has indicated No Scheme report was found for the given period."
   )
-  val InvalidPstrResponse: JsObject = Json.obj(
+  val invalidPstrResponse: JsObject = Json.obj(
     "code" -> "INVALID_PSTR",
     "reason" -> "Submission has not passed validation. Invalid parameter pstr."
   )
 
-  val InvalidEventTypeResponse: JsObject = Json.obj(
+  val invalidEventTypeResponse: JsObject = Json.obj(
     "code" -> "INVALID_EVENTTYPE",
     "reason" -> "Invalid event type"
   )
-  val InvalidVersionResponse: JsObject = Json.obj(
+  val invalidVersionResponse: JsObject = Json.obj(
     "code" -> "INVALID_VERSIONNUMBER",
     "reason" -> "Invalid version"
   )
 
-  val InvalidStartDateResponse: JsObject = Json.obj(
+  val invalidStartDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_STARTDATE",
     "reason" -> "Invalid start date"
   )
-  val InvalidFromDateResponse: JsObject = Json.obj(
+  val invalidFromDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_FROM_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter fromDate."
   )
-  val InvalidToDateResponse: JsObject = Json.obj(
+  val invalidToDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_TO_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter toDate."
   )
@@ -281,14 +304,16 @@ object EventReportController {
     "code" -> "MISSING_REPORT_TYPE",
     "reason" -> "Submission has not passed validation. Required query parameter reportType has not been supplied."
   )
-  val invalidStartDateResponse: JsObject = Json.obj(
-    "code" -> "INVALID_START_DATE",
-    "reason" -> "Submission has not passed validation. Invalid query parameter startDate."
-  )
   val mandatoryStartDateResponse: JsObject = Json.obj(
     "code" -> "PERIOD_START_DATE_MANDATORY",
     "reason" -> "The remote endpoint has indicated that Period Start Date must be provided."
   )
+  val internalServerErrorResponse: JsObject = Json.obj(
+    "code" -> "SERVER_ERROR",
+    "reason" -> "IF is currently experiencing problems that require live service intervention."
+  )
+
+
 
 }
 

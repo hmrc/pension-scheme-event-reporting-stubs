@@ -41,7 +41,7 @@ object DefaultGetResponse {
       )
     )
 
-   def defaultGetEvent1832(pstr: String, eventType: String, version: String, startDate: String):JsValue = Json.parse(
+   def defaultGetEvent1832(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
        |{
        |  "success": {
@@ -89,6 +89,36 @@ object DefaultGetResponse {
        |}
        |
        |""".stripMargin)
+
+   def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
+    s"""
+       | {
+       |   "processingDate": "2023-12-15T12:30:46Z",
+       |   "schemeDetails": {
+       |     "pSTR": "$pstr",
+       |     "schemeName": "Abc Ltd"
+       |   },
+       |   "er1Details": {
+       |     "reportStartDate": "$startDate",
+       |     "reportEndDate": "2022-04-05",
+       |     "reportVersionNumber": "$version",
+       |     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
+       |   },
+       |   "schemeMasterTrustDetails": {
+       |     "startDate": "2021-06-08"
+       |   },
+       |   "erDeclarationDetails": {
+       |     "submittedBy": "PSP",
+       |     "submittedID": "20000001",
+       |     "submittedName": "ABCDEFGHIJKLMNOPQRSTUV",
+       |     "pspDeclaration": {
+       |     "authorisedPSAID": "A4045157",
+       |     "pspDeclaration1": "Selected",
+       |     "pspDeclaration2": "Selected"
+       |   }
+       |   }
+       |
+       |}""".stripMargin)
 
    def defaultGetEvent1831(pstr: String, version: String, startDate: String):JsValue = Json.parse(
     s"""
