@@ -72,23 +72,23 @@ class EventReportController @Inject()(
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
 
-    if(reportType.isEmpty){
+    if (reportType.isEmpty) {
       Future.successful(BadRequest(missingReportTypeResponse))
     }
-    else if(fromDate.isEmpty){
+    else if (fromDate.isEmpty) {
       Future.successful(BadRequest(missingFromDateResponse))
     }
     else if (toDate.isEmpty) {
       Future.successful(BadRequest(missingToDateResponse))
     }
     else if (notFoundPSTR.contains(pstr) || pstr.matches(erPerfTestPstrPattern)) {
-      Future.successful(BadRequest(InvalidPstrResponse))
+      Future.successful(BadRequest(invalidPstrResponse))
     }
     else if (!fromDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidFromDateResponse))
+      Future.successful(BadRequest(invalidFromDateResponse))
     }
     else if (!toDate.matches(datePattern)) {
-      Future.successful(BadRequest(InvalidToDateResponse))
+      Future.successful(BadRequest(invalidToDateResponse))
     }
     else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       Future.successful(BadRequest(toDateNotInRangeResponse))
@@ -123,7 +123,7 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
         .getOrElse(defaultVersions(startDate))
@@ -142,7 +142,7 @@ class EventReportController @Inject()(
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(InvalidPstrResponse))
+      Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
         .getOrElse(defaultVersions(startDate))
@@ -154,24 +154,44 @@ class EventReportController @Inject()(
   def api1823GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1823"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
-    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some(eventType), Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-          Future.successful(NotFound(InvalidPstrResponse))
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
+          Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1823(pstr, eventType, version, startDate))
           Future.successful(Ok(jsValue))
         }
-      case (None, _, _) => Future.successful(BadRequest(InvalidEventTypeResponse))
-      case (_, None, _) => Future.successful(BadRequest(InvalidVersionResponse))
-      case _ => Future.successful(BadRequest(InvalidStartDateResponse))
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
 
 
   }
+
+  def api1833GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1833"
+    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+
+    (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+      case (Some("Event1"), Some(version), Some(startDate)) =>
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
+          Future.successful(NotFound(invalidPstrResponse))
+        else {
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+            .getOrElse(defaultGetEvent1833(pstr, version, startDate))
+          Future.successful(Ok(jsValue))
+        }
+      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
+      case _ => Future.successful(InternalServerError(internalServerErrorResponse))
+    }
+  }
+
 
   private case class Overview(
                                periodStartDate: LocalDate,
@@ -200,34 +220,36 @@ class EventReportController @Inject()(
 }
 
 object EventReportController {
-  val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
-  val NoReportFoundResponse: JsObject = Json.obj(
+  private val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
+  private val perfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+
+  val noReportFoundResponse: JsObject = Json.obj(
     "code" -> "NO_REPORT_FOUND",
     "reason" -> "The remote endpoint has indicated No Scheme report was found for the given period."
   )
-  val InvalidPstrResponse: JsObject = Json.obj(
+  val invalidPstrResponse: JsObject = Json.obj(
     "code" -> "INVALID_PSTR",
     "reason" -> "Submission has not passed validation. Invalid parameter pstr."
   )
 
-  val InvalidEventTypeResponse: JsObject = Json.obj(
+  val invalidEventTypeResponse: JsObject = Json.obj(
     "code" -> "INVALID_EVENTTYPE",
     "reason" -> "Invalid event type"
   )
-  val InvalidVersionResponse: JsObject = Json.obj(
+  val invalidVersionResponse: JsObject = Json.obj(
     "code" -> "INVALID_VERSIONNUMBER",
     "reason" -> "Invalid version"
   )
 
-  val InvalidStartDateResponse: JsObject = Json.obj(
+  val invalidStartDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_STARTDATE",
     "reason" -> "Invalid start date"
   )
-  val InvalidFromDateResponse: JsObject = Json.obj(
+  val invalidFromDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_FROM_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter fromDate."
   )
-  val InvalidToDateResponse: JsObject = Json.obj(
+  val invalidToDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_TO_DATE",
     "reason" -> "Submission has not passed validation. Invalid query parameter toDate."
   )
@@ -251,14 +273,16 @@ object EventReportController {
     "code" -> "MISSING_REPORT_TYPE",
     "reason" -> "Submission has not passed validation. Required query parameter reportType has not been supplied."
   )
-  val invalidStartDateResponse: JsObject = Json.obj(
-    "code" -> "INVALID_START_DATE",
-    "reason" -> "Submission has not passed validation. Invalid query parameter startDate."
-  )
   val mandatoryStartDateResponse: JsObject = Json.obj(
     "code" -> "PERIOD_START_DATE_MANDATORY",
     "reason" -> "The remote endpoint has indicated that Period Start Date must be provided."
   )
+  val internalServerErrorResponse: JsObject = Json.obj(
+    "code" -> "SERVER_ERROR",
+    "reason" -> "IF is currently experiencing problems that require live service intervention."
+  )
+
+
   def defaultVersions(startDate: String): JsArray =
     Json.arr(
       Json.obj(
@@ -280,53 +304,83 @@ object EventReportController {
       )
     )
 
-  private def defaultGetEvent1823(pstr: String, eventType: String, version: String, startDate: String):JsValue = Json.parse(
+  private def defaultGetEvent1823(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
-      |{
-      |  "success": {
-      |    "headerDetails": {
-      |      "processingDate": "2023-12-15T12:30:46Z"
-      |    },
-      |    "schemeDetails": {
-      |      "pSTR": "$pstr",
-      |      "schemeName": "Abc Ltd"
-      |    },
-      |    "eventReportDetails": {
-      |      "fbNumber": "123456789012",
-      |      "reportStartDate": "$startDate",
-      |      "reportEndDate": "2024-04-05",
-      |      "reportStatus": "Compiled",
-      |      "reportVersion": "$version",
-      |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
-      |    },
-      |    "eventDetails": [
-      |      {
-      |        "memberDetails": {
-      |          "eventType": "$eventType",
-      |          "amendedVersion": "001",
-      |          "memberStatus": "New",
-      |          "title": "0001",
-      |          "firstName": "John",
-      |          "middleName": "S",
-      |          "lastName": "Smith",
-      |          "ninoRef": "AS123456A"
-      |        },
-      |        "paymentDetails": {
-      |          "amountPaidBenefitLumpsum": 100.34,
-      |          "eventDateOrTaxYear": "2023-04-13"
-      |        },
-      |        "personReceivedThePayment": {
-      |          "title": "0001",
-      |          "firstName": "Andrew",
-      |          "middleName": "D",
-      |          "lastName": "Collin",
-      |          "ninoRef": "AS123456A"
-      |        }
-      |      }
-      |    ]
-      |  }
-      |}
-      |
-      |""".stripMargin)
+       |{
+       |  "success": {
+       |    "headerDetails": {
+       |      "processingDate": "2023-12-15T12:30:46Z"
+       |    },
+       |    "schemeDetails": {
+       |      "pSTR": "$pstr",
+       |      "schemeName": "Abc Ltd"
+       |    },
+       |    "eventReportDetails": {
+       |      "fbNumber": "123456789012",
+       |      "reportStartDate": "$startDate",
+       |      "reportEndDate": "2024-04-05",
+       |      "reportStatus": "Compiled",
+       |      "reportVersion": "$version",
+       |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
+       |    },
+       |    "eventDetails": [
+       |      {
+       |        "memberDetails": {
+       |          "eventType": "$eventType",
+       |          "amendedVersion": "001",
+       |          "memberStatus": "New",
+       |          "title": "0001",
+       |          "firstName": "John",
+       |          "middleName": "S",
+       |          "lastName": "Smith",
+       |          "ninoRef": "AS123456A"
+       |        },
+       |        "paymentDetails": {
+       |          "amountPaidBenefitLumpsum": 100.34,
+       |          "eventDateOrTaxYear": "2023-04-13"
+       |        },
+       |        "personReceivedThePayment": {
+       |          "title": "0001",
+       |          "firstName": "Andrew",
+       |          "middleName": "D",
+       |          "lastName": "Collin",
+       |          "ninoRef": "AS123456A"
+       |        }
+       |      }
+       |    ]
+       |  }
+       |}
+       |
+       |""".stripMargin)
+
+  private def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
+    s"""
+       | {
+       |   "processingDate": "2023-12-15T12:30:46Z",
+       |   "schemeDetails": {
+       |     "pSTR": "$pstr",
+       |     "schemeName": "Abc Ltd"
+       |   },
+       |   "er1Details": {
+       |     "reportStartDate": "$startDate",
+       |     "reportEndDate": "2022-04-05",
+       |     "reportVersionNumber": "$version",
+       |     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
+       |   },
+       |   "schemeMasterTrustDetails": {
+       |     "startDate": "2021-06-08"
+       |   },
+       |   "erDeclarationDetails": {
+       |     "submittedBy": "PSP",
+       |     "submittedID": "20000001",
+       |     "submittedName": "ABCDEFGHIJKLMNOPQRSTUV",
+       |     "pspDeclaration": {
+       |     "authorisedPSAID": "A4045157",
+       |     "pspDeclaration1": "Selected",
+       |     "pspDeclaration2": "Selected"
+       |   }
+       |   }
+       |
+       |}""".stripMargin)
 }
 
