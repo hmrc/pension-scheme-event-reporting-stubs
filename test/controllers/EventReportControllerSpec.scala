@@ -254,7 +254,6 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> "Event1",
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -276,7 +275,7 @@ class EventReportControllerSpec extends SpecBase {
         val result: Future[Result] = controller.api1833GET(pstr = "test-pstr")(badRequest)
 
         status(result) mustBe BAD_REQUEST
-        contentAsJson(result) mustBe invalidEventTypeResponse
+        contentAsJson(result) mustBe invalidVersionResponse
       }
     }
 
@@ -286,7 +285,6 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> "Event1",
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )

@@ -168,8 +168,8 @@ class EventReportController @Inject()(
     val path = "conf/resources/data/api1833"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
 
-    (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
-      case (Some("Event1"), Some(version), Some(startDate)) =>
+    (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+      case (Some(version), Some(startDate)) =>
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
@@ -177,9 +177,8 @@ class EventReportController @Inject()(
             .getOrElse(defaultGetEvent1833(pstr, version, startDate))
           Future.successful(Ok(jsValue))
         }
-      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
-      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
-      case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
+      case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case (_, None) => Future.successful(BadRequest(invalidStartDateResponse))
       case _ => Future.successful(InternalServerError(internalServerErrorResponse))
     }
   }
