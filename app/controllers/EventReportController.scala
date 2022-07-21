@@ -19,9 +19,10 @@ package controllers
 import com.google.inject.Inject
 import controllers.EventReportController._
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.{APIResponses, JsonUtils}
+import utils.DefaultGetResponse.{defaultGetEvent1831, defaultGetEvent1832, defaultGetEvent1833, defaultVersions}
+import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
 import javax.inject.Singleton
@@ -151,8 +152,8 @@ class EventReportController @Inject()(
     }
   }
 
-  def api1823GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "conf/resources/data/api1823"
+  def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1832"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
@@ -161,7 +162,7 @@ class EventReportController @Inject()(
           Future.successful(NotFound(invalidPstrResponse))
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-            .getOrElse(defaultGetEvent1823(pstr, eventType, version, startDate))
+            .getOrElse(defaultGetEvent1832(pstr, eventType, version, startDate))
           Future.successful(Ok(jsValue))
         }
       case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
@@ -189,6 +190,35 @@ class EventReportController @Inject()(
       case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
       case (_, _, None) => Future.successful(BadRequest(invalidStartDateResponse))
       case _ => Future.successful(InternalServerError(internalServerErrorResponse))
+    }
+  }
+
+  def getEvent20A(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/getEvent20A"
+
+    (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
+      case (Some(version), Some(startDate), None) =>
+        eventResponseByPstr(pstr, path, version, startDate)
+      case (None, None, Some(_)) =>
+        eventResponseByPstr(pstr, path, "1", "2021-01-01")
+      case (None, _, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case _ => Future.successful(BadRequest(invalidStartDateResponse))
+    }
+  }
+
+  private def eventResponseByPstr(pstr: String, path: String, version: String, startDate: String): Future[Result] = {
+    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
+    pstr match {
+      case PstrIDs.INTERNAL_SERVER_ERROR => Future.successful(InternalServerError(serverError))
+      case PstrIDs.SERVICE_UNAVAILABLE => Future.successful(ServiceUnavailable(serviceUnavailable))
+      case PstrIDs.DUPLICATE_SUBMISSION => Future.successful(Conflict(duplicateSubmission))
+      case PstrIDs.INVALID_PAYLOAD => Future.successful(BadRequest(invalidPayload))
+      case PstrIDs.REQUEST_NOT_PROCESSED => Future.successful(UnprocessableEntity(unprocessableEntity))
+      case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(invalidPstrResponse))
+      case _ =>
+        val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+          .getOrElse(defaultGetEvent1831(pstr, version, startDate))
+        Future.successful(Ok(jsValue))
     }
   }
 
@@ -283,104 +313,5 @@ object EventReportController {
   )
 
 
-  def defaultVersions(startDate: String): JsArray =
-    Json.arr(
-      Json.obj(
-        "reportFormBundleNumber" -> "123456789012",
-        "reportVersion" -> 1,
-        "reportStatus" -> "Compiled",
-        "compilationOrSubmissionDate" -> s"${startDate}T09:30:47Z",
-        "reportSubmitterDetails" -> Json.obj(
-          "reportSubmittedBy" -> "PSP",
-          "orgOrPartnershipDetails" -> Json.obj(
-            "orgOrPartnershipName" -> "ABC Limited"
-          )
-        ),
-        "psaDetails" -> Json.obj(
-          "psaOrgOrPartnershipDetails" -> Json.obj(
-            "orgOrPartnershipName" -> "XYZ Limited"
-          )
-        )
-      )
-    )
-
-  private def defaultGetEvent1823(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
-    s"""
-       |{
-       |  "success": {
-       |    "headerDetails": {
-       |      "processingDate": "2023-12-15T12:30:46Z"
-       |    },
-       |    "schemeDetails": {
-       |      "pSTR": "$pstr",
-       |      "schemeName": "Abc Ltd"
-       |    },
-       |    "eventReportDetails": {
-       |      "fbNumber": "123456789012",
-       |      "reportStartDate": "$startDate",
-       |      "reportEndDate": "2024-04-05",
-       |      "reportStatus": "Compiled",
-       |      "reportVersion": "$version",
-       |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
-       |    },
-       |    "eventDetails": [
-       |      {
-       |        "memberDetails": {
-       |          "eventType": "$eventType",
-       |          "amendedVersion": "001",
-       |          "memberStatus": "New",
-       |          "title": "0001",
-       |          "firstName": "John",
-       |          "middleName": "S",
-       |          "lastName": "Smith",
-       |          "ninoRef": "AS123456A"
-       |        },
-       |        "paymentDetails": {
-       |          "amountPaidBenefitLumpsum": 100.34,
-       |          "eventDateOrTaxYear": "2023-04-13"
-       |        },
-       |        "personReceivedThePayment": {
-       |          "title": "0001",
-       |          "firstName": "Andrew",
-       |          "middleName": "D",
-       |          "lastName": "Collin",
-       |          "ninoRef": "AS123456A"
-       |        }
-       |      }
-       |    ]
-       |  }
-       |}
-       |
-       |""".stripMargin)
-
-  private def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
-    s"""
-       | {
-       |   "processingDate": "2023-12-15T12:30:46Z",
-       |   "schemeDetails": {
-       |     "pSTR": "$pstr",
-       |     "schemeName": "Abc Ltd"
-       |   },
-       |   "er1Details": {
-       |     "reportStartDate": "$startDate",
-       |     "reportEndDate": "2022-04-05",
-       |     "reportVersionNumber": "$version",
-       |     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
-       |   },
-       |   "schemeMasterTrustDetails": {
-       |     "startDate": "2021-06-08"
-       |   },
-       |   "erDeclarationDetails": {
-       |     "submittedBy": "PSP",
-       |     "submittedID": "20000001",
-       |     "submittedName": "ABCDEFGHIJKLMNOPQRSTUV",
-       |     "pspDeclaration": {
-       |     "authorisedPSAID": "A4045157",
-       |     "pspDeclaration1": "Selected",
-       |     "pspDeclaration2": "Selected"
-       |   }
-       |   }
-       |
-       |}""".stripMargin)
 }
 

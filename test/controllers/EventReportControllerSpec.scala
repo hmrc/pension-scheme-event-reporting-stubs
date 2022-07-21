@@ -29,6 +29,7 @@ import scala.concurrent.Future
 class EventReportControllerSpec extends SpecBase {
 
   import EventReportController._
+  import utils.DefaultGetResponse._
 
   private val fakeRequest = FakeRequest("POST", "/").withHeaders(("CorrelationId", "testId"),
     "Authorization" -> "test Bearer token", ("Environment", "local"))
@@ -230,9 +231,9 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
-  "api1823GET" must {
+  "api1832GET" must {
     "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1823/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1832/24000015IN.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -242,11 +243,171 @@ class EventReportControllerSpec extends SpecBase {
         "reportStartDate" -> "start"
       )
       val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.api1823GET(pstr = "24000015IN")(getRequest)
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
+      }
+    }
+  }
+
+  "getEvent20A" must {
+    "return 200 for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getEvent20A/24000015IN.json")
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request with reportFormBundleNumber" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/getEvent20A/24000015IN.json")
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportFormBundleNumber" -> "version"
+      )
+      val getRequest = fakeRequest
+      running() { _ =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return BAD_REQUEST for a startDate missing" in {
+
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST for a version missing" in {
+
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return InternalServerError" in {
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "21000001AA")(getRequest)
+
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+
+    "return ServiceUnavailable" in {
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "21000002AA")(getRequest)
+
+        status(result) mustBe SERVICE_UNAVAILABLE
+      }
+    }
+
+    "return DUPLICATE_SUBMISSION" in {
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000009IN")(getRequest)
+
+        status(result) mustBe CONFLICT
+      }
+    }
+
+    "return INVALID_PAYLOAD" in {
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "21000004AA")(getRequest)
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return REQUEST_NOT_PROCESSED" in {
+      val fakeRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      val getRequest = fakeRequest
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "21000005AA")(getRequest)
+
+        status(result) mustBe UNPROCESSABLE_ENTITY
       }
     }
   }
