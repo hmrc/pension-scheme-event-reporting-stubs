@@ -282,13 +282,13 @@ class EventReportControllerSpec extends SpecBase {
         "reportFormBundleNumber" -> "version"
       )
       val getRequest = fakeRequest
-        running() { _ =>
-          val controller = app.injector.instanceOf[EventReportController]
-          val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+      running() { _ =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
 
-          status(result) mustBe OK
-          contentAsJson(result) mustBe validData
-        }
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
     }
 
     "return BAD_REQUEST for a startDate missing" in {

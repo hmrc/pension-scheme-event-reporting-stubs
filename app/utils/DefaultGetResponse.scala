@@ -41,7 +41,7 @@ object DefaultGetResponse {
       )
     )
 
-   def defaultGetEvent1832(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
+  def defaultGetEvent1832(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
        |{
        |  "success": {
@@ -90,7 +90,7 @@ object DefaultGetResponse {
        |
        |""".stripMargin)
 
-   def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
+  def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
        | {
        |   "processingDate": "2023-12-15T12:30:46Z",
@@ -120,7 +120,7 @@ object DefaultGetResponse {
        |
        |}""".stripMargin)
 
-   def defaultGetEvent1831(pstr: String, version: String, startDate: String):JsValue = Json.parse(
+  def defaultGetEvent1831(pstr: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
        |{
        |  "processingDate": "2021-08-19T23:00:00.0Z",

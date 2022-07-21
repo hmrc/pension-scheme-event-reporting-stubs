@@ -196,18 +196,17 @@ class EventReportController @Inject()(
   def getEvent20A(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/getEvent20A"
 
-
-    (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"),request.headers.get("reportFormBundleNumber")) match {
-      case (Some(version), Some(startDate),None) =>
+    (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
+      case (Some(version), Some(startDate), None) =>
         eventResponseByPstr(pstr, path, version, startDate)
-      case (None, None,Some(_)) =>
+      case (None, None, Some(_)) =>
         eventResponseByPstr(pstr, path, "1", "2021-01-01")
-      case (None, _,_) => Future.successful(BadRequest(invalidVersionResponse))
+      case (None, _, _) => Future.successful(BadRequest(invalidVersionResponse))
       case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
   }
 
-  private def eventResponseByPstr(pstr: String, path: String, version: String, startDate: String):Future[Result] = {
+  private def eventResponseByPstr(pstr: String, path: String, version: String, startDate: String): Future[Result] = {
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     pstr match {
       case PstrIDs.INTERNAL_SERVER_ERROR => Future.successful(InternalServerError(serverError))
@@ -312,7 +311,6 @@ object EventReportController {
     "code" -> "SERVER_ERROR",
     "reason" -> "IF is currently experiencing problems that require live service intervention."
   )
-
 
 
 }

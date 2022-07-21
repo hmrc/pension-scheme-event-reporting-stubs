@@ -74,7 +74,7 @@ trait APIResponses {
 
   val createCompileEventReportSummarySuccessResponse: JsObject = Json.obj(
     "processingDate" -> LocalDate.now(),
-     "formBundleNumber" -> "12345678912"
+    "formBundleNumber" -> "12345678912"
   )
 
   val compileEventOneReportSuccessResponse: JsObject = Json.obj(
