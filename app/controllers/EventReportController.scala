@@ -21,7 +21,7 @@ import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.DefaultGetResponse.{defaultGetEvent1831, defaultGetEvent1832, defaultGetEvent1833, defaultVersions}
+import utils.DefaultGetResponse.{defaultGetEvent1831, defaultGetEvent1832, defaultGetEvent1833, defaultGetEvent1834, defaultVersions}
 import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
@@ -184,6 +184,25 @@ class EventReportController @Inject()(
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1833(pstr, version, startDate))
+          Future.successful(Ok(jsValue))
+        }
+      case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
+      case (_, None) => Future.successful(BadRequest(invalidStartDateResponse))
+      case _ => Future.successful(InternalServerError(internalServerErrorResponse))
+    }
+  }
+
+  def api1834GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1834"
+    val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
+
+    (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+      case (Some(version), Some(startDate)) =>
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
+          Future.successful(NotFound(invalidPstrResponse))
+        else {
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+            .getOrElse(defaultGetEvent1834(pstr, version, startDate))
           Future.successful(Ok(jsValue))
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))

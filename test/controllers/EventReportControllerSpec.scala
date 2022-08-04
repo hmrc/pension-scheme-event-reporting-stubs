@@ -412,6 +412,60 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
+  "api1834GET" must {
+    "return 200 OK for a valid request" in {
+      val validData = readJsonFromFile(filePath = "/resources/data/api1834/24000015IN.json")
+
+      val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+
+      val getRequest = fakeRequest
+
+      running() { _ =>
+        val result = controller.api1834GET(pstr = "24000015IN")(getRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 400 BAD REQUEST for a invalid request" in {
+      val badRequest = fakeRequest
+
+      running() { _ =>
+        val result: Future[Result] = controller.api1834GET(pstr = "test-pstr")(badRequest)
+
+        status(result) mustBe BAD_REQUEST
+        contentAsJson(result) mustBe invalidVersionResponse
+      }
+    }
+
+    "return 404 NOT FOUND for a not found PSTR" in {
+      val notFoundPstr = "24000001IN"
+      val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+
+      val getRequest = fakeRequest
+
+      running() { _ =>
+        val result: Future[Result] = controller.api1834GET(pstr = notFoundPstr)(getRequest)
+
+        status(result) mustBe NOT_FOUND
+        contentAsJson(result) mustBe invalidPstrResponse
+      }
+    }
+  }
+
   "api1833GET" must {
     "return 200 OK for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/api1833/24000015IN.json")
