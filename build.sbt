@@ -4,23 +4,15 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "pension-scheme-event-reporting-stubs"
 
-val silencerVersion = "1.7.7"
-
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
-    majorVersion                     := 0,
-    scalaVersion                     := "2.12.15",
+    majorVersion := 0,
+    scalaVersion := "2.13.8",
     PlayKeys.playDefaultPort := 8217,
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
-    // ***************
-    // Use the silencer plugin to suppress warnings
-    scalacOptions += "-P:silencer:pathFilters=routes",
-    libraryDependencies ++= Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-    )
-    // ***************
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    scalacOptions += "-Wconf:src=routes/.*:s",
+    scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
   )
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
@@ -29,7 +21,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(CodeCoverageSettings.settings: _*)
   .settings(ScoverageKeys.coverageMinimumStmtTotal := 80)
   .settings(
-    Test / parallelExecution := false,
-    Test / fork  := true,
-    Test / javaOptions  += "-Dconfig.file=conf/test.application.conf"
+    Test / parallelExecution := true,
+    Test / fork := true,
+    Test / javaOptions += "-Dconfig.file=conf/test.application.conf"
   )
