@@ -18,7 +18,30 @@
     "eventDetails": [
       {
         "memberDetails": {
-          "eventType": "Event2",
+          "eventType": "Event22",
+          "amendedVersion": "001",
+          "memberStatus": "New",
+          "title": "0001",
+          "firstName": "John",
+          "middleName": "S",
+          "lastName": "Smith",
+          "ninoRef": "AS123456A"
+        },
+        "paymentDetails": {
+          "amountPaidBenefitLumpsum": 100.34,
+          "eventDateOrTaxYear": "2023-04-13"
+        },
+        "personReceivedThePayment": {
+          "title": "0001",
+          "firstName": "Andrew",
+          "middleName": "D",
+          "lastName": "Collin",
+          "ninoRef": "AS123456A"
+        }
+      },
+      {
+        "memberDetails": {
+          "eventType": "Event23",
           "amendedVersion": "001",
           "memberStatus": "New",
           "title": "0001",

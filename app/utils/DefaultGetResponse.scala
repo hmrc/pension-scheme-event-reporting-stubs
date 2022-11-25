@@ -41,7 +41,7 @@ object DefaultGetResponse {
       )
     )
 
-  def defaultGetEvent1832(pstr: String, eventType: String, version: String, startDate: String): JsValue = Json.parse(
+  def defaultGetEvent1832(pstr: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
        |{
        |  "success": {
@@ -63,7 +63,7 @@ object DefaultGetResponse {
        |    "eventDetails": [
        |      {
        |        "memberDetails": {
-       |          "eventType": "$eventType",
+       |          "eventType": "Event6",
        |          "amendedVersion": "001",
        |          "memberStatus": "New",
        |          "title": "0001",
