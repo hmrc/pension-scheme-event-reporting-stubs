@@ -41,54 +41,7 @@ object DefaultGetResponse {
       )
     )
 
-  def defaultGetEvent1832(pstr: String, version: String, startDate: String): JsValue = Json.parse(
-    s"""
-       |{
-       |  "success": {
-       |    "headerDetails": {
-       |      "processingDate": "2023-12-15T12:30:46Z"
-       |    },
-       |    "schemeDetails": {
-       |      "pSTR": "$pstr",
-       |      "schemeName": "Abc Ltd"
-       |    },
-       |    "eventReportDetails": {
-       |      "fbNumber": "123456789012",
-       |      "reportStartDate": "$startDate",
-       |      "reportEndDate": "2024-04-05",
-       |      "reportStatus": "Compiled",
-       |      "reportVersion": "$version",
-       |      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
-       |    },
-       |    "eventDetails": [
-       |      {
-       |        "memberDetails": {
-       |          "eventType": "Event2",
-       |          "amendedVersion": "001",
-       |          "memberStatus": "New",
-       |          "title": "0001",
-       |          "firstName": "John",
-       |          "middleName": "S",
-       |          "lastName": "Smith",
-       |          "ninoRef": "AS123456A"
-       |        },
-       |        "paymentDetails": {
-       |          "amountPaidBenefitLumpsum": 100.34,
-       |          "eventDateOrTaxYear": "2023-04-13"
-       |        },
-       |        "personReceivedThePayment": {
-       |          "title": "0001",
-       |          "firstName": "Andrew",
-       |          "middleName": "D",
-       |          "lastName": "Collin",
-       |          "ninoRef": "AS123456A"
-       |        }
-       |      }
-       |    ]
-       |  }
-       |}
-       |
-       |""".stripMargin)
+  def defaultGetEvent1832(): JsValue = Json.parse("{}")
 
   def defaultGetEvent1833(pstr: String, version: String, startDate: String): JsValue = Json.parse(
     s"""
