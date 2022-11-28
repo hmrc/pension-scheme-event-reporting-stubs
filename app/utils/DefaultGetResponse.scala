@@ -63,7 +63,7 @@ object DefaultGetResponse {
        |    "eventDetails": [
        |      {
        |        "memberDetails": {
-       |          "eventType": "Event6",
+       |          "eventType": "Event2",
        |          "amendedVersion": "001",
        |          "memberStatus": "New",
        |          "title": "0001",

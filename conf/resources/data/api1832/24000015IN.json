@@ -1,67 +1,36 @@
 {
-  "success": {
-    "headerDetails": {
-      "processingDate": "2023-12-15T12:30:46Z"
-    },
-    "schemeDetails": {
-      "pSTR": "23056588SB",
-      "schemeName": "Abc Ltd"
-    },
-    "eventReportDetails": {
-      "fbNumber": "123456789012",
-      "reportStartDate": "2023-04-06",
-      "reportEndDate": "2024-04-05",
-      "reportStatus": "Compiled",
-      "reportVersion": "001",
-      "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
-    },
-    "eventDetails": [
-      {
-        "memberDetails": {
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "87219363YN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event22"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
           "eventType": "Event22",
-          "amendedVersion": "001",
-          "memberStatus": "New",
-          "title": "0001",
-          "firstName": "John",
-          "middleName": "S",
-          "lastName": "Smith",
-          "ninoRef": "AS123456A"
-        },
-        "paymentDetails": {
-          "amountPaidBenefitLumpsum": 100.34,
-          "eventDateOrTaxYear": "2023-04-13"
-        },
-        "personReceivedThePayment": {
-          "title": "0001",
-          "firstName": "Andrew",
-          "middleName": "D",
-          "lastName": "Collin",
-          "ninoRef": "AS123456A"
-        }
-      },
-      {
-        "memberDetails": {
-          "eventType": "Event23",
-          "amendedVersion": "001",
-          "memberStatus": "New",
-          "title": "0001",
-          "firstName": "John",
-          "middleName": "S",
-          "lastName": "Smith",
-          "ninoRef": "AS123456A"
-        },
-        "paymentDetails": {
-          "amountPaidBenefitLumpsum": 100.34,
-          "eventDateOrTaxYear": "2023-04-13"
-        },
-        "personReceivedThePayment": {
-          "title": "0001",
-          "firstName": "Andrew",
-          "middleName": "D",
-          "lastName": "Collin",
-          "ninoRef": "AS123456A"
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "John",
+            "middleName": "A",
+            "lastName": "Smith",
+            "nino": "AA345678B"
+          },
+          "paymentDetails": {
+            "monetaryAmount": 123.01,
+            "taxYearEndingDate": "2021-05-30"
+          }
         }
       }
-    ]
-  }
+    }
+  ]
 }
