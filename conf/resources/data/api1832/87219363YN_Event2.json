@@ -10,24 +10,31 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event23"
+    "eventType": "Event2"
   },
   "eventDetails": [
     {
       "memberDetail": {
         "memberStatus": "New",
         "event": {
-          "eventType": "Event23",
+          "eventType": "Event2",
           "individualDetails": {
-            "title": "Mr",
-            "firstName": "Xavier",
-            "middleName": "Y",
-            "lastName": "Ziegler",
+            "title": "Mrs",
+            "firstName": "Joanna",
+            "middleName": "A",
+            "lastName": "Smith",
+            "nino": "AA345678C"
+          },
+          "personReceivedThePayment": {
+            "title": "Mrs",
+            "firstName": "Julia",
+            "middleName": "Samantha",
+            "lastName": "Mike",
             "nino": "AA345678B"
           },
           "paymentDetails": {
-            "monetaryAmount": 17.38,
-            "taxYearEndingDate": "2021-05-30"
+            "amountPaid": 123.02,
+            "eventDate": "2021-05-30"
           }
         }
       }
