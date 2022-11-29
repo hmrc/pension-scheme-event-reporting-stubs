@@ -233,19 +233,19 @@ class EventReportControllerSpec extends SpecBase {
 
   "api1832GET" must {
     "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1832/24000015IN_Event22.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1832/87219363YN_Event22.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> "Event3",
+        "eventType" -> "Event22",
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.api1832GET(pstr = "24000015IN")(getRequest)
+        val result = controller.api1832GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
@@ -253,7 +253,7 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
-  "getEvent20A" must {
+  "api1831GET" must {
     "return 200 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/getEvent20A/24000015IN.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
