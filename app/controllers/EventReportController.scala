@@ -210,7 +210,7 @@ class EventReportController @Inject()(
   }
 
   def api1831GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "conf/resources/data/getEvent20A"
+    val path = "conf/resources/data/api1831"
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
       case (Some(version), Some(startDate), None) =>
