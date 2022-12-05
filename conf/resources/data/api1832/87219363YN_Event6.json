@@ -1,0 +1,35 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "87219363YN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event6"
+  },
+  "eventDetails": [
+    {
+      "event": {
+        "eventType": "Event6",
+        "individualDetails": {
+          "title": "Mrs",
+          "firstName": "Sarah",
+          "middleName": "T",
+          "lastName": "Urqhart",
+          "nino": "AA345678C"
+        },
+        "paymentDetails": {
+          "amountCrystalised": 600.67,
+          "typeOfProtection": "Enhanced life time allowance",
+          "eventDate": "2021-05-30",
+          "freeText": "Sample text"
+        }
+      }
+    }
+  ]
+}

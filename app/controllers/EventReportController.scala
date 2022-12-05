@@ -21,7 +21,7 @@ import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.DefaultGetResponse.{defaultGetEvent1831, defaultGetEvent1832, defaultGetEvent1833, defaultGetEvent1834, defaultVersions}
+import utils.DefaultGetResponse._
 import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
@@ -161,16 +161,14 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-            .getOrElse(defaultGetEvent1832(pstr, eventType, version, startDate))
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json")
+            .getOrElse(defaultGetEvent1832())
           Future.successful(Ok(jsValue))
         }
       case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
       case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
       case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
-
-
   }
 
   def api1833GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
@@ -211,8 +209,8 @@ class EventReportController @Inject()(
     }
   }
 
-  def getEvent20A(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "conf/resources/data/getEvent20A"
+  def api1831GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+    val path = "conf/resources/data/api1831"
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
       case (Some(version), Some(startDate), None) =>

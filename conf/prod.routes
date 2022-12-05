@@ -15,7 +15,8 @@ POST        /pension-online/event20a-declaration-reports/:pstr             contr
 GET         /pension-online/reports/:pstr/ER/versions                      controllers.EventReportController.getERVersions(pstr: String, startDate: String)
 GET         /pension-online/reports/:pstr/ER20A/versions                   controllers.EventReportController.getER20AVersions(pstr: String, startDate: String)
 
-GET         /pension-online/event1-status-reports/:pstr                    controllers.EventReportController.api1833GET(pstr: String)
+
+GET         /pension-online/event20a-status-reports/:pstr                  controllers.EventReportController.api1831GET(pstr: String)
 GET         /pension-online/member-event-status-reports/:pstr              controllers.EventReportController.api1832GET(pstr: String)
-GET         /pension-online/event20a-status-reports/:pstr                  controllers.EventReportController.getEvent20A(pstr: String)
+GET         /pension-online/event1-status-reports/:pstr                    controllers.EventReportController.api1833GET(pstr: String)
 GET         /pension-online/event-status-reports/:pstr                     controllers.EventReportController.api1834GET(pstr: String)

@@ -233,19 +233,19 @@ class EventReportControllerSpec extends SpecBase {
 
   "api1832GET" must {
     "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1832/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1832/87219363YN_Event22.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> "Event3",
+        "eventType" -> "Event22",
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.api1832GET(pstr = "24000015IN")(getRequest)
+        val result = controller.api1832GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
@@ -253,9 +253,9 @@ class EventReportControllerSpec extends SpecBase {
     }
   }
 
-  "getEvent20A" must {
+  "api1831GET" must {
     "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/getEvent20A/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1831/24000015IN.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -266,7 +266,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+        val result = controller.api1831GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
@@ -274,7 +274,7 @@ class EventReportControllerSpec extends SpecBase {
     }
 
     "return 200 for a valid request with reportFormBundleNumber" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/getEvent20A/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1831/24000015IN.json")
       val fakeRequest = FakeRequest("POST", "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -284,7 +284,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { _ =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+        val result = controller.api1831GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
@@ -302,7 +302,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+        val result = controller.api1831GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe BAD_REQUEST
       }
@@ -319,7 +319,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "24000015IN")(getRequest)
+        val result = controller.api1831GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe BAD_REQUEST
       }
@@ -336,7 +336,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "21000001AA")(getRequest)
+        val result = controller.api1831GET(pstr = "21000001AA")(getRequest)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
@@ -354,7 +354,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "21000002AA")(getRequest)
+        val result = controller.api1831GET(pstr = "21000002AA")(getRequest)
 
         status(result) mustBe SERVICE_UNAVAILABLE
       }
@@ -371,7 +371,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "24000009IN")(getRequest)
+        val result = controller.api1831GET(pstr = "24000009IN")(getRequest)
 
         status(result) mustBe CONFLICT
       }
@@ -388,7 +388,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "21000004AA")(getRequest)
+        val result = controller.api1831GET(pstr = "21000004AA")(getRequest)
 
         status(result) mustBe BAD_REQUEST
       }
@@ -405,7 +405,7 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { app =>
         val controller = app.injector.instanceOf[EventReportController]
-        val result = controller.getEvent20A(pstr = "21000005AA")(getRequest)
+        val result = controller.api1831GET(pstr = "21000005AA")(getRequest)
 
         status(result) mustBe UNPROCESSABLE_ENTITY
       }
