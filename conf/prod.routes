@@ -6,7 +6,7 @@ GET         /admin/metrics                                                 com.k
 GET         /pension-online/reports/overview/pods/:pstr/:reportType        controllers.EventReportController.getOverview(pstr: String, fromDate: String, toDate: String, reportType: String)
 
 POST        /pension-online/event-reports/pods/:pstr                       controllers.EventReportController.compileEventReportSummary(pstr: String)
-POST        /pension-online/event1-report/pods/:pstr                       controllers.EventReportController.compileEventOneReport(pstr: String)
+POST        /pension-online/event1-reports/pods/:pstr                      controllers.EventReportController.compileEventOneReport(pstr: String)
 POST        /pension-online/member-event-reports/:pstr                     controllers.EventReportController.compileMemberEventReport(pstr: String)
 
 POST        /pension-online/event-declaration-reports/:pstr                controllers.EventReportController.submitEventDeclarationReport(pstr: String)
