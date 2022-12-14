@@ -1,7 +1,7 @@
 
-# pension-scheme-event-reporting-stubs
+# Pension Scheme Event Reporting Stubs
 
-This is a placeholder README.md for a new repository
+Microservice to provide endpoints to replicate request and response
 
 ### License
 
