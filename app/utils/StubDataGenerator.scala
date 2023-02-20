@@ -24,19 +24,28 @@ import faker._
 @Singleton
 class StubDataGenerator {
 
-  def generateEvent22PaginationJson(members: Int): List[JsObject] = {
-    for {
+  def generateEvent22SummaryJson(members: Int): JsObject = {
+    val arrayOfMembers = for {
       _ <- (1 to members).toList
     } yield {
       Json.obj(
-        "firstName" -> Name.first_name,
-        "lastName" -> Name.last_name,
-        "nino" -> s"${new Random().alphanumeric.filter(_.isLetter).take(2).mkString.toUpperCase}${new Random().between(100000, 999999)}C",
-        "taxYear" -> "2022-23",
-        "amount" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP)
+        "membersDetails" -> Json.obj(
+          "firstName" -> Name.first_name,
+          "lastName" -> Name.last_name,
+          "nino" -> s"${new Random().alphanumeric.filter(_.isLetter).take(2).mkString.toUpperCase}${new Random().between(100000, 999999)}C"
+        ),
+        "chooseTaxYear" -> "2022",
+        "totalPensionAmounts" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP)
       )
     }
+    Json.obj(
+      "data" -> Json.obj(
+        "event22" -> Json.obj(
+          "members" -> arrayOfMembers
+        )
+      )
+    )
   }
   // See JSON output:
-  // println(generateEvent22PaginationJson(3))
+  // println(generateEvent22SummaryJson(3))
 }
