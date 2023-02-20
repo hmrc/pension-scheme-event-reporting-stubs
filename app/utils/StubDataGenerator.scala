@@ -20,10 +20,10 @@ import play.api.libs.json.{JsObject, Json}
 import scala.util.Random
 import faker._
 
-// TODO: Change back to class once happy with implementation, object extending App for now so you can run it.
-object StubDataGenerator extends App {
+// object StubDataGenerator extends App (if you want to test locally)
+@Singleton
+class StubDataGenerator {
 
-  // Makes as many random members as you like and turns into the JSON required for the FE display.
   def generateEvent22PaginationJson(members: Int): List[JsObject] = {
     for {
       _ <- (1 to members).toList
@@ -31,12 +31,12 @@ object StubDataGenerator extends App {
       Json.obj(
         "firstName" -> Name.first_name,
         "lastName" -> Name.last_name,
-        "nino" -> s"AB${new Random().between(100000, 999999)}C",
+        "nino" -> s"${new Random().alphanumeric.filter(_.isLetter).take(2).mkString.toUpperCase}${new Random().between(100000, 999999)}C",
         "taxYear" -> "2022-23",
         "amount" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP)
       )
     }
   }
-  // TODO: remove println, exists now to see JSON output.
-  println(generateEvent22PaginationJson(3))
+  // See JSON output:
+  // println(generateEvent22PaginationJson(3))
 }
