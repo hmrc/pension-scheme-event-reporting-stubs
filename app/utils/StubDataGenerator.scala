@@ -18,15 +18,15 @@ package utils
 
 import play.api.libs.json.{JsObject, Json}
 import scala.util.Random
-import faker._
+import faker.Name
 
 // object StubDataGenerator extends App (if you want to test locally)
 @Singleton
 class StubDataGenerator {
 
-  def generateEvent22SummaryJson(members: Int): JsObject = {
+  def generateEvent22SummaryJson(numberOfMembers: Int): JsObject = {
     val arrayOfMembers = for {
-      _ <- (1 to members).toList
+      _ <- (1 to numberOfMembers).toList
     } yield {
       Json.obj(
         "membersDetails" -> Json.obj(
