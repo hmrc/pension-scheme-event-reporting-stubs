@@ -20,9 +20,15 @@ import play.api.libs.json.{JsObject, Json}
 import scala.util.Random
 import faker.Name
 
-// object StubDataGenerator extends App (if you want to test locally)
-@Singleton
-class StubDataGenerator {
+// Run here to generate fake payload file.
+object StubDataGenerator extends App {
+
+  def writeFileToConfResources(content:String, fileName:String):Unit = {
+    import java.io._
+    val pw = new PrintWriter(new File( s"conf/resources/data/api1832/event22PaginationTestPayloads/$fileName" ))
+    pw.write(content)
+    pw.close()
+  }
 
   def generateEvent22SummaryJson(numberOfMembers: Int): JsObject = {
     val arrayOfMembers = for {
@@ -39,13 +45,20 @@ class StubDataGenerator {
       )
     }
     Json.obj(
+      "_id" -> """ObjectId("Change me to match the original ObjectId value")""",
+      "apiTypes" -> "1830",
+      "pstr" -> "87219363YN",
       "data" -> Json.obj(
         "event22" -> Json.obj(
           "members" -> arrayOfMembers
         )
-      )
+      ),
+    "expireAt" -> """ISODate("2023-03-22T00:00:00.000+0000")""",
+    "lastUpdated" -> """ISODate("2023-02-21T11:54:23.723+0000")"""
     )
   }
-  // See JSON output:
-  // println(generateEvent22SummaryJson(3))
+
+  // Uncomment below to write files, rename second argument as appropriate.
+  // private val numOfMembers = 500
+  // writeFileToConfResources(generateEvent22SummaryJson(numOfMembers).toString(), s"${numOfMembers.toString}MembersPayload.json")
 }
