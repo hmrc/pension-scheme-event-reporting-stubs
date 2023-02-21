@@ -58,7 +58,7 @@ object StubDataGenerator extends App {
     )
   }
 
-  // Uncomment below to write files, rename second argument as appropriate.
+  // Uncomment below to write files.
   // private val numOfMembers = 500
   // writeFileToConfResources(generateEvent22SummaryJson(numOfMembers).toString(), s"${numOfMembers.toString}MembersPayload.json")
 }
