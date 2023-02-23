@@ -30,7 +30,7 @@ object StubDataGenerator extends App {
     pw.close()
   }
 
-  def generateEvent22SummaryJson(numberOfMembers: Int): JsObject = {
+  def generateEvent22SummaryJson(numberOfMembers: Int, year: Int): JsObject = {
     val arrayOfMembers = for {
       _ <- (1 to numberOfMembers).toList
     } yield {
@@ -38,14 +38,14 @@ object StubDataGenerator extends App {
         "membersDetails" -> Json.obj(
           "firstName" -> Name.first_name,
           "lastName" -> Name.last_name,
-          "nino" -> s"${new Random().alphanumeric.filter(_.isLetter).take(2).mkString.toUpperCase}${new Random().between(100000, 999999)}C"
+          "nino" -> s"AB${new Random().between(100000, 999999)}C"
         ),
-        "chooseTaxYear" -> "2022",
+        "chooseTaxYear" -> s"${year}",
         "totalPensionAmounts" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP)
       )
     }
     Json.obj(
-      "_id" -> """ObjectId("Change me to match the original ObjectId value")""",
+      "_id" -> "Change this entire line to match the original Mongo document",
       "apiTypes" -> "1830",
       "pstr" -> "87219363YN",
       "data" -> Json.obj(
@@ -53,12 +53,13 @@ object StubDataGenerator extends App {
           "members" -> arrayOfMembers
         )
       ),
-    "expireAt" -> """ISODate("2023-03-22T00:00:00.000+0000")""",
-    "lastUpdated" -> """ISODate("2023-02-21T11:54:23.723+0000")"""
+    "expireAt" -> "Change this entire line to match the original Mongo document",
+    "lastUpdated" -> "Change this entire line to match the original Mongo document"
     )
   }
 
   // Uncomment below to write files.
-//   private val numOfMembers = 100
-//   writeFileToConfResources(generateEvent22SummaryJson(numOfMembers).toString(), s"${numOfMembers.toString}MembersPayload.json")
+  //  private val numOfMembers = 100
+  //  private val taxYear = DateHelper.currentYear - 1
+  //  writeFileToConfResources(generateEvent22SummaryJson(numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 }
