@@ -22,15 +22,14 @@ import faker.Name
 
 // Run here to generate fake payload file.
 object StubDataGenerator extends App {
-
-  def writeFileToConfResources(content:String, fileName:String):Unit = {
+  def writeFileToConfResources(eventType: String, content:String, fileName:String):Unit = {
     import java.io._
-    val pw = new PrintWriter(new File( s"conf/resources/data/api1832/event22PaginationTestPayloads/$fileName" ))
+    val pw = new PrintWriter(new File( s"conf/resources/data/api1832/${eventType}PaginationTestPayloads/$fileName" ))
     pw.write(content)
     pw.close()
   }
 
-  def generateEvent22SummaryJson(numberOfMembers: Int, year: Int): JsObject = {
+  def generateEvent22Or23SummaryJson(eventType: String, numberOfMembers: Int, year: Int): JsObject = {
     val arrayOfMembers = for {
       _ <- (1 to numberOfMembers).toList
     } yield {
@@ -49,7 +48,7 @@ object StubDataGenerator extends App {
       "apiTypes" -> "1830",
       "pstr" -> "87219363YN",
       "data" -> Json.obj(
-        "event22" -> Json.obj(
+        eventType -> Json.obj(
           "members" -> arrayOfMembers
         )
       ),
@@ -58,8 +57,52 @@ object StubDataGenerator extends App {
     )
   }
 
+  def generateEvent6SummaryJson(eventType: String, numberOfMembers: Int, year: Int): JsObject = {
+    val protectionTypes = Seq("enhancedLifetimeAllowance", "enhancedProtection", "fixedProtection",
+      "fixedProtection2014", "fixedProtection2016", "individualProtection2014", "individualProtection2016"
+    )
+    val arrayOfMembers = for {
+      _ <- (1 to numberOfMembers).toList
+    } yield {
+      Json.obj(
+        "membersDetails" -> Json.obj(
+          "firstName" -> Name.first_name,
+          "lastName" -> Name.last_name,
+          "nino" -> s"AB${new Random().between(100000, 999999)}C"
+        ),
+        //TODO: randomise value of typeOfProtection options
+        "typeOfProtection" -> s"${new Random().shuffle(protectionTypes).head}",
+        "inputProtectionType" ->  s"${new Random().between(10000000, 99999999)}",
+        "AmountCrystallisedAndDate" -> Json.obj(
+          "amountCrystallised" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP),
+          "crystallisedDate" -> s"${year}-11-0${new Random().between(1, 9)}",
+        )
+      )
+    }
+    Json.obj(
+      "_id" -> "Change this entire line to match the original Mongo document",
+      "apiTypes" -> "1830",
+      "pstr" -> "87219363YN",
+      "data" -> Json.obj(
+        eventType -> Json.obj(
+          "members" -> arrayOfMembers
+        )
+      ),
+      "expireAt" -> "Change this entire line to match the original Mongo document",
+      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+    )
+  }
+
   // Uncomment below to write files.
-  //  private val numOfMembers = 100
-  //  private val taxYear = DateHelper.currentYear - 1
-  //  writeFileToConfResources(generateEvent22SummaryJson(numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+  private val numOfMembers = 100
+   private val taxYear = DateHelper.currentYear - 1
+
+  // generate data for event22
+  //writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+
+  //generate data for event23
+//  writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+
+  // generate data for event6
+  writeFileToConfResources("event6", generateEvent6SummaryJson("event6", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 }
