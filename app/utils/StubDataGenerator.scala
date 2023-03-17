@@ -145,9 +145,6 @@ object StubDataGenerator extends App {
   // generate data for event22
   //writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
-  //generate data for event23
-  //writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
-
   // generate json data for event6
   //writeFileToConfResources("event6", generateEvent6SummaryJson("event6", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
@@ -155,6 +152,9 @@ object StubDataGenerator extends App {
   //writeFileToConfResources("event6", generateEvent6SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
 
   // generate csv data for event23
-  writeFileToConfResources("event23", generateEvent22Or23SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
+  // writeFileToConfResources("event23", generateEvent22Or23SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
+
+  //generate json data for event23
+//  writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
 }
