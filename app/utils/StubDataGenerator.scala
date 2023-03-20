@@ -59,12 +59,31 @@ object StubDataGenerator extends App {
     headers + membersListAsString
   }
 
-  def generateEvent22Or23SummaryCsv(numberOfMembers: Int, year: Int): String = {
+  def generateEvent23SummaryCsv(numberOfMembers: Int, year: Int): String = {
     val headers = "First name," +
       "Last name," +
       "National Insurance number," +
       "In which tax year was the money purchase pension savings statement issued? (XXXX to XXXX)," +
       "What is the total of the member’s pension input amounts for money purchase arrangements under the scheme for the tax year that the purchase pension savings statement was issued? (£)\n"
+    val arrayOfMembers = for {
+      _ <- (1 to numberOfMembers).toList
+    } yield {
+      s"${Name.first_name}," +
+        s"${Name.last_name}," +
+        s"AB${new Random().between(100000, 999999)}C," +
+        s"$year to ${year + 1}," +
+        s"${BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP)}\n"
+    }
+    val membersListAsString = arrayOfMembers.mkString
+    headers + membersListAsString
+  }
+
+  def generateEvent22SummaryCsv(numberOfMembers: Int, year: Int): String = {
+    val headers = "First name," +
+      "Last name," +
+      "National Insurance number," +
+      "In which tax year was the annual allowance exceeded? (XXXX to XXXX)," +
+      "What is the total of the member's pension input amounts for all arrangements under the scheme in the tax year that the annual allowance was exceeded? (£)\n"
     val arrayOfMembers = for {
       _ <- (1 to numberOfMembers).toList
     } yield {
@@ -143,7 +162,10 @@ object StubDataGenerator extends App {
   private val taxYear = DateHelper.currentYear - 1
 
   // generate data for event22
-  //writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+  // writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+
+  // generate csv data for event6
+  // writeFileToConfResources("event22", generateEvent22SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
 
   // generate json data for event6
   //writeFileToConfResources("event6", generateEvent6SummaryJson("event6", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
@@ -154,7 +176,7 @@ object StubDataGenerator extends App {
   // generate csv data for event23
   // writeFileToConfResources("event23", generateEvent22Or23SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
 
-  //generate json data for event23
-//  writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+  // generate json data for event23
+  // writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
 }
