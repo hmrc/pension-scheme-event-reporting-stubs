@@ -114,7 +114,7 @@ object StubDataGenerator extends App {
     Json.obj(
       "_id" -> "Change this entire line to match the original Mongo document",
       "apiTypes" -> "1830",
-      "pstr" -> "87219363YN",
+      "pstr" -> "Change this entire line to match the original Mongo document",
       "data" -> Json.obj(
         eventType -> Json.obj(
           "members" -> arrayOfMembers
@@ -146,7 +146,7 @@ object StubDataGenerator extends App {
     Json.obj(
       "_id" -> "Change this entire line to match the original Mongo document",
       "apiTypes" -> "1830",
-      "pstr" -> "87219363YN",
+      "pstr" -> "Change this entire line to match the original Mongo document",
       "data" -> Json.obj(
         eventType -> Json.obj(
           "members" -> arrayOfMembers
