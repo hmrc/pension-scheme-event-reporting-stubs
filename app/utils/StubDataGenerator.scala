@@ -164,7 +164,7 @@ object StubDataGenerator extends App {
   // generate data for event22
   // writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
-  // generate csv data for event6
+  // generate csv data for event22
   // writeFileToConfResources("event22", generateEvent22SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
 
   // generate json data for event6

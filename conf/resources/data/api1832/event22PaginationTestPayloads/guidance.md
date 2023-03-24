@@ -14,6 +14,7 @@ To test the pagination for the Event 22 summary please follow these steps.
 10. Copy and paste this whole document to a text editor,
 11. In the Mongo document, replace the whole document with the formatted document (step 7),
 12. Replace the second line starting "_id" with the corresponding line from the original mongo document, saved in step 9,
+12. Replace the fourth line starting "pstr" with the corresponding line from the original mongo document, saved in step 9,
 13. Replace the penultimate line starting "expireAt" with the corresponding line from the original mongo document, saved in step 9,
 14. Replace the last line starting "lastUpdated" with the corresponding line from the original mongo document, saved in step 9,
 15. Save the new document in your Mongo browser,
