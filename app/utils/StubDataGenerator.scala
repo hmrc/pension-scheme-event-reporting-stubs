@@ -29,14 +29,12 @@ object StubDataGenerator extends App {
     pw.close()
   }
 
-  private val protectionTypes = Seq("enhancedLifetimeAllowance", "enhancedProtection", "fixedProtection",
-    "fixedProtection2014", "fixedProtection2016", "individualProtection2014", "individualProtection2016"
-  )
-  private val protectionTypesCsv = Seq("Enhanced lifetime allowance", "Enhanced protection", "Fixed protection",
-    "Fixed protection 2014", "Fixed protection 2016", "Individual protection 2014", "Individual protection 2016"
-  )
-
   def generateEvent6SummaryCsv( numberOfMembers: Int, year: Int): String = {
+
+    val protectionTypesCsv = Seq("Enhanced lifetime allowance", "Enhanced protection", "Fixed protection",
+      "Fixed protection 2014", "Fixed protection 2016", "Individual protection 2014", "Individual protection 2016"
+    )
+
     val headers = "First name," +
       "Last name," +
       "National Insurance number," +
@@ -126,6 +124,9 @@ object StubDataGenerator extends App {
   }
 
   def generateEvent6SummaryJson(eventType: String, numberOfMembers: Int, year: Int): JsObject = {
+    val protectionTypes = Seq("enhancedLifetimeAllowance", "enhancedProtection", "fixedProtection",
+      "fixedProtection2014", "fixedProtection2016", "individualProtection2014", "individualProtection2016"
+    )
     val arrayOfMembers = for {
       _ <- (1 to numberOfMembers).toList
     } yield {
@@ -158,8 +159,8 @@ object StubDataGenerator extends App {
   }
 
   // Uncomment below to write files.
-  private val numOfMembers = 18000
-  private val taxYear = DateHelper.currentYear - 1
+  //  private val numOfMembers = 18000
+  //  private val taxYear = DateHelper.currentYear - 1
 
   // generate data for event22
   // writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
