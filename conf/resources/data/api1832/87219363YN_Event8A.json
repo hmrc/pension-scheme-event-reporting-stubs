@@ -14,21 +14,24 @@
   },
   "eventDetails": [
     {
-      "event": {
-        "eventType": "Event8A",
-        "individualDetails": {
-          "title": "Mr",
-          "firstName": "Nigel",
-          "middleName": "O",
-          "lastName": "Pratchett",
-          "nino": "AA345678C"
-        },
-        "paymentDetails": {
-          "reasonBenefitTaken": "Member where payment of a stand-alone lump sum (100 per lump sum) and the member had protected lump sum rights of more than £375,000 with either primary protection or enhanced protection",
-          "typeOfProtection": "Primary Protection",
-          "amountLumpSum": 500.00,
-          "eventDate": "2021-05-30",
-          "freeText": "Sample text"
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event8A",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Nigel",
+            "middleName": "O",
+            "lastName": "Pratchett",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "reasonBenefitTaken": "Member where payment of a stand-alone lump sum (100 per lump sum) and the member had protected lump sum rights of more than £375,000 with either primary protection or enhanced protection",
+            "typeOfProtection": "Primary Protection",
+            "amountLumpSum": 500.00,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
         }
       }
     }
