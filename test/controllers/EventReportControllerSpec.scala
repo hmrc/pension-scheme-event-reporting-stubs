@@ -232,28 +232,224 @@ class EventReportControllerSpec extends SpecBase {
   }
 
   "api1832GET" must {
-    "return 200 for a valid request" in {
-      val api1832Events = List("Event2", "Event3", "Event4", "Event5", "Event6", "Event7", "Event8", "Event8A", "Event22", "Event23", "Event24")
-      api1832Events.foreach(
-        event => {
-          val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
-          val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
-            ("CorrelationId", "testId"),
-            "Authorization" -> "test Bearer token",
-            ("Environment", "local"),
-            "eventType" -> s"${event.toLowerCase()}",
-            "reportVersionNumber" -> "version",
-            "reportStartDate" -> "start"
-          )
-          running() { app =>
-            val controller = app.injector.instanceOf[EventReportController]
-            val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
-            status(result) mustBe OK
-            contentAsJson(result) mustBe validData
-          }
-        }
+    "return 200 for a valid request, Event2" in {
+      val event = "Event2"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
       )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event3" in {
+      val event = "Event3"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event4" in {
+      val event = "Event4"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event5" in {
+      val event = "Event5"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event6" in {
+      val event = "Event6"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event7" in {
+      val event = "Event7"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event8" in {
+      val event = "Event8"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event8A" in {
+      val event = "Event8A"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> "event8A",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event22" in {
+      val event = "Event22"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event23" in {
+      val event = "Event23"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
+    }
+
+    "return 200 for a valid request, Event24" in {
+      val event = "Event24"
+      val validData = readJsonFromFile(filePath = s"/resources/data/api1832/87219363YN_${event}.json")
+      val fakeGetRequest = FakeRequest("POST", "/").withHeaders(
+        ("CorrelationId", "testId"),
+        "Authorization" -> "test Bearer token",
+        ("Environment", "local"),
+        "eventType" -> s"${event.toLowerCase()}",
+        "reportVersionNumber" -> "version",
+        "reportStartDate" -> "start"
+      )
+      running() { app =>
+        val controller = app.injector.instanceOf[EventReportController]
+        val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
+
+        status(result) mustBe OK
+        contentAsJson(result) mustBe validData
+      }
     }
   }
 
