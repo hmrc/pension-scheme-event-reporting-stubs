@@ -243,10 +243,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -263,10 +261,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -283,10 +279,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -303,10 +297,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -323,10 +315,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -343,10 +333,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -363,10 +351,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -383,10 +369,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -403,10 +387,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -423,10 +405,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -443,10 +423,8 @@ class EventReportControllerSpec extends SpecBase {
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
-      running() { app =>
-        val controller = app.injector.instanceOf[EventReportController]
+      running() { _ =>
         val result = controller.api1832GET(pstr = "87219363YN")(fakeGetRequest)
-
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
