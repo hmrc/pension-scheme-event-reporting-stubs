@@ -365,7 +365,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> "event8A",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
