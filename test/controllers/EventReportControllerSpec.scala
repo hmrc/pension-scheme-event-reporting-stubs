@@ -239,7 +239,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -257,7 +257,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -275,7 +275,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -293,7 +293,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -311,7 +311,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -329,7 +329,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -347,7 +347,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -383,7 +383,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -401,7 +401,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )
@@ -419,7 +419,7 @@ class EventReportControllerSpec extends SpecBase {
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "eventType" -> s"${event.toLowerCase()}",
+        "eventType" -> event,
         "reportVersionNumber" -> "version",
         "reportStartDate" -> "start"
       )

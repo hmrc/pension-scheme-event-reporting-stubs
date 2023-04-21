@@ -60,7 +60,7 @@ class EventReportController @Inject()(
 
   def getOverview(pstr: String, fromDate: String, toDate: String, reportType: String): Action[AnyContent] = Action.async {
 
-    val path = "resources/data/getOverview"
+    val path = "conf/resources/data/getOverview"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN", "00000042IN")
     val erPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     val datePattern: String = "^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$"
@@ -115,7 +115,7 @@ class EventReportController @Inject()(
 
   def getERVersions(pstr: String, startDate: String): Action[AnyContent] = Action.async {
 
-    val path = "resources/data/getVersions"
+    val path = "conf/resources/data/getVersions"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
@@ -134,7 +134,7 @@ class EventReportController @Inject()(
   }
 
   def getER20AVersions(pstr: String, startDate: String): Action[AnyContent] = Action.async {
-    val path = "resources/data/getVersions"
+    val path = "conf/resources/data/getVersions"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
@@ -153,7 +153,7 @@ class EventReportController @Inject()(
   }
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "resources/data/api1832"
+    val path = "conf/resources/data/api1832"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
@@ -172,7 +172,7 @@ class EventReportController @Inject()(
   }
 
   def api1833GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "resources/data/api1833"
+    val path = "conf/resources/data/api1833"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
@@ -191,7 +191,7 @@ class EventReportController @Inject()(
   }
 
   def api1834GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "resources/data/api1834"
+    val path = "conf/resources/data/api1834"
     val notFoundPSTR = Seq("24000001IN", "24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
@@ -210,7 +210,7 @@ class EventReportController @Inject()(
   }
 
   def api1831GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "resources/data/api1831"
+    val path = "conf/resources/data/api1831"
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
       case (Some(version), Some(startDate), None) =>
