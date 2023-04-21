@@ -14,18 +14,21 @@
   },
   "eventDetails": [
     {
-      "event": {
-        "eventType": "Event5",
-        "individualDetails": {
-          "title": "Mr",
-          "firstName": "Kevin",
-          "middleName": "L",
-          "lastName": "Mount",
-          "nino": "AA345678C"
-        },
-        "paymentDetails": {
-          "annualRate": 5.00,
-          "eventDate": "2021-05-30"
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event5",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Kevin",
+            "middleName": "L",
+            "lastName": "Mount",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "annualRate": 6.00,
+            "eventDate": "2021-05-30"
+          }
         }
       }
     }

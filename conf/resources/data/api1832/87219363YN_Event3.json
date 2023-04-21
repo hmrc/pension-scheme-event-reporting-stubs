@@ -14,20 +14,23 @@
   },
   "eventDetails": [
     {
-      "event": {
-        "eventType": "Event3",
-        "individualDetails": {
-          "title": "Mrs",
-          "firstName": "Gemma",
-          "middleName": "H",
-          "lastName": "Ioannis",
-          "nino": "AA345678C"
-        },
-        "paymentDetails": {
-          "reasonBenefitTaken": "Ill Health",
-          "amountBenefit": 999.99,
-          "eventDate": "2021-05-30",
-          "freeText": "Sample description"
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event3",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Gemma",
+            "middleName": "H",
+            "lastName": "Ioannis",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "reasonBenefitTaken": "Other",
+            "amountBenefit": 999.99,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample description"
+          }
         }
       }
     }
