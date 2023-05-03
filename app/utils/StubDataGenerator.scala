@@ -159,11 +159,11 @@ object StubDataGenerator extends App {
   }
 
   // Uncomment below to write files.
-  //  private val numOfMembers = 18000
-  //  private val taxYear = DateHelper.currentYear - 1
+    private val numOfMembers = 18000
+    private val taxYear = DateHelper.currentYear - 1
 
-  // generate data for event22
-  // writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+//   generate data for event22
+   writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
   // generate csv data for event22
   // writeFileToConfResources("event22", generateEvent22SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
