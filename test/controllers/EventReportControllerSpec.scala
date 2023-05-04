@@ -192,7 +192,7 @@ class EventReportControllerSpec extends SpecBase {
     "return Bad Request if invalid PSTR response" in {
       val getRequest = fakeRequest
       running() { _ =>
-        val invalidPstr = "24000001IN"
+        val invalidPstr = "24000007IN"
         val result = controller.getOverview(pstr = invalidPstr, fromDate = "2022-04-05", toDate = "2022-04-04", reportType = "ER")(getRequest)
 
         status(result) mustBe BAD_REQUEST
@@ -624,7 +624,7 @@ class EventReportControllerSpec extends SpecBase {
     }
 
     "return 404 NOT FOUND for a not found PSTR" in {
-      val notFoundPstr = "24000001IN"
+      val notFoundPstr = "24000007IN"
       val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -678,7 +678,7 @@ class EventReportControllerSpec extends SpecBase {
     }
 
     "return 404 NOT FOUND for a not found PSTR" in {
-      val notFoundPstr = "24000001IN"
+      val notFoundPstr = "24000007IN"
       val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
@@ -793,7 +793,7 @@ class EventReportControllerSpec extends SpecBase {
     "must return Not Found if invalid PSTR response" in {
       val getRequest = fakeRequest
       running() { _ =>
-        val invalidPstr = "24000001IN"
+        val invalidPstr = "24000007IN"
         val result = controller.getERVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
@@ -847,7 +847,7 @@ class EventReportControllerSpec extends SpecBase {
     "must return Not Found if invalid PSTR response" in {
       val getRequest = fakeRequest
       running() { _ =>
-        val invalidPstr = "24000001IN"
+        val invalidPstr = "24000007IN"
         val result = controller.getER20AVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
