@@ -14,20 +14,23 @@
   },
   "eventDetails": [
     {
-      "event": {
-        "eventType": "Event8",
-        "individualDetails": {
-          "title": "Mr",
-          "firstName": "Richard",
-          "middleName": "S",
-          "lastName": "Trudy",
-          "nino": "AA345678C"
-        },
-        "paymentDetails": {
-          "typeOfProtection": "Primary Protection",
-          "amountLumpSum": 8910.00,
-          "eventDate": "2021-05-30",
-          "freeText": "Sample text"
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event8",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "Trudy",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "typeOfProtection": "Primary Protection",
+            "amountLumpSum": 8910.00,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
         }
       }
     }

@@ -14,18 +14,21 @@
   },
   "eventDetails": [
     {
-      "event": {
-        "eventType": "Event4",
-        "individualDetails": {
-          "title": "Mr",
-          "firstName": "Henry",
-          "middleName": "I",
-          "lastName": "Johnson",
-          "nino": "AA345678C"
-        },
-        "paymentDetails": {
-          "amountPaid": 3500.00,
-          "eventDate": "2021-05-30"
+      "memberDetail": {
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event4",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "Johnson",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountPaid": 3500.00,
+            "eventDate": "2021-05-30"
+          }
         }
       }
     }
