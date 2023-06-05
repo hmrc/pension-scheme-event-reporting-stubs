@@ -233,7 +233,7 @@ class EventReportController @Inject()(
       case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(invalidPstrResponse))
       case _ =>
         val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-          .getOrElse(defaultGetEvent1831(pstr, version, startDate))
+          .getOrElse(defaultGetEvent1831())
         Future.successful(Ok(jsValue))
     }
   }
