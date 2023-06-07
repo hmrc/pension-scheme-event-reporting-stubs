@@ -181,38 +181,5 @@ object DefaultGetResponse {
                   |}""".stripMargin)
   }
 
-  def defaultGetEvent1831(pstr: String, version: String, startDate: String): JsValue = Json.parse(
-    s"""
-       |{
-       |  "processingDate": "2021-08-19T23:00:00.0Z",
-       |  "schemeDetails": {
-       |    "pSTR": "$pstr",
-       |    "schemeName": "Test Scheme"
-       |  },
-       |  "er20aDetails": {
-       |    "periodStartDate": "$startDate",
-       |    "periodEndDate": "2021-12-31",
-       |    "reportVersionNumber": "$version",
-       |    "reportSubmittedDateAndTime": "2021-10-05T22:10:09Z"
-       |  },
-       |  "schemeMasterTrustDetails": {
-       |    "startDate": "2021-01-21"
-       |  },
-       |  "erDeclarationDetails": {
-       |    "submittedBy": "PSA",
-       |    "submittedID": "eP64hipm",
-       |    "submittedName": "laborum deserunt ad al",
-       |    "pspDeclaration": {
-       |      "authorisedPSAID": "A9564957",
-       |      "pspDeclaration1": "Not Selected",
-       |      "pspDeclaration2": "Selected"
-       |    },
-       |    "psaDeclaration": {
-       |      "psaDeclaration1": "Not Selected",
-       |      "psaDeclaration2": "Selected"
-       |    }
-       |  }
-       |}
-       |
-       |""".stripMargin)
+  def defaultGetEvent1831(): JsValue = Json.parse("{}")
 }
