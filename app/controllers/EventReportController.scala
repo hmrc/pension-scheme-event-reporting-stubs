@@ -161,7 +161,8 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json")
+          val fileWithPath = s"$path/${pstr}_$eventType.json"
+          val jsValue = jsonUtils.readJsonIfFileFound(ss)
             .getOrElse(defaultGetEvent1832())
           Future.successful(Ok(jsValue))
         }
