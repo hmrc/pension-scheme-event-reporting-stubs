@@ -16,30 +16,11 @@
 
 package utils
 
-import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 
 object DefaultGetResponse {
 
-  def defaultVersions(startDate: String): JsArray =
-    Json.arr(
-      Json.obj(
-        "reportFormBundleNumber" -> "123456789012",
-        "reportVersion" -> 1,
-        "reportStatus" -> "Compiled",
-        "compilationOrSubmissionDate" -> s"${startDate}T09:30:47Z",
-        "reportSubmitterDetails" -> Json.obj(
-          "reportSubmittedBy" -> "PSP",
-          "orgOrPartnershipDetails" -> Json.obj(
-            "orgOrPartnershipName" -> "ABC Limited"
-          )
-        ),
-        "psaDetails" -> Json.obj(
-          "psaOrgOrPartnershipDetails" -> Json.obj(
-            "orgOrPartnershipName" -> "XYZ Limited"
-          )
-        )
-      )
-    )
+  def defaultVersions(startDate: String): JsValue = Json.parse("{}")
 
   def defaultGetEvent1832(): JsValue = Json.parse("{}")
 
