@@ -20,7 +20,7 @@ import play.api.libs.json.{JsValue, Json}
 
 object DefaultGetResponse {
 
-  def defaultVersions(startDate: String): JsValue = Json.parse("{}")
+  def defaultVersions(startDate: String): JsValue = Json.parse("[{}]")
 
   def defaultGetEvent1832(): JsValue = Json.parse("{}")
 
