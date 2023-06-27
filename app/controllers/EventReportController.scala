@@ -154,17 +154,18 @@ class EventReportController @Inject()(
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1832"
-    val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
-
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
-      case (Some(eventType), Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
-          Future.successful(NotFound(invalidPstrResponse))
-        else {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json")
+      case (Some("Event6"), _, _) =>
+        if (pstr == "24000041IN") {
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_Event6.json")
             .getOrElse(defaultGetEvent1832())
           Future.successful(Ok(jsValue))
+
+        } else {
+          Future.successful(UnprocessableEntity(reportNotFoundResponse))
         }
+      case (Some(_), Some(_), Some(_)) =>
+        Future.successful(UnprocessableEntity(reportNotFoundResponse))
       case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
       case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
       case _ => Future.successful(BadRequest(invalidStartDateResponse))
@@ -290,6 +291,10 @@ object EventReportController {
   val invalidStartDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_STARTDATE",
     "reason" -> "Invalid start date"
+  )
+  val reportNotFoundResponse: JsObject = Json.obj(
+    "code" -> "REPORT_NOT_FOUND",
+    "reason" -> "Report not found"
   )
   val invalidFromDateResponse: JsObject = Json.obj(
     "code" -> "INVALID_FROM_DATE",
