@@ -142,7 +142,7 @@ class EventReportControllerSpec extends SpecBase {
       val validData = readJsonFromFile(filePath = "/resources/data/getOverview/24000015IN.json")
       val getRequest = fakeRequest
       running() { _ =>
-        val result = controller.getOverview(pstr = "24000015IN", fromDate = "2021-04-06", toDate = "2022-04-05", reportType = "ER")(getRequest)
+        val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2020-04-05", reportType = "ER")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
