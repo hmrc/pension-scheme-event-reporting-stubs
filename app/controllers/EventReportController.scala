@@ -192,7 +192,6 @@ class EventReportController @Inject()(
   }
 
   def api1834GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-
     val path = "conf/resources/data/api1834"
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
 
