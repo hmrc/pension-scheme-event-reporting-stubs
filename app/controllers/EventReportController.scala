@@ -192,16 +192,16 @@ class EventReportController @Inject()(
   }
 
   def api1834GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
+
     val path = "conf/resources/data/api1834"
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some(version), Some(startDate)) =>
-        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern)) {
-          println("\n\n\n\n\n\nTESTING!")
+        if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
-        } else {
-          println("\n\n\n\n\nTESTING2222")
+        else {
+    println(s"\n\n\n\n\n$pstr")
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1834(pstr, version, startDate))
           Future.successful(Ok(jsValue))
