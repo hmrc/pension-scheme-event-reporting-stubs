@@ -161,9 +161,10 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json")
-            .getOrElse(defaultGetEvent1832())
-          Future.successful(Ok(jsValue))
+          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json") match {
+            case Some(jsValue) => Future.successful(Ok(jsValue))
+            case None => Future.successful(NotFound(invalidPstrResponse))
+          }
         }
       case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
       case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
@@ -180,9 +181,10 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-            .getOrElse(defaultGetEvent1833())
-          Future.successful(Ok(jsValue))
+          jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
+            case Some(jsValue) => Future.successful(Ok(jsValue))
+            case None => Future.successful(NotFound(invalidPstrResponse))
+          }
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
       case (_, None) => Future.successful(BadRequest(invalidStartDateResponse))
@@ -232,9 +234,10 @@ class EventReportController @Inject()(
       case PstrIDs.REQUEST_NOT_PROCESSED => Future.successful(UnprocessableEntity(unprocessableEntity))
       case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(invalidPstrResponse))
       case _ =>
-        val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-          .getOrElse(defaultGetEvent1831())
-        Future.successful(Ok(jsValue))
+        jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
+          case Some(jsValue) => Future.successful(Ok(jsValue))
+          case None => Future.successful(NotFound(invalidPstrResponse))
+        }
     }
   }
 
