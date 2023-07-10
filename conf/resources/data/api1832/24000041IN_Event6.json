@@ -15,6 +15,7 @@
   "eventDetails": [
     {
       "memberDetail": {
+        "amendedVersion": "002",
         "memberStatus": "New",
         "event": {
           "eventType": "Event6",
@@ -23,6 +24,50 @@
             "firstName": "Sarah",
             "middleName": "T",
             "lastName": "Urqhart",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountCrystalised": 600.67,
+            "typeOfProtection": "Enhanced life time allowance",
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "amendedVersion": "003",
+        "memberStatus": "Changed",
+        "event": {
+          "eventType": "Event6",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Sarah",
+            "middleName": "T",
+            "lastName": "UrqhartChanged",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountCrystalised": 600.67,
+            "typeOfProtection": "Enhanced life time allowance",
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "amendedVersion": "004",
+        "memberStatus": "Deleted",
+        "event": {
+          "eventType": "Event6",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Sarah",
+            "middleName": "T",
+            "lastName": "UrqhartDeleted",
             "nino": "AA345678C"
           },
           "paymentDetails": {
