@@ -206,6 +206,7 @@ class EventReportController @Inject()(
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1834(pstr, version, startDate))
+          println(jsValue)
           Future.successful(Ok(jsValue))
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
