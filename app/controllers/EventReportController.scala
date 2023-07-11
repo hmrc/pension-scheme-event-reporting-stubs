@@ -154,7 +154,6 @@ class EventReportController @Inject()(
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1832"
-    println(request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"))
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some("Event6"), _, _) =>
         if (pstr == "24000041IN") {
@@ -206,7 +205,6 @@ class EventReportController @Inject()(
         else {
           val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
             .getOrElse(defaultGetEvent1834(pstr, version, startDate))
-          println(jsValue)
           Future.successful(Ok(jsValue))
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
