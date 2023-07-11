@@ -157,8 +157,9 @@ class EventReportController @Inject()(
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some("Event6"), _, _) =>
         if (pstr == "24000041IN") {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
-            case Some(jsValue) => Future.successful(Ok(jsValue))
+          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_Event6.json") match {
+            case Some(jsValue) =>
+              Future.successful(Ok(jsValue))
             case None => Future.successful(NotFound(invalidPstrResponse))
           }
 
