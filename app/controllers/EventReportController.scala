@@ -22,7 +22,7 @@ import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.DefaultGetResponse._
-import utils.{APIResponses, DefaultGetResponse, JsonUtils, PstrIDs}
+import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
 import javax.inject.Singleton
@@ -157,9 +157,11 @@ class EventReportController @Inject()(
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
       case (Some("Event6"), _, _) =>
         if (pstr == "24000041IN") {
-          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/${pstr}_Event6.json")
-            .getOrElse(defaultGetEvent1832())
-          Future.successful(Ok(jsValue))
+          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_Event6.json") match {
+            case Some(jsValue) =>
+              Future.successful(Ok(jsValue))
+            case None => Future.successful(NotFound(invalidPstrResponse))
+          }
 
         } else {
           Future.successful(UnprocessableEntity(reportNotFoundResponse))
@@ -181,10 +183,9 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
-            case None => Future.successful(NotFound)
-            case Some(jsValue) => Future.successful(Ok(jsValue))
-          }
+          val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
+            .getOrElse(defaultGetEvent1833())
+          Future.successful(Ok(jsValue))
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
       case (_, None) => Future.successful(BadRequest(invalidStartDateResponse))
@@ -235,9 +236,10 @@ class EventReportController @Inject()(
       case PstrIDs.REQUEST_NOT_PROCESSED => Future.successful(UnprocessableEntity(unprocessableEntity))
       case value if value.matches(aftPerfTestPstrPattern) => Future.successful(BadRequest(invalidPstrResponse))
       case _ =>
-        val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr.json")
-          .getOrElse(defaultGetEvent1831())
-        Future.successful(Ok(jsValue))
+        jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
+          case Some(jsValue) => Future.successful(Ok(jsValue))
+          case None => Future.successful(NotFound(invalidPstrResponse))
+        }
     }
   }
 
