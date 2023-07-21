@@ -12,22 +12,6 @@
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z"
   },
   "eventDetails": {
-    "event10": [
-      {
-        "recordVersion": "001",
-        "invRegScheme": {
-          "startDateDetails": {
-            "startDateOfInvReg": "2022-04-06",
-            "contractsOrPolicies": "Yes"
-          }
-        }
-      }
-    ],
-    "event11": {
-      "recordVersion": "001",
-      "unauthorisedPmtsDate": "2022-04-06",
-      "contractsOrPoliciesDate": "2022-04-06"
-    },
     "event12": {
       "recordVersion": "001",
       "twoOrMoreSchemesDate": "2022-04-06"
@@ -39,21 +23,6 @@
         "dateOfChange": "2022-04-06"
       }
     ],
-    "event14": {
-      "recordVersion": "001",
-      "schemeMembers": "12 to 50"
-    },
-    "event18": {
-      "recordVersion": "001",
-      "chargeablePmt": "Yes"
-    },
-    "event19": [
-      {
-        "recordVersion": "001",
-        "countryCode": "GB",
-        "dateOfChange": "2022-04-06"
-      }
-    ],
     "event20": [
       {
         "recordVersion": "001",
@@ -61,11 +30,7 @@
           "startDateOfOccScheme": "2022-04-06"
         }
       }
-    ],
-    "eventWindUp": {
-      "recordVersion": "001",
-      "dateOfWindUp": "2022-04-06"
-    }
+    ]
   },
   "memberEventsSummary": {
     "event2": {

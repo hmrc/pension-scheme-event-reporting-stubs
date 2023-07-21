@@ -592,7 +592,7 @@ class EventReportControllerSpec extends SpecBase {
 
   "api1834GET" must {
     "return 200 OK for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1834/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1834/24000015IN-2019-001.json")
 
       val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
         ("CorrelationId", "testId"),

@@ -204,13 +204,10 @@ class EventReportController @Inject()(
           Future.successful(NotFound(invalidPstrResponse))
         else {
           val year = startDate.take(4)
-          println("\nLOOKING FOR FILE:" + s"$path/$pstr-$year-$version.json")
           jsonUtils.readJsonIfFileFound(s"$path/$pstr-$year-$version.json") match {
             case None =>
-            println("\nNOT FOUND")
               Future.successful(NotFound)
             case Some(jsValue) =>
-              println("\nFOUND")
               Future.successful(Ok(jsValue))
           }
         }
