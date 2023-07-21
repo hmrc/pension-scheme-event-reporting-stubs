@@ -203,9 +203,15 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
-            case None =>    Future.successful(NotFound)
-            case Some(jsValue) => Future.successful(Ok(jsValue))
+          val year = startDate.take(4)
+          println("\nLOOKING FOR FILE:" + s"$path/$pstr-$year-$version.json")
+          jsonUtils.readJsonIfFileFound(s"$path/$pstr-$year-$version.json") match {
+            case None =>
+            println("\nNOT FOUND")
+              Future.successful(NotFound)
+            case Some(jsValue) =>
+              println("\nFOUND")
+              Future.successful(Ok(jsValue))
           }
         }
       case (None, _) => Future.successful(BadRequest(invalidVersionResponse))
