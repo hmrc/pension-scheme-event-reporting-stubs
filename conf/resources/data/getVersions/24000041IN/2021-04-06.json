@@ -1,0 +1,19 @@
+[
+  {
+    "reportFormBundleNumber": "123456785015",
+    "reportVersion": 1,
+    "reportStatus": "SubmittedAndSuccessfullyProcessed",
+    "compilationOrSubmissionDate": "2021-04-01T09:30:47Z",
+    "reportSubmitterDetails": {
+      "reportSubmittedBy": "PSP",
+      "organisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "ABC Limited"
+      }
+    },
+    "psaDetails": {
+      "psaOrganisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "XYZ Limited"
+      }
+    }
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "reportFormBundleNumber": "123456785012",
+    "reportVersion": 1,
+    "reportStatus": "Compiled",
+    "compilationOrSubmissionDate": "2020-04-01T09:30:47Z",
+    "reportSubmitterDetails": {
+      "reportSubmittedBy": "PSP",
+      "organisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "ABC Limited"
+      }
+    },
+    "psaDetails": {
+      "psaOrganisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "XYZ Limited"
+      }
+    }
+  },
+  {
+    "reportFormBundleNumber": "123456785012",
+    "reportVersion": 2,
+    "reportStatus": "SubmittedAndInProgress",
+    "compilationOrSubmissionDate": "2020-04-01T09:30:47Z",
+    "reportSubmitterDetails": {
+      "reportSubmittedBy": "PSP",
+      "organisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "ABC Limited"
+      }
+    },
+    "psaDetails": {
+      "psaOrganisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "XYZ Limited"
+      }
+    }
+  },
+
+  {
+    "reportFormBundleNumber": "123456785012",
+    "reportVersion": 3,
+    "reportStatus": "SubmittedAndInProgress",
+    "compilationOrSubmissionDate": "2020-04-01T09:30:47Z",
+    "reportSubmitterDetails": {
+      "reportSubmittedBy": "PSP",
+      "organisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "ABC Limited"
+      }
+    },
+    "psaDetails": {
+      "psaOrganisationOrPartnershipDetails": {
+        "organisationOrPartnershipName": "XYZ Limited"
+      }
+    }
+  }
+]
