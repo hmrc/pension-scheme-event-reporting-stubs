@@ -126,10 +126,11 @@ class EventReportController @Inject()(
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
       Future.successful(NotFound(invalidPstrResponse))
     else {
-      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
-        .getOrElse(defaultVersions(startDate))
+      jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json") match {
+        case Some(x) => Future.successful(Ok(x))
+        case None => Future.successful(NotFound(noDataErrorResponse))
+      }
 
-      Future.successful(Ok(jsValue))
     }
   }
 
@@ -203,7 +204,7 @@ class EventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
+          jsonUtils.readJsonIfFileFound(s"$path/$pstr-${startDate.take(4)}-$version.json") match {
             case None =>    Future.successful(NotFound)
             case Some(jsValue) => Future.successful(Ok(jsValue))
           }
@@ -336,6 +337,11 @@ object EventReportController {
   val internalServerErrorResponse: JsObject = Json.obj(
     "code" -> "SERVER_ERROR",
     "reason" -> "IF is currently experiencing problems that require live service intervention."
+  )
+
+  val noDataErrorResponse: JsObject = Json.obj(
+    "code" -> "NO_DATA_FOUND",
+    "reason" -> "The remote endpoint has indicated that no scheme report was found for the given period"
   )
 
 

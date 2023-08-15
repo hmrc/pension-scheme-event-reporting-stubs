@@ -142,8 +142,8 @@ class EventReportControllerSpec extends SpecBase {
       val validData = readJsonFromFile(filePath = "/resources/data/getOverview/24000015IN.json")
       val getRequest = fakeRequest
       running() { _ =>
-        val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2020-04-05", reportType = "ER")(getRequest)
-
+        val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2021-04-05", reportType = "ER")(getRequest)
+println("\n\n\n\n"+ contentAsJson(result))
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
@@ -592,14 +592,14 @@ class EventReportControllerSpec extends SpecBase {
 
   "api1834GET" must {
     "return 200 OK for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/api1834/24000015IN.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/api1834/24000015IN-2019-001.json")
 
       val fakeRequest = FakeRequest(method = "POST", path = "/").withHeaders(
         ("CorrelationId", "testId"),
         "Authorization" -> "test Bearer token",
         ("Environment", "local"),
-        "reportVersionNumber" -> "version",
-        "reportStartDate" -> "start"
+        "reportVersionNumber" -> "001",
+        "reportStartDate" -> "2019"
       )
 
       val getRequest = fakeRequest
@@ -750,23 +750,13 @@ class EventReportControllerSpec extends SpecBase {
 
   "getERVersions" must {
     "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/getVersions/24000015IN/2020-04-01.json")
+      val validData = readJsonFromFile(filePath = "/resources/data/getVersions/24000015IN/2020-04-06.json")
       val getRequest = fakeRequest
       running() { _ =>
-        val result = controller.getERVersions(pstr = "24000015IN", startDate = "2020-04-01")(getRequest)
+        val result = controller.getERVersions(pstr = "24000015IN", startDate = "2020-04-06")(getRequest)
 
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
-      }
-    }
-
-    "return 200 for a valid request for default value" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getERVersions(pstr = "24000015IN", startDate = "2022-04-01")(getRequest)
-
-        status(result) mustBe OK
-        contentAsJson(result) mustBe Json.parse(defaultVersions("2022-04-01").toString())
       }
     }
 
