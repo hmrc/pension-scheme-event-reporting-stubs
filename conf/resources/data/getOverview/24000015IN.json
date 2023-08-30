@@ -4,13 +4,13 @@
     "periodEndDate": "2020-04-05",
     "numberOfVersions": 3,
     "submittedVersionAvailable": "Yes",
-    "compiledVersionAvailable": "Yes"
+    "compiledVersionAvailable": "No"
   },
   {
     "periodStartDate": "2020-04-06",
     "periodEndDate": "2021-04-05",
     "numberOfVersions": 1,
     "submittedVersionAvailable": "Yes",
-    "compiledVersionAvailable": "Yes"
+    "compiledVersionAvailable": "No"
   }
 ]
