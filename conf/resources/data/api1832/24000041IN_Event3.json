@@ -1,0 +1,83 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "24000041IN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event3"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "amendedVersion": "002",
+        "memberStatus": "New",
+        "event": {
+          "eventType": "Event3",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Gemma",
+            "middleName": "H",
+            "lastName": "Ioannis",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "reasonBenefitTaken": "Other",
+            "amountBenefit": 999.99,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample description"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "amendedVersion": "003",
+        "memberStatus": "Changed",
+        "event": {
+          "eventType": "Event3",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Gemma",
+            "middleName": "H",
+            "lastName": "Ioannis",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "reasonBenefitTaken": "Other",
+            "amountBenefit": 999.99,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample description"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "amendedVersion": "004",
+        "memberStatus": "Deleted",
+        "event": {
+          "eventType": "Event3",
+          "individualDetails": {
+            "title": "Mrs",
+            "firstName": "Gemma",
+            "middleName": "H",
+            "lastName": "Ioannis",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "reasonBenefitTaken": "Other",
+            "amountBenefit": 999.99,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample description"
+          }
+        }
+      }
+    }
+  ]
+}
