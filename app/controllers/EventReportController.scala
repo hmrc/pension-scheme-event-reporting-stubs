@@ -155,19 +155,14 @@ class EventReportController @Inject()(
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1832"
-    val eventTypeStr = request.headers.get("eventType") match {
-      case Some(eventType) => eventType
-    }
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
-      case (Some("Event2")|Some("Event3")|Some("Event4")|Some("Event5")|Some("Event6") |Some("Event7")
-            |Some("Event8")|Some("Event8A")|Some("Event22")|Some("Event23")|Some("Event24"), _, _) =>
+      case (Some(eventType), _, _) if Set("Event2", "Event3", "Event4", "Event5", "Event6", "Event7", "Event8", "Event8A", "Event22", "Event23").contains(eventType) =>
         if (pstr == "24000041IN") {
-          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventTypeStr.json") match {
+          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json") match {
             case Some(jsValue) =>
               Future.successful(Ok(jsValue))
             case None => Future.successful(NotFound(invalidPstrResponse))
           }
-
         } else {
           Future.successful(UnprocessableEntity(reportNotFoundResponse))
         }
@@ -209,7 +204,7 @@ class EventReportController @Inject()(
           Future.successful(NotFound(invalidPstrResponse))
         else {
           jsonUtils.readJsonIfFileFound(s"$path/$pstr-${startDate.take(4)}-$version.json") match {
-            case None =>    Future.successful(NotFound)
+            case None => Future.successful(NotFound)
             case Some(jsValue) => Future.successful(Ok(jsValue))
           }
         }
