@@ -1,0 +1,77 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "87219363YN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event4"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "memberStatus": "New",
+        "amendedVersion": "002",
+        "event": {
+          "eventType": "Event4",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "Johnson",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountPaid": 401.41,
+            "eventDate": "2021-05-30"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Changed",
+        "amendedVersion": "003",
+        "event": {
+          "eventType": "Event4",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "JohnsonChanged",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountPaid": 402.42,
+            "eventDate": "2021-05-30"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Deleted",
+        "amendedVersion": "004",
+        "event": {
+          "eventType": "Event4",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "JohnsonDeleted",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "amountPaid": 403.43,
+            "eventDate": "2021-05-30"
+          }
+        }
+      }
+    }
+  ]
+}

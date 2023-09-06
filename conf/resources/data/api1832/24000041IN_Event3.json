@@ -28,7 +28,7 @@
           },
           "paymentDetails": {
             "reasonBenefitTaken": "Other",
-            "amountBenefit": 999.99,
+            "amountBenefit": 933.97,
             "eventDate": "2021-05-30",
             "freeText": "Sample description"
           }
@@ -45,12 +45,12 @@
             "title": "Mrs",
             "firstName": "Gemma",
             "middleName": "H",
-            "lastName": "Ioannis",
+            "lastName": "IoannisChanged",
             "nino": "AA345678C"
           },
           "paymentDetails": {
             "reasonBenefitTaken": "Other",
-            "amountBenefit": 999.99,
+            "amountBenefit": 133.98,
             "eventDate": "2021-05-30",
             "freeText": "Sample description"
           }
@@ -67,12 +67,12 @@
             "title": "Mrs",
             "firstName": "Gemma",
             "middleName": "H",
-            "lastName": "Ioannis",
+            "lastName": "IoannisDeleted",
             "nino": "AA345678C"
           },
           "paymentDetails": {
             "reasonBenefitTaken": "Other",
-            "amountBenefit": 999.99,
+            "amountBenefit": 133.99,
             "eventDate": "2021-05-30",
             "freeText": "Sample description"
           }
