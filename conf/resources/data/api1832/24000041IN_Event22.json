@@ -10,7 +10,7 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event4"
+    "eventType": "Event22"
   },
   "eventDetails": [
     {
@@ -18,17 +18,17 @@
         "memberStatus": "New",
         "amendedVersion": "002",
         "event": {
-          "eventType": "Event4",
+          "eventType": "Event22",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Henry",
-            "middleName": "I",
-            "lastName": "Johnson",
-            "nino": "AA345678C"
+            "firstName": "John",
+            "middleName": "A",
+            "lastName": "Smith",
+            "nino": "AA345678B"
           },
           "paymentDetails": {
-            "amountPaid": 401.41,
-            "eventDate": "2021-05-30"
+            "monetaryAmount": 123.99,
+            "taxYearEndingDate": "2021-05-30"
           }
         }
       }
@@ -38,17 +38,17 @@
         "memberStatus": "Changed",
         "amendedVersion": "003",
         "event": {
-          "eventType": "Event4",
+          "eventType": "Event22",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Henry",
-            "middleName": "I",
-            "lastName": "JohnsonChanged",
-            "nino": "AA345678C"
+            "firstName": "John",
+            "middleName": "A",
+            "lastName": "SmithChanged",
+            "nino": "AA345678B"
           },
           "paymentDetails": {
-            "amountPaid": 402.42,
-            "eventDate": "2021-05-30"
+            "monetaryAmount": 123.99,
+            "taxYearEndingDate": "2021-05-30"
           }
         }
       }
@@ -58,17 +58,17 @@
         "memberStatus": "Deleted",
         "amendedVersion": "004",
         "event": {
-          "eventType": "Event4",
+          "eventType": "Event22",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Henry",
-            "middleName": "I",
-            "lastName": "JohnsonDeleted",
-            "nino": "AA345678C"
+            "firstName": "John",
+            "middleName": "A",
+            "lastName": "SmithDeleted",
+            "nino": "AA345678B"
           },
           "paymentDetails": {
-            "amountPaid": 403.43,
-            "eventDate": "2021-05-30"
+            "monetaryAmount": 123.99,
+            "taxYearEndingDate": "2021-05-30"
           }
         }
       }
