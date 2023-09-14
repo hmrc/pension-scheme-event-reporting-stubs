@@ -1,0 +1,83 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "24000041IN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event8"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "memberStatus": "New",
+        "amendedVersion": "002",
+        "event": {
+          "eventType": "Event8",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "Trudy",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "typeOfProtection": "Primary Protection",
+            "amountLumpSum": 8910.00,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Changed",
+        "amendedVersion": "003",
+        "event": {
+          "eventType": "Event8",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "TrudyChanged",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "typeOfProtection": "Primary Protection",
+            "amountLumpSum": 8910.00,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Deleted",
+        "amendedVersion": "004",
+        "event": {
+          "eventType": "Event8",
+          "individualDetails": {
+            "title": "Mr",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "TrudyDeleted",
+            "nino": "AA345678C"
+          },
+          "paymentDetails": {
+            "typeOfProtection": "Primary Protection",
+            "amountLumpSum": 8910.00,
+            "eventDate": "2021-05-30",
+            "freeText": "Sample text"
+          }
+        }
+      }
+    }
+  ]
+}
