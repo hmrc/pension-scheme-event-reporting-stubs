@@ -97,251 +97,251 @@ object StubDataGenerator extends App {
     val membersListAsString = arrayOfMembers.mkString
     headers + membersListAsString
   }
-
-
-  def generateEvent2SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |{
-          |  "deceasedMembersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "beneficiaryDetails": {
-          |    "firstName": "Bonjour",
-          |    "lastName": "Monde",
-          |    "nino": "AB${200000 + num}C"
-          |  },
-          |  "amountPaid": 10.01,
-          |  "datePaid": "2022-12-12"
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent3SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |{
-          |  "membersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "benefitType": {
-          |    "reasonBenefitTaken": "other",
-          |    "freeText": "Reason"
-          |  },
-          |  "paymentDetails": {
-          |    "amountPaid": 10.01,
-          |    "eventDate": "2022-12-12"
-          |  }
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent4SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-  s"""
-    |{
-    |  "membersDetails": {
-    |    "firstName": "Hello",
-    |    "lastName": "World",
-    |    "nino": "AB${100000 + num}C"
-    |  },
-    |  "paymentDetails": {
-    |    "amountPaid": 10.01,
-    |    "eventDate": "2022-12-12"
-    |  }
-    |}
-    |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent5SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |  {
-          |  "membersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "paymentDetails": {
-          |    "amountPaid": 10.01,
-          |    "eventDate": "2022-12-12"
-          |  }
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent7SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |{
-          |  "membersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "lumpSumAmount": 10.01,
-          |  "crystallisedAmount": 10.01,
-          |  "paymentDate": {
-          |    "date": "2022-12-12"
-          |  }
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent8SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |  {
-          |  "membersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "typeOfProtection": "primaryProtection",
-          |  "typeOfProtectionReference": "12345678",
-          |  "lumpSumAmountAndDate": {
-          |    "lumpSumAmount": 10.01,
-          |    "lumpSumDate": "2022-12-12"
-          |  }
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
-
-  def generateEvent8ASummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
-    val arrayOfMembers = for {
-      num <- (1 to numberOfMembers).toList
-    } yield {
-      Json.parse(
-        s"""
-          |{
-          |  "membersDetails": {
-          |    "firstName": "Hello",
-          |    "lastName": "World",
-          |    "nino": "AB${100000 + num}C"
-          |  },
-          |  "paymentType": "paymentOfAStandAloneLumpSum",
-          |  "typeOfProtection": "primaryProtection",
-          |  "typeOfProtectionReference": "12345678",
-          |  "lumpSumAmountAndDate": {
-          |    "lumpSumAmount": 10.01,
-          |    "lumpSumDate": "2022-12-12"
-          |  }
-          |}
-          |""".stripMargin)
-    }
-    Json.obj(
-      "_id" -> "Change this entire line to match the original Mongo document",
-      "apiTypes" -> "1830",
-      "pstr" -> "Change this entire line to match the original Mongo document",
-      "data" -> Json.obj(
-        eventType -> Json.obj(
-          "members" -> arrayOfMembers
-        )
-      ),
-      "expireAt" -> "Change this entire line to match the original Mongo document",
-      "lastUpdated" -> "Change this entire line to match the original Mongo document"
-    )
-  }
+//
+//
+//  def generateEvent2SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |{
+//          |  "deceasedMembersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "beneficiaryDetails": {
+//          |    "firstName": "Bonjour",
+//          |    "lastName": "Monde",
+//          |    "nino": "AB${200000 + num}C"
+//          |  },
+//          |  "amountPaid": 10.01,
+//          |  "datePaid": "2022-12-12"
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent3SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |{
+//          |  "membersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "benefitType": {
+//          |    "reasonBenefitTaken": "other",
+//          |    "freeText": "Reason"
+//          |  },
+//          |  "paymentDetails": {
+//          |    "amountPaid": 10.01,
+//          |    "eventDate": "2022-12-12"
+//          |  }
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent4SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//  s"""
+//    |{
+//    |  "membersDetails": {
+//    |    "firstName": "Hello",
+//    |    "lastName": "World",
+//    |    "nino": "AB${100000 + num}C"
+//    |  },
+//    |  "paymentDetails": {
+//    |    "amountPaid": 10.01,
+//    |    "eventDate": "2022-12-12"
+//    |  }
+//    |}
+//    |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent5SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |  {
+//          |  "membersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "paymentDetails": {
+//          |    "amountPaid": 10.01,
+//          |    "eventDate": "2022-12-12"
+//          |  }
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent7SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |{
+//          |  "membersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "lumpSumAmount": 10.01,
+//          |  "crystallisedAmount": 10.01,
+//          |  "paymentDate": {
+//          |    "date": "2022-12-12"
+//          |  }
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent8SummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |  {
+//          |  "membersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "typeOfProtection": "primaryProtection",
+//          |  "typeOfProtectionReference": "12345678",
+//          |  "lumpSumAmountAndDate": {
+//          |    "lumpSumAmount": 10.01,
+//          |    "lumpSumDate": "2022-12-12"
+//          |  }
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
+//
+//  def generateEvent8ASummaryJson(eventType: String, numberOfMembers: Int): JsObject = {
+//    val arrayOfMembers = for {
+//      num <- (1 to numberOfMembers).toList
+//    } yield {
+//      Json.parse(
+//        s"""
+//          |{
+//          |  "membersDetails": {
+//          |    "firstName": "Hello",
+//          |    "lastName": "World",
+//          |    "nino": "AB${100000 + num}C"
+//          |  },
+//          |  "paymentType": "paymentOfAStandAloneLumpSum",
+//          |  "typeOfProtection": "primaryProtection",
+//          |  "typeOfProtectionReference": "12345678",
+//          |  "lumpSumAmountAndDate": {
+//          |    "lumpSumAmount": 10.01,
+//          |    "lumpSumDate": "2022-12-12"
+//          |  }
+//          |}
+//          |""".stripMargin)
+//    }
+//    Json.obj(
+//      "_id" -> "Change this entire line to match the original Mongo document",
+//      "apiTypes" -> "1830",
+//      "pstr" -> "Change this entire line to match the original Mongo document",
+//      "data" -> Json.obj(
+//        eventType -> Json.obj(
+//          "members" -> arrayOfMembers
+//        )
+//      ),
+//      "expireAt" -> "Change this entire line to match the original Mongo document",
+//      "lastUpdated" -> "Change this entire line to match the original Mongo document"
+//    )
+//  }
 
   def generateEvent22Or23SummaryJson(eventType: String, numberOfMembers: Int, year: Int): JsObject = {
     val arrayOfMembers = for {
