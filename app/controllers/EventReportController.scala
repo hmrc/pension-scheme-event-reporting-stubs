@@ -119,8 +119,8 @@ class EventReportController @Inject()(
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
-    if (startDate.isEmpty) {
-      Future.successful(Forbidden(mandatoryStartDateResponse))
+    if (pstr.isEmpty || startDate.isEmpty) {
+      Future.successful(Forbidden(invalidRequestResponse))
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
@@ -139,8 +139,8 @@ class EventReportController @Inject()(
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
 
-    if (startDate.isEmpty) {
-      Future.successful(Forbidden(mandatoryStartDateResponse))
+    if (pstr.isEmpty || startDate.isEmpty) {
+      Future.successful(Forbidden(invalidRequestResponse))
     } else if (!startDate.matches(datePattern)) {
       Future.successful(BadRequest(invalidStartDateResponse))
     } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
@@ -329,9 +329,9 @@ object EventReportController {
     "code" -> "MISSING_REPORT_TYPE",
     "reason" -> "Submission has not passed validation. Required query parameter reportType has not been supplied."
   )
-  val mandatoryStartDateResponse: JsObject = Json.obj(
-    "code" -> "PERIOD_START_DATE_MANDATORY",
-    "reason" -> "The remote endpoint has indicated that Period Start Date must be provided."
+  val invalidRequestResponse: JsObject = Json.obj(
+    "code" -> "INVALID_REQUEST",
+    "reason" -> "The remote endpoint has indicated that the request is invalid."
   )
   val internalServerErrorResponse: JsObject = Json.obj(
     "code" -> "SERVER_ERROR",
