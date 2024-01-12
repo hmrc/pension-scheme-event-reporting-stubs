@@ -766,7 +766,17 @@ println("\n\n\n\n"+ contentAsJson(result))
         val result = controller.getERVersions(pstr = "24000015IN", startDate = "")(getRequest)
 
         status(result) mustBe FORBIDDEN
-        contentAsJson(result) mustBe mandatoryStartDateResponse
+        contentAsJson(result) mustBe invalidRequestResponse
+      }
+    }
+
+    "must return a FORBIDDEN if pstr is empty" in {
+      val getRequest = fakeRequest
+      running() { _ =>
+        val result = controller.getERVersions(pstr = "", startDate = "2020-04-06")(getRequest)
+
+        status(result) mustBe FORBIDDEN
+        contentAsJson(result) mustBe invalidRequestResponse
       }
     }
 
@@ -820,7 +830,17 @@ println("\n\n\n\n"+ contentAsJson(result))
         val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "")(getRequest)
 
         status(result) mustBe FORBIDDEN
-        contentAsJson(result) mustBe mandatoryStartDateResponse
+        contentAsJson(result) mustBe invalidRequestResponse
+      }
+    }
+
+    "must return a FORBIDDEN if pstr is empty" in {
+      val getRequest = fakeRequest
+      running() { _ =>
+        val result = controller.getER20AVersions(pstr = "", startDate = "2022-04-01")(getRequest)
+
+        status(result) mustBe FORBIDDEN
+        contentAsJson(result) mustBe invalidRequestResponse
       }
     }
 
