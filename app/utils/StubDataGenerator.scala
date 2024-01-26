@@ -16,20 +16,65 @@
 
 package utils
 
-import play.api.libs.json.{JsObject, Json}
-import scala.util.Random
 import faker.Name
+import play.api.libs.json.{JsObject, Json}
+
+import scala.util.Random
 
 // Run here to generate fake payload file.
 object StubDataGenerator extends App {
-  def writeFileToConfResources(eventType: String, content:String, fileName:String):Unit = {
+  // Uncomment below to write files.
+  private val numOfMembers = 18000
+  private val taxYear = DateHelper.currentYear - 1
+
+  def writeFileToConfResources(eventType: String, content: String, fileName: String): Unit = {
     import java.io._
-    val pw = new PrintWriter(new File( s"conf/resources/data/api1832/${eventType}PaginationTestPayloads/$fileName" ))
+    val pw = new PrintWriter(new File(s"conf/resources/data/api1832/${eventType}PaginationTestPayloads/$fileName"))
     pw.write(content)
     pw.close()
   }
 
-  def generateEvent6SummaryCsv( numberOfMembers: Int, year: Int): String = {
+  def writeFileToResources(content: String, srn: String): Unit = {
+    import java.io._
+    val pw = new PrintWriter(new File(s"conf/resources/data/api1444/$srn"))
+    pw.write(content)
+    pw.close()
+  }
+
+  def generateApi1444(numOfRecords: Int) = {
+    for {
+      num <- (1 to numOfRecords).toList
+    } {
+      val srn = s"S${100000000 + num}"
+      val xyz = Json.obj(
+        "processingDate" -> "2001-12-17T09:30:47Z",
+        "formBundleNumber" -> "12345678912",
+        "sapNumber" -> "12345678",
+        "psaPspSchemeDetails" -> Json.obj(
+          "racdacScheme" -> "Yes",
+          "racdacSchemeDetails" -> Json.obj(
+            "srn" -> srn,
+            "schemeStatus" -> "Deregistered",
+            "racdacName" -> "Benefits Scheme",
+            "contractOrPolicyNumber" -> "12345AD",
+            "registrationStartDate" -> "2021-04-25"
+          ),
+          "psaDetails" -> Json.arr(
+            Json.obj(
+              "psaid" -> "A0000099",
+              "orgOrPartnershipName" -> "XYX Ltd",
+              "relationshipType" -> "Primary",
+              "relationshipDate" -> "1977-03-22"
+            )
+          )
+        )
+      )
+
+      writeFileToResources(xyz.toString(), srn + ".json")
+    }
+  }
+
+  def generateEvent6SummaryCsv(numberOfMembers: Int, year: Int): String = {
 
     val protectionTypesCsv = Seq("Enhanced lifetime allowance", "Enhanced protection", "Fixed protection",
       "Fixed protection 2014", "Fixed protection 2016", "Individual protection 2014", "Individual protection 2016"
@@ -118,8 +163,8 @@ object StubDataGenerator extends App {
           "members" -> arrayOfMembers
         )
       ),
-    "expireAt" -> "Change this entire line to match the original Mongo document",
-    "lastUpdated" -> "Change this entire line to match the original Mongo document"
+      "expireAt" -> "Change this entire line to match the original Mongo document",
+      "lastUpdated" -> "Change this entire line to match the original Mongo document"
     )
   }
 
@@ -137,7 +182,7 @@ object StubDataGenerator extends App {
           "nino" -> s"AB${new Random().between(100000, 999999)}C"
         ),
         "typeOfProtection" -> s"${new Random().shuffle(protectionTypes).head}",
-        "inputProtectionType" ->  s"${new Random().between(10000000, 99999999)}",
+        "inputProtectionType" -> s"${new Random().between(10000000, 99999999)}",
         "AmountCrystallisedAndDate" -> Json.obj(
           "amountCrystallised" -> BigDecimal(new Random().between(1: Float, 1000: Float)).setScale(2, BigDecimal.RoundingMode.HALF_UP),
           "crystallisedDate" -> s"$year-11-0${new Random().between(1, 9)}",
@@ -158,12 +203,8 @@ object StubDataGenerator extends App {
     )
   }
 
-  // Uncomment below to write files.
-    private val numOfMembers = 18000
-    private val taxYear = DateHelper.currentYear - 1
-
-//   generate data for event22
-   writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
+  //   generate data for event22
+  writeFileToConfResources("event22", generateEvent22Or23SummaryJson("event22", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
   // generate csv data for event22
   // writeFileToConfResources("event22", generateEvent22SummaryCsv(numOfMembers, taxYear), s"${numOfMembers.toString}Members${taxYear}Payload.csv")
@@ -180,4 +221,6 @@ object StubDataGenerator extends App {
   // generate json data for event23
   // writeFileToConfResources("event23", generateEvent22Or23SummaryJson("event23", numOfMembers, taxYear).toString(), s"${numOfMembers.toString}Members${taxYear}Payload.json")
 
+
+  generateApi1444(2000)
 }
