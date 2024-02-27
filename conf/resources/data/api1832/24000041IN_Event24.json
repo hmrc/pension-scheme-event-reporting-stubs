@@ -1,0 +1,69 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "24000041IN",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event24"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "memberStatus": "New",
+        "amendedVersion": "002",
+        "event": {
+          "eventType": "Event24",
+          "individualDetails": {
+            "firstName": "John",
+            "lastName": "Smith",
+            "nino": "AA345678B"
+          },
+          "paymentDetails": {
+            "memberHoldProtection": true,
+            "preCommenceReference": "ABCDEF123456",
+            "availableLumpSumExceeded": true,
+            "schemeSpecificLumpSum": true,
+            "amountCrystalised": 23.09,
+            "typeOfProtection": "Enhanced protection",
+            "reasonBenefitTaken": "A stand-alone lump sum",
+            "taxYearEndingDate": "2023-09-22",
+            "freeText": "123456ABCDEF",
+            "taxedAtMarginalRate": true,
+            "payeReference": "123/ABCDE"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Changed",
+        "amendedVersion": "003",
+        "event": {
+          "eventType": "Event24",
+          "individualDetails": {
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "nino": "AA827463D"
+          },
+          "paymentDetails": {
+            "memberHoldProtection": true,
+            "preCommenceReference": "ABCDEF123456",
+            "availableLumpSumExceeded": false,
+            "availableLumpSumDBAExceeded": false,
+            "amountCrystalised": 223.44,
+            "typeOfProtection": "Enhanced protection",
+            "reasonBenefitTaken": "A stand-alone lump sum",
+            "taxYearEndingDate": "2023-09-22",
+            "freeText": "123456ABCDEF"
+          }
+        }
+      }
+    }
+  ]
+}
