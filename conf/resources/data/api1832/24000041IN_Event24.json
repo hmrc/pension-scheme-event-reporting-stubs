@@ -25,16 +25,16 @@
             "nino": "AA345678B"
           },
           "paymentDetails": {
-            "memberHoldProtection": true,
+            "memberHoldProtection": "Yes",
             "preCommenceReference": "ABCDEF123456",
-            "availableLumpSumExceeded": true,
-            "schemeSpecificLumpSum": true,
+            "availableLumpSumExceeded": "Yes",
+            "schemeSpecificLumpSum": "Yes",
             "amountCrystalised": 23.09,
             "typeOfProtection": "Enhanced protection",
             "reasonBenefitTaken": "A stand-alone lump sum",
             "taxYearEndingDate": "2023-09-22",
             "freeText": "123456ABCDEF",
-            "taxedAtMarginalRate": true,
+            "taxedAtMarginalRate": "Yes",
             "payeReference": "123/ABCDE"
           }
         }
@@ -52,10 +52,10 @@
             "nino": "AA827463D"
           },
           "paymentDetails": {
-            "memberHoldProtection": true,
+            "memberHoldProtection": "Yes",
             "preCommenceReference": "ABCDEF123456",
-            "availableLumpSumExceeded": false,
-            "availableLumpSumDBAExceeded": false,
+            "availableLumpSumExceeded": "No",
+            "availableLumpSumDBAExceeded": "No",
             "amountCrystalised": 223.44,
             "typeOfProtection": "Enhanced protection",
             "reasonBenefitTaken": "A stand-alone lump sum",
