@@ -54,6 +54,9 @@
           "paymentDetails": {
             "memberHoldProtection": "Yes",
             "preCommenceReference": "ABCDEF123456",
+            "pensionCreditReference": "GHIJKL789012",
+            "nonResidenceReference": "MNOPQR123456",
+            "overseasReference": "MNOPQR789012",
             "availableLumpSumExceeded": "No",
             "availableLumpSumDBAExceeded": "No",
             "amountCrystalised": 223.44,
