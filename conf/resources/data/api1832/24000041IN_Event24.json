@@ -27,6 +27,7 @@
           "paymentDetails": {
             "memberHoldProtection": "Yes",
             "preCommenceReference": "ABCDEF123456",
+            "availableLumpSumDBAExceeded": "No",
             "availableLumpSumExceeded": "Yes",
             "schemeSpecificLumpSum": "Yes",
             "amountCrystalised": 23.09,
@@ -58,7 +59,7 @@
             "nonResidenceReference": "MNOPQR123456",
             "overseasReference": "MNOPQR789012",
             "availableLumpSumExceeded": "No",
-            "availableLumpSumDBAExceeded": "No",
+            "availableLumpSumDBAExceeded": "Yes",
             "amountCrystalised": 223.44,
             "typeOfProtection": "Enhanced protection",
             "reasonBenefitTaken": "A stand-alone lump sum",
