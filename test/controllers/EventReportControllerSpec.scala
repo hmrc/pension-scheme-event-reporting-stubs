@@ -143,7 +143,6 @@ class EventReportControllerSpec extends SpecBase {
       val getRequest = fakeRequest
       running() { _ =>
         val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2021-04-05", reportType = "ER")(getRequest)
-println("\n\n\n\n"+ contentAsJson(result))
         status(result) mustBe OK
         contentAsJson(result) mustBe validData
       }
