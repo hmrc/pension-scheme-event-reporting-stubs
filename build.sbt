@@ -3,11 +3,12 @@ import uk.gov.hmrc.DefaultBuildSettings
 val appName = "pension-scheme-event-reporting-stubs"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.7.0"
 ThisBuild / scalacOptions ++= Seq(
   "-feature",
   "-Wconf:src=routes/.*:s",
   "-Xfatal-warnings",
+  "-Wconf:msg=Flag.*repeatedly:s",
   "-deprecation"
 )
 

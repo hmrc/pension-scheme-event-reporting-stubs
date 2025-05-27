@@ -68,13 +68,13 @@ object DateHelper {
 
       case "<StartLastTaxYear>" =>
         if (LocalDate.now().isAfter(taxYearStart)) {
-          taxYearStart.minusYears(1) format (DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+          taxYearStart.minusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         } else {
           taxYearStart.minusYears(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         }
       case "<EndLastTaxYear>" =>
         if (LocalDate.now().isAfter(taxYearStart)) {
-          taxYearStart.minusDays(1) format (DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+          taxYearStart.minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         } else {
           taxYearStart.minusDays(1).minusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         }

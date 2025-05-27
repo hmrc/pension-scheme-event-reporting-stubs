@@ -21,11 +21,11 @@ import controllers.EventReportController._
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.DefaultGetResponse._
 import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
 import javax.inject.Singleton
+import scala.annotation.unused
 import scala.concurrent.Future
 
 @Singleton()
@@ -34,7 +34,7 @@ class EventReportController @Inject()(
                                        jsonUtils: JsonUtils,
                                      ) extends BackendController(cc) with APIResponses {
 
-  def compileEventReportSummary(pstr: String): Action[AnyContent] = Action.async {
+  def compileEventReportSummary(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
         case Some(_) => Future.successful(Ok(createCompileEventReportSummarySuccessResponse))
@@ -42,7 +42,7 @@ class EventReportController @Inject()(
       }
   }
 
-  def compileEventOneReport(pstr: String): Action[AnyContent] = Action.async {
+  def compileEventOneReport(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
         case Some(_) => Future.successful(Ok(compileEventOneReportSuccessResponse))
@@ -50,7 +50,7 @@ class EventReportController @Inject()(
       }
   }
 
-  def compileMemberEventReport(pstr: String): Action[AnyContent] = Action.async {
+  def compileMemberEventReport(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
         case Some(_) => Future.successful(Ok(compileMemberEventReportSuccessResponse))
@@ -97,7 +97,7 @@ class EventReportController @Inject()(
     }
   }
 
-  def submitEventDeclarationReport(pstr: String): Action[AnyContent] = Action.async {
+  def submitEventDeclarationReport(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
         case Some(_) => Future.successful(Ok(submitEventDeclarationReportSuccessResponse))
@@ -105,7 +105,7 @@ class EventReportController @Inject()(
       }
   }
 
-  def submitEvent20ADeclarationReport(pstr: String): Action[AnyContent] = Action.async {
+  def submitEvent20ADeclarationReport(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asJson match {
         case Some(_) => Future.successful(Ok(submitEvent20ADeclarationReportSuccessResponse))
@@ -147,7 +147,7 @@ class EventReportController @Inject()(
       Future.successful(NotFound(invalidPstrResponse))
     else {
       val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
-        .getOrElse(defaultVersions(startDate))
+        .getOrElse(Json.parse("[{}]"))
 
       Future.successful(Ok(jsValue))
     }
@@ -179,7 +179,7 @@ class EventReportController @Inject()(
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
-      case (Some(version), Some(startDate)) =>
+      case (Some(_), Some(_)) =>
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           Future.successful(NotFound(invalidPstrResponse))
         else {
@@ -218,16 +218,16 @@ class EventReportController @Inject()(
     val path = "conf/resources/data/api1831"
 
     (request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate"), request.headers.get("reportFormBundleNumber")) match {
-      case (Some(version), Some(startDate), None) =>
-        eventResponseByPstr(pstr, path, version, startDate)
+      case (Some(_), Some(_), None) =>
+        eventResponseByPstr(pstr, path)
       case (None, None, Some(_)) =>
-        eventResponseByPstr(pstr, path, "1", "2021-01-01")
+        eventResponseByPstr(pstr, path)
       case (None, _, _) => Future.successful(BadRequest(invalidVersionResponse))
       case _ => Future.successful(BadRequest(invalidStartDateResponse))
     }
   }
 
-  private def eventResponseByPstr(pstr: String, path: String, version: String, startDate: String): Future[Result] = {
+  private def eventResponseByPstr(pstr: String, path: String): Future[Result] = {
     val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
     pstr match {
       case PstrIDs.INTERNAL_SERVER_ERROR => Future.successful(InternalServerError(serverError))
@@ -254,7 +254,7 @@ class EventReportController @Inject()(
                                compiledVersionAvailable: Option[String]
                              )
 
-  private def filterOverview(jsValue: JsValue, startDate: String, endDate: String, reportType: String): JsValue = {
+  private def filterOverview(jsValue: JsValue, startDate: String, endDate: String, @unused reportType: String): JsValue = {
     implicit val formats: Format[Overview] = Json.format[Overview]
     jsValue.validate[Seq[Overview]] match {
       case JsSuccess(seqOverview, _) =>
@@ -342,7 +342,6 @@ object EventReportController {
     "code" -> "NO_DATA_FOUND",
     "reason" -> "The remote endpoint has indicated that no scheme report was found for the given period"
   )
-
 
 }
 
