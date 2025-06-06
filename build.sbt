@@ -1,20 +1,24 @@
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 val appName = "pension-scheme-event-reporting-stubs"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.7.0"
+ThisBuild / scalacOptions ++= Seq(
+  "-feature",
+  "-Wconf:src=routes/.*:s",
+  "-Xfatal-warnings",
+  "-Wconf:msg=Flag.*repeatedly:s",
+  "-deprecation"
+)
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
     PlayKeys.playDefaultPort := 8217,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    scalacOptions += "-Wconf:src=routes/.*:s",
   )
-  .settings(resolvers += Resolver.jcenterRepo)
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(CodeCoverageSettings.settings *)
   .settings(
     Test / parallelExecution := true,
     Test / fork := true,

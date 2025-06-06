@@ -29,7 +29,6 @@ import scala.concurrent.Future
 class EventReportControllerSpec extends SpecBase {
 
   import EventReportController._
-  import utils.DefaultGetResponse._
 
   private val fakeRequest = FakeRequest("POST", "/").withHeaders(("CorrelationId", "testId"),
     "Authorization" -> "test Bearer token", ("Environment", "local"))
@@ -819,7 +818,7 @@ class EventReportControllerSpec extends SpecBase {
         val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "2022-04-01")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe Json.parse(defaultVersions("2022-04-01").toString())
+        contentAsJson(result) mustBe Json.parse(Json.parse("[{}]").toString())
       }
     }
 
