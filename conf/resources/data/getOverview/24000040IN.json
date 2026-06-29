@@ -3,8 +3,15 @@
     "periodStartDate": "2020-04-06",
     "periodEndDate": "2021-04-05",
     "numberOfVersions": 2,
-    "submittedVersionAvailable": "No",
+    "submittedVersionAvailable": "Yes",
     "compiledVersionAvailable": "Yes"
+  },
+  {
+    "periodStartDate": "2021-04-06",
+    "periodEndDate": "2022-04-05",
+    "numberOfVersions": 2,
+    "submittedVersionAvailable": "Yes",
+    "compiledVersionAvailable": "No"
   },
   {
     "periodStartDate": "2022-04-06",
@@ -14,10 +21,10 @@
     "compiledVersionAvailable": "No"
   },
   {
-    "periodStartDate": "2021-04-06",
-    "periodEndDate": "2022-04-05",
+    "periodStartDate": "2024-04-06",
+    "periodEndDate": "2025-04-05",
     "numberOfVersions": 2,
-    "submittedVersionAvailable": "No",
-    "compiledVersionAvailable": "No"
+    "submittedVersionAvailable": "Yes",
+    "compiledVersionAvailable": "Yes"
   }
 ]
