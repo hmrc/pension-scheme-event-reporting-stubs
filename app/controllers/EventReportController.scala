@@ -17,9 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController._
-import play.api.libs.json._
+import controllers.EventReportController.*
+import play.api.Logging
+import play.api.libs.json.*
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
+import schemaValidator.JsonSchemaValidator
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.{APIResponses, JsonUtils, PstrIDs}
 
@@ -32,7 +34,8 @@ import scala.concurrent.Future
 class EventReportController @Inject()(
                                        cc: ControllerComponents,
                                        jsonUtils: JsonUtils,
-                                     ) extends BackendController(cc) with APIResponses {
+                                       jsonSchemaValidator: JsonSchemaValidator
+                                     ) extends BackendController(cc) with APIResponses with Logging {
 
   def compileEventReportSummary(@unused pstr: String): Action[AnyContent] = Action.async {
     implicit request =>
@@ -154,23 +157,36 @@ class EventReportController @Inject()(
   }
 
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
-    val path = "conf/resources/data/api1832"
-    (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {
+    (
+      request.headers.get("eventType"),
+      request.headers.get("reportVersionNumber"),
+      request.headers.get("reportStartDate")
+    ) match {
       case (Some(eventType), _, _) if Set("Event2", "Event3", "Event4", "Event5", "Event6", "Event7", "Event8", "Event8A", "Event22", "Event23", "Event24").contains(eventType) =>
         if (pstr == "24000041IN") {
-          jsonUtils.readJsonIfFileFound(s"$path/${pstr}_$eventType.json") match {
+          jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1832/${pstr}_$eventType.json") match {
             case Some(jsValue) =>
-              Future.successful(Ok(jsValue))
-            case None => Future.successful(NotFound(invalidPstrResponse))
+              jsonSchemaValidator.validateJson(jsValue, jsonSchemaValidator.api1832ResponseSchema) match {
+                case errors if errors.isEmpty =>
+                  Future.successful(Ok(jsValue))
+                case errors =>
+                  logger.error(s"\n\n\n\nHIP #1832 validation errors: \n${errors.mkString("\n")}\n\n\n")
+                  Future.successful(BadRequest(errors.mkString("\n")))
+              }
+            case None =>
+              Future.successful(NotFound(invalidPstrResponse))
           }
         } else {
           Future.successful(UnprocessableEntity(reportNotFoundResponse))
         }
       case (Some(_), Some(_), Some(_)) =>
         Future.successful(UnprocessableEntity(reportNotFoundResponse))
-      case (None, _, _) => Future.successful(BadRequest(invalidEventTypeResponse))
-      case (_, None, _) => Future.successful(BadRequest(invalidVersionResponse))
-      case _ => Future.successful(BadRequest(invalidStartDateResponse))
+      case (None, _, _) =>
+        Future.successful(BadRequest(invalidEventTypeResponse))
+      case (_, None, _) =>
+        Future.successful(BadRequest(invalidVersionResponse))
+      case _ =>
+        Future.successful(BadRequest(invalidStartDateResponse))
     }
   }
 
