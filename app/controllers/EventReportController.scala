@@ -17,8 +17,8 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.EventReportController._
-import play.api.libs.json._
+import controllers.EventReportController.*
+import play.api.libs.json.*
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.{APIResponses, JsonUtils, PstrIDs}
