@@ -45,7 +45,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1826RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(createCompileEventReportSummarySuccessResponse)
+              Ok(Json.obj("success" -> createCompileEventReportSummarySuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1826 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -61,7 +61,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1827RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(Json.obj("success" -> compileEventOneReportSuccessResponse))
+              Ok(Json.obj("successes" -> compileEventOneReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1827 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -77,7 +77,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1830RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(compileMemberEventReportSuccessResponse)
+              Ok(Json.obj("success" -> compileMemberEventReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1830 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -132,7 +132,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1828RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(submitEventDeclarationReportSuccessResponse)
+              Ok(Json.obj("success" -> submitEventDeclarationReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1828 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -148,7 +148,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1829RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(submitEvent20ADeclarationReportSuccessResponse)
+              Ok(Json.obj("success" -> submitEvent20ADeclarationReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1829 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -208,7 +208,7 @@ class HipEventReportController @Inject()(
               case Some(jsValue) =>
                 hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1832ResponseSchema) match {
                   case errors if errors.isEmpty =>
-                    Ok(jsValue)
+                    Ok(Json.obj("success" -> jsValue))
                   case errors =>
                     logger.error(s"\n\n\n\nHIP #1832 validation errors for $eventType: \n${errors.mkString("\n\n")}\n\n\n")
                     BadRequest(errors.mkString("\n"))
@@ -247,7 +247,7 @@ class HipEventReportController @Inject()(
               case Some(jsValue) =>
                 hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1833ResponseSchema) match {
                   case errors if errors.isEmpty =>
-                    Ok(jsValue)
+                    Ok(Json.obj("success" -> jsValue))
                   case errors =>
                     logger.error(s"\n\n\n\nHIP #1833 validation errors: \n${errors.mkString("\n")}\n\n\n")
                     BadRequest(errors.mkString("\n"))
@@ -283,7 +283,7 @@ class HipEventReportController @Inject()(
             case Some(jsValue) =>
               hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1834ResponseSchema) match {
                 case errors if errors.isEmpty =>
-                  Ok(jsValue)
+                  Ok(Json.obj("success" -> jsValue))
                 case errors =>
                   logger.error(s"\n\n\n\nHIP #1834 validation errors: \n${errors.mkString("\n")}\n\n\n")
                   BadRequest(errors.mkString("\n"))

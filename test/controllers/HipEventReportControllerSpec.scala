@@ -72,7 +72,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.compileEventReportSummary(pstr = "test-pstr")(postRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe createCompileEventReportSummarySuccessResponse
+        contentAsJson(result) mustBe Json.obj("success" -> createCompileEventReportSummarySuccessResponse)
       }
     }
 
@@ -96,7 +96,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.compileEventOneReport(pstr = "test-pstr")(postRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe Json.obj("success" -> compileEventOneReportSuccessResponse)
+        contentAsJson(result) mustBe Json.obj("successes" -> compileEventOneReportSuccessResponse)
       }
     }
 
@@ -120,7 +120,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.compileMemberEventReport(pstr = "test-pstr")(postRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe compileMemberEventReportSuccessResponse
+        contentAsJson(result) mustBe Json.obj("success" -> compileMemberEventReportSuccessResponse)
       }
     }
 
@@ -249,7 +249,7 @@ class HipEventReportControllerSpec extends SpecBase {
           running() { _ =>
             val result = controller.api1832GET(pstr = "24000041IN")(fakeRequest(event))
             status(result) mustBe OK
-            contentAsJson(result) mustBe validData
+            contentAsJson(result) mustBe Json.obj("success" -> validData)
           }
         }
     }
@@ -432,7 +432,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1834GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -486,7 +486,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1833GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -529,7 +529,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.submitEventDeclarationReport(pstr = "test-pstr")(postRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe submitEventDeclarationReportSuccessResponse
+        contentAsJson(result) mustBe Json.obj("success" -> submitEventDeclarationReportSuccessResponse)
       }
     }
 
@@ -554,7 +554,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.submitEvent20ADeclarationReport(pstr = "test-pstr")(postRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe submitEvent20ADeclarationReportSuccessResponse
+        contentAsJson(result) mustBe Json.obj("success" -> submitEvent20ADeclarationReportSuccessResponse)
       }
     }
 

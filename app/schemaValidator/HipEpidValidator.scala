@@ -28,7 +28,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 class HipEpidValidator {
 
   private lazy val epidBasePath: String =
-    s"file:///${Paths.get("conf/epid/hip").toAbsolutePath}/EPID1822_Pension_Online_Evenets_openapi_v0.1.1.yaml#/components/schemas".replace(" ", "%20")
+    s"file:///${Paths.get("conf/epid/hip").toAbsolutePath}/EPID1822_Pension_Online_Events_openapi_v0.1.2.yaml#/components/schemas".replace(" ", "%20")
 
   private lazy val api1826RequestPath: String =
     s"$epidBasePath/API1826_request"
