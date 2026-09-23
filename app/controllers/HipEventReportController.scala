@@ -301,17 +301,13 @@ class HipEventReportController @Inject()(
 
   def api1831GET(pstr: String): Action[AnyContent] = Action {
     implicit request =>
-      val path = "conf/resources/data/api1831"
-
       (
         request.headers.get("reportVersionNumber"),
         request.headers.get("reportStartDate"),
         request.headers.get("reportFormBundleNumber")
       ) match {
-        case (Some(_), Some(_), None) =>
-          eventResponseByPstr(pstr, path)
-        case (None, None, Some(_)) =>
-          eventResponseByPstr(pstr, path)
+        case (Some(_), Some(_), None) | (None, None, Some(_)) =>
+          eventResponseByPstr(pstr, "conf/resources/data/api1831")
         case (None, _, _) =>
           BadRequest(invalidVersionResponse)
         case _ =>
@@ -338,7 +334,7 @@ class HipEventReportController @Inject()(
           case Some(jsValue) =>
             hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1831ResponseSchema) match {
               case errors if errors.isEmpty =>
-                Ok(jsValue)
+                Ok(Json.obj("success" -> jsValue))
               case errors =>
                 logger.error(s"\n\n\n\nHIP #1826 validation errors: \n${errors.mkString("\n")}\n\n\n")
                 BadRequest(errors.mkString("\n"))
