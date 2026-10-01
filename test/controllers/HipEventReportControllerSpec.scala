@@ -143,7 +143,7 @@ class HipEventReportControllerSpec extends SpecBase {
       running() { _ =>
         val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2021-04-05", reportType = "ER")(getRequest)
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -271,7 +271,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1831GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -289,7 +289,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1831GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -578,7 +578,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.getERVersions(pstr = "24000015IN", startDate = "2020-04-06")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 

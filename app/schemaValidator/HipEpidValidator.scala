@@ -28,7 +28,13 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 class HipEpidValidator {
 
   private lazy val epidBasePath: String =
-    s"file:///${Paths.get("conf/epid/hip").toAbsolutePath}/EPID1822_Pension_Online_Events_openapi_v0.1.3.yaml#/components/schemas".replace(" ", "%20")
+    s"file:///${Paths.get("conf/epid/hip").toAbsolutePath}/EPID1822_Pension_Online_Events_openapi_v0.1.4.yaml#/components/schemas".replace(" ", "%20")
+
+  private lazy val api1537ResponsePath: String =
+    s"$epidBasePath/API1537_get__RESTAdapter_pension_online_reports_pstr_reportType_versions_SuccessResponse"
+
+  private lazy val api1557ResponsePath: String =
+    s"$epidBasePath/API1557_successResponse"
 
   private lazy val api1826RequestPath: String =
     s"$epidBasePath/API1826_request"
@@ -72,8 +78,7 @@ class HipEpidValidator {
   private lazy val config: SchemaValidatorsConfig =
     SchemaValidatorsConfig
       .builder
-      .discriminatorKeywordEnabled(false)
-      .typeLoose(true)
+      .typeLoose(false)
       .build
 
   private lazy val factory: JsonSchemaFactory =
@@ -83,6 +88,12 @@ class HipEpidValidator {
         .metaSchema(OpenApi30.getInstance())
         .defaultMetaSchemaIri(OpenApi30.getInstance().getIri)
     )
+
+  lazy val api1537ResponseSchema: JsonSchema =
+    factory.getSchema(SchemaLocation.of(api1537ResponsePath), config)
+
+  lazy val api1557ResponseSchema: JsonSchema =
+    factory.getSchema(SchemaLocation.of(api1557ResponsePath), config)
 
   lazy val api1826RequestSchema: JsonSchema =
     factory.getSchema(SchemaLocation.of(api1826RequestPath), config)

@@ -94,35 +94,33 @@ class HipEventReportController @Inject()(
 
     if (reportType.isEmpty) {
       BadRequest(missingReportTypeResponse)
-    }
-    else if (fromDate.isEmpty) {
+    } else if (fromDate.isEmpty) {
       BadRequest(missingFromDateResponse)
-    }
-    else if (toDate.isEmpty) {
+    } else if (toDate.isEmpty) {
       BadRequest(missingToDateResponse)
-    }
-    else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
       BadRequest(invalidPstrResponse)
-    }
-    else if (!fromDate.matches(datePattern)) {
+    } else if (!fromDate.matches(datePattern)) {
       BadRequest(invalidFromDateResponse)
-    }
-    else if (!toDate.matches(datePattern)) {
+    } else if (!toDate.matches(datePattern)) {
       BadRequest(invalidToDateResponse)
-    }
-    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
+    } else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       BadRequest(toDateNotInRangeResponse)
-    }
-    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
+    } else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
       BadRequest(fromDateNotInRangeResponse)
-    }
-    else {
+    } else {
       val jsValue: JsValue =
         jsonUtils
           .readJsonIfFileFound(s"conf/resources/data/getOverview/$pstr.json")
           .getOrElse(defaultOverview(fromDate, toDate))
 
-      Ok(filterOverview(jsValue, fromDate, toDate, reportType))
+      hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1557ResponseSchema) match {
+        case errors if errors.isEmpty =>
+          Ok(Json.obj("success" -> filterOverview(jsValue, fromDate, toDate, reportType)))
+        case errors =>
+          logger.error(s"\n\n\n\nHIP #1557 validation errors: \n${errors.mkString("\n")}\n\n\n")
+          BadRequest(errors.mkString("\n"))
+      }
     }
   }
 
@@ -165,12 +163,19 @@ class HipEventReportController @Inject()(
       Forbidden(invalidRequestResponse)
     } else if (!startDate.matches(datePattern)) {
       BadRequest(invalidStartDateResponse)
-    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$"""))
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
       NotFound(invalidPstrResponse)
-    else {
+    } else {
       jsonUtils.readJsonIfFileFound(s"conf/resources/data/getVersions/$pstr/$startDate.json") match {
-        case Some(jsValue) => 
-          Ok(jsValue)
+        case Some(jsValue) =>
+          hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1537ResponseSchema) match {
+            case errors if errors.isEmpty =>
+              Ok(Json.obj("success" -> jsValue))
+            case errors =>
+              println(s"\n\n\n\n${Json.prettyPrint(jsValue)}\n\n\n\n")
+              logger.error(s"\n\n\n\nHIP #1537 validation errors: \n${errors.mkString("\n")}\n\n\n")
+              BadRequest(errors.mkString("\n"))
+          }
         case None =>
           NotFound(noDataErrorResponse)
       }
@@ -366,7 +371,8 @@ class HipEventReportController @Inject()(
             (o.periodEndDate.isBefore(compareEndDate) || o.periodEndDate.isEqual(compareEndDate))
         )
         Json.toJson(filteredSeqOverview)
-      case JsError(_) => throw new RuntimeException("Unable to read json")
+      case JsError(_) =>
+        throw new RuntimeException("Unable to read json")
     }
   }
 }
