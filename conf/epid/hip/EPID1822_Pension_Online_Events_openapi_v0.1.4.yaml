@@ -2152,7 +2152,7 @@ components:
       properties:
         organisationOrPartnershipName:
           type: string
-          pattern: ^[a-zA-Z0-9 \u00C0-\u00FF!#$%&''‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\u005C\u2014\u2013\u2010\u002d]{1,160}$
+          pattern: ^[a-zA-Z0-9 \u00C0-\u00FF!#$%&'‘’\"“”«»()*+,./:;=?@\\[\\]£€¥\u005C\u2014\u2013\u2010\u002d]{1,160}$
           description: Organisation Name , \u00C0 for À, \u00FF for ÿ, \u2014 for — (EM DASH), \u2013 for – (EN DASH), \u2010 for -(HYPHEN), \u002d for -(HYPHEN_MINUS), \u005C for \
       required:
         - organisationOrPartnershipName

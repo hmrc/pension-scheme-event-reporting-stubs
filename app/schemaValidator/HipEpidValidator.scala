@@ -78,7 +78,7 @@ class HipEpidValidator {
   private lazy val config: SchemaValidatorsConfig =
     SchemaValidatorsConfig
       .builder
-      .typeLoose(false)
+      .typeLoose(true)
       .build
 
   private lazy val factory: JsonSchemaFactory =
