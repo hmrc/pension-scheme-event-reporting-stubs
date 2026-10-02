@@ -55,5 +55,3 @@ GET         /RESTAdapter/pension-online/event1-status-reports/:pstr             
 GET         /pension-online/event-status-reports/:pstr                            controllers.EventReportController.api1834GET(pstr: String)
 #1834 HIP
 GET         /RESTAdapter/pension-online/event-status-reports/:pstr                controllers.HipEventReportController.api1834GET(pstr: String)
-
-GET         /pension-online/reports/:pstr/ER20A/versions                          controllers.EventReportController.getER20AVersions(pstr: String, startDate: String)

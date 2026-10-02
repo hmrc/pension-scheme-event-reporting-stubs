@@ -134,25 +134,6 @@ class EventReportController @Inject()(
     }
   }
 
-  def getER20AVersions(pstr: String, startDate: String): Action[AnyContent] = Action.async {
-    val path = "conf/resources/data/getVersions"
-    val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
-    val aftPerfTestPstrPattern: String = """^34000[0-9]{3}IN$"""
-
-    if (pstr.isEmpty || startDate.isEmpty) {
-      Future.successful(Forbidden(invalidRequestResponse))
-    } else if (!startDate.matches(datePattern)) {
-      Future.successful(BadRequest(invalidStartDateResponse))
-    } else if (notFoundPSTR.contains(pstr) || pstr.matches(aftPerfTestPstrPattern))
-      Future.successful(NotFound(invalidPstrResponse))
-    else {
-      val jsValue = jsonUtils.readJsonIfFileFound(s"$path/$pstr/$startDate.json")
-        .getOrElse(Json.parse("[{}]"))
-
-      Future.successful(Ok(jsValue))
-    }
-  }
-
   def api1832GET(pstr: String): Action[AnyContent] = Action.async { implicit request =>
     val path = "conf/resources/data/api1832"
     (request.headers.get("eventType"), request.headers.get("reportVersionNumber"), request.headers.get("reportStartDate")) match {

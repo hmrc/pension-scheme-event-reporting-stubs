@@ -172,31 +172,12 @@ class HipEventReportController @Inject()(
             case errors if errors.isEmpty =>
               Ok(Json.obj("success" -> jsValue))
             case errors =>
-              println(s"\n\n\n\n${Json.prettyPrint(jsValue)}\n\n\n\n")
               logger.error(s"\n\n\n\nHIP #1537 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
           }
         case None =>
           NotFound(noDataErrorResponse)
       }
-    }
-  }
-
-  def getER20AVersions(pstr: String, startDate: String): Action[AnyContent] = Action {
-    val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
-    if (pstr.isEmpty || startDate.isEmpty) {
-      Forbidden(invalidRequestResponse)
-    } else if (!startDate.matches(datePattern)) {
-      BadRequest(invalidStartDateResponse)
-    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$"""))
-      NotFound(invalidPstrResponse)
-    else {
-      val jsValue: JsValue =
-        jsonUtils
-          .readJsonIfFileFound(s"conf/resources/data/getVersions/$pstr/$startDate.json")
-          .getOrElse(Json.parse("[{}]"))
-
-      Ok(jsValue)
     }
   }
 
