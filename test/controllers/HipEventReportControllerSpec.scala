@@ -65,13 +65,13 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileEventReportSummary" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validEventReportSummaryRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileEventReportSummary(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
+        status(result) mustBe CREATED
         contentAsJson(result) mustBe Json.obj("success" -> createCompileEventReportSummarySuccessResponse)
       }
     }
@@ -89,13 +89,13 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileEventOneReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validEventOneReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileEventOneReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
+        status(result) mustBe CREATED
         contentAsJson(result) mustBe Json.obj("successes" -> compileEventOneReportSuccessResponse)
       }
     }
@@ -113,13 +113,13 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileMemberEventReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validMemberEventReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileMemberEventReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
+        status(result) mustBe CREATED
         contentAsJson(result) mustBe Json.obj("success" -> compileMemberEventReportSuccessResponse)
       }
     }
@@ -522,13 +522,13 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "submitEventDeclarationReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validSubmitEventDeclarationReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.submitEventDeclarationReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
+        status(result) mustBe CREATED
         contentAsJson(result) mustBe Json.obj("success" -> submitEventDeclarationReportSuccessResponse)
       }
     }
@@ -546,14 +546,14 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "submitEvent20ADeclarationReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validSubmitEvent20ADeclarationReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { app =>
         val controller = app.injector.instanceOf[HipEventReportController]
         val result = controller.submitEvent20ADeclarationReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
+        status(result) mustBe CREATED
         contentAsJson(result) mustBe Json.obj("success" -> submitEvent20ADeclarationReportSuccessResponse)
       }
     }
