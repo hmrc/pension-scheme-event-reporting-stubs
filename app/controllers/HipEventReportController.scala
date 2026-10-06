@@ -34,7 +34,7 @@ class HipEventReportController @Inject()(
                                           cc: ControllerComponents,
                                           jsonUtils: JsonUtils,
                                           hipEpidValidator: HipEpidValidator
-                                     ) 
+                                        )
   extends BackendController(cc)
     with APIResponses
     with Logging {
@@ -252,7 +252,6 @@ class HipEventReportController @Inject()(
   }
 
   def api1834GET(pstr: String): Action[AnyContent] = Action { implicit request =>
-    val path = "conf/resources/data/api1834"
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
 
     (
@@ -263,7 +262,7 @@ class HipEventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           NotFound(invalidPstrResponse)
         else {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr-${startDate.take(4)}-$version.json") match {
+          jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1834/$pstr-${startDate.take(4)}-$version.json") match {
             case None =>
               NotFound
             case Some(jsValue) =>
