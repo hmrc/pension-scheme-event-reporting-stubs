@@ -1,0 +1,5032 @@
+openapi: 3.0.1
+info:
+  title: Pension Online Events
+  version: 0.1.3
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0"
+  description:  |
+    This API specification describes the data structures and operations to support the Pension Online Events.
+    
+    The following resources are offered by this API:
+
+    - **Create Compiled Event Summary Report**
+    
+      Allows to compile their event summary data in ETMP.
+      
+    - **Create Compiled Event 1 Report**
+    
+      Allows the PODS digital service to store compiled Event 1 report data for a pension scheme in ETMP before the formal declaration. 
+
+    - **Submit Event Declaration Report**
+    
+      Allows the PODS digital service to submit the event declaration report for a pension scheme to ETMP, covering both PSA (Pension Scheme Administrator) and PSP (Pension Scheme Practitioner) declarations. 
+      
+    - **Submit Event 20A Declaration Report**
+    
+      Allows the PODS digital service to submit the Event 20A declaration report for a specific pension scheme. 
+
+    - **Create Compiled Member Event Report**
+
+      Stores a single-event-type member event report for a pension scheme.
+
+    - **Get Event 20A Report**
+
+      Allows pension scheme administrators  to retrieve the compiled Event 20A report data stored in ETMP. 
+
+    - **Get Member Event Report**
+
+      Allows Pension scheme administrators and practitioners  to review member-level event data that has been compiled in ETMP for their scheme before or after declaration. 
+
+    - **Get Event 1 Report**  
+
+      Allows Pension scheme administrators  to review their compiled Event 1 report data before or after declaration. 
+
+    - **Get Event Summary Report**
+    
+      Provides a high-level view of all the event types and member event activity recorded for a pension scheme in a given reporting period.  
+
+      
+    **EPID Reference:**
+    
+    - EPID1822- HIP OAS: Pension Online Events
+
+    ### Change Log
+    | Version | Date | Author | Description |
+    | :--- | :--- | :--- | :--- |
+    | 0.1.0 | 2026-07-28 | GitHub Copilot | OAS Events OAS extracted from consolidated specification |
+    | 0.1.1 | 2026-07-13 | Hima V Pramod |  Updated the main summary of the OAS and descriptions of individual APIs. |
+    |||| Updated the description and regex for all the Headers.|
+    |||| Included correlationid headers for 401,403 and 404 error codes.|
+    |||| Defined the 400 Bad Request response in line aligning with HIP standards for all the APIs.|
+    |||| Updated the success response status code to 201 for post operations.|
+    |||| Updated the enums for the headers X-Originating-System and X- Transmitting-System.|
+    |||| Included the EPID References.|
+    |||| Included examples for header and path parameters.|
+    |||| Updated 422 business validation error code descriptions and examples|
+    |0.1.2|2026-09-02|Hima V Pramod|Updated the Event24 *paymentDetails* schema as per review comments|
+    |0.1.3|2026-09-18|Hima V Pramod| Updated the Event24 *paymentDetails* schema for API1830 and API1832 as per  review comments.|
+    ||||Removed the oneOf nesting for *taxedAtMarginalRate* and *payeReference* for API1830 and API1832 as this was causing validation issues due to ambiguity in structure.Now these fields are made optional with descriptions indicating when these fields should be mandatory.This would not cause any change in the payload structure.|
+    ||||Updated error texts for code 004 and 125 for API1829|
+    ||||Corrected a spelling error in the error message for code 166 in API1827|
+    
+    
+  x-integration-catalogue:
+    reviewed-date: 2026-07-23 00:00:00+00:00
+    short-description: pension online v0.1 consolidated onboarding contract generated
+      from source APIs.
+    status: BETA
+    api-type: SIMPLE
+    backends:
+    - ETMP
+    domain: TBC
+    sub-domain: TBC
+servers:
+- url: http://etmp-egress-gateway.egress.svc.cluster.local
+  description: Egress Gateway to ETMP TEST
+tags:
+- name: API#1826
+  description: Source operations from API#1826
+- name: API#1827
+  description: Source operations from API#1827
+- name: API#1828
+  description: Source operations from API#1828
+- name: API#1829
+  description: Source operations from API#1829
+- name: API#1830
+  description: Source operations from API#1830
+- name: API#1831
+  description: Source operations from API#1831
+- name: API#1832
+  description: Source operations from API#1832
+- name: API#1833
+  description: Source operations from API#1833
+- name: API#1834
+  description: Source operations from API#1834
+paths:
+  /RESTAdapter/pension-online/event-reports/{pstr}:
+    post:
+      summary: API#1826 Create Compiled Event Summary Report
+      description: "This API handles creation and amendment of event summary records.\n \nThe call is synchronous.\n \nFor the successful scenario the API stores a Pension Scheme Event Summary report in a compiled (work-in-progress) status for a given scheme and regime.\n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1813"
+      operationId: post_RESTAdapter_pension_online_event_reports_regime_pstr_
+      tags:
+      - API#1826
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '201':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1826_post_RESTAdapter_pension_online_event_reports_regime_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  formBundleNumber: '12345678912'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1826_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+      requestBody:
+        required: true
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/API1826_request'
+            example:
+              eventReportDetails:
+                reportStartDate: 2021-04-06
+                reportEndDate: 2022-04-05
+              eventDetails:
+                event10:
+                - recordVersion: '001'
+                  invRegScheme:
+                    startDateDetails:
+                      startDateOfInvReg: 2022-01-31
+                      contractsOrPolicies: 'Yes'
+                event11:
+                  recordVersion: '001'
+                  unauthorisedPmtsDate: 2022-01-31
+                  contractsOrPoliciesDate: 2022-01-10
+                event12:
+                  recordVersion: '001'
+                  twoOrMoreSchemesDate: 2022-01-02
+                event13:
+                - recordVersion: '001'
+                  schemeStructure: A single trust under which all of the assets are
+                    held for the benefit of all members of the scheme
+                  dateOfChange: 2022-01-02
+                event14:
+                  recordVersion: '001'
+                  schemeMembers: 12 to 50
+                event18:
+                  recordVersion: '001'
+                  chargeablePmt: 'Yes'
+                event19:
+                - recordVersion: '001'
+                  countryCode: GB
+                  dateOfChange: 2022-01-14
+                event20:
+                - recordVersion: '001'
+                  occSchemeDetails:
+                    startDateOfOccScheme: 2022-01-27
+                eventWindUp:
+                  recordVersion: '001'
+                  dateOfWindUp: 2022-01-28
+  /RESTAdapter/pension-online/event1-reports/{pstr}:
+    post:
+      summary: API#1827 Create Compiled Event 1 Report
+      description: "This API allows the PODS digital service to store compiled Event 1 report data for a pension scheme in ETMP before the formal declaration. \n \nFor the successful scenario the compiled data may be created, amended, or resubmitted; ETMP maintains a version number per report entry.\n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1814"
+      operationId: post_RESTAdapter_pension_online_event1_reports_regime_pstr_
+      tags:
+      - API#1827
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '201':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1827_successResponse'
+              example:
+                  successes:
+                  - processingDate: 2026-11-11T23:23:23Z
+                    formBundleNumber: '12345678912'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1827_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+      requestBody:
+        required: true
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/API1827_request'
+            example:
+              eventReportDetails:
+                reportStartDate: 2020-04-06
+                reportEndDate: 2021-04-05
+              event1Details:
+                event1Details:
+                - memberStatus: New
+                  memberType: Individual
+                  individualMemberDetails:
+                    title: Mr
+                    firstName: John
+                    middleName: Mac
+                    lastName: Smith
+                    nino: AA999999A
+                    signedMandate: 'Yes'
+                    pmtMoreThan25PerFundValue: 'No'
+                    schemePayingSurcharge: 'Yes'
+                  unAuthorisedPaymentDetails:
+                    unAuthorisedPmtType1: Transfer to non-registered pensions scheme
+                    unAuthorisedPmtType2: Transfer to an Employer Financed retirement
+                      Benefit scheme (EFRB)
+                    freeTxtOrSchemeOrRecipientName: ABCDEFGHIJKLMNOPQRSTUV
+                    pstrOrReference: 20034565RX
+                    dateOfUnauthorisedPayment: 2020-06-30
+                    valueOfUnauthorisedPayment: 723
+  /RESTAdapter/pension-online/event-declaration-reports/{pstr}:
+    post:
+      summary: API#1828 Submit Event Declaration Report
+      description: "This API allows allows the PODS digital service to submit the event declaration report for a pension scheme to ETMP, covering both PSA (Pension Scheme Administrator) and PSP (Pension Scheme Practitioner) declarations. \n \nFor the successful scenario the API returns a form bundle number and processing date confirming the declaration has been received.\n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1815"
+      operationId: post_RESTAdapter_pension_online_event_declaration_reports_pstr_
+      tags:
+      - API#1828
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '201':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1828_post_RESTAdapter_pension_online_event_declaration_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  formBundleNumber: '12345678912'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1828_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+      requestBody:
+        required: true
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/API1828_request'
+            example:
+              declarationDetails:
+                erDetails:
+                  pSTR: 27176941JF
+                  reportStartDate: 2020-04-06
+                  reportEndDate: 2021-04-05
+                erDeclarationDetails:
+                  submittedBy: PSA
+                  submittedID: A2345678
+                psaDeclaration:
+                  psaDeclaration1: Selected
+                  psaDeclaration2: Selected
+  /RESTAdapter/pension-online/event20a-declaration-reports/{pstr}:
+    post:
+      summary: API#1829 Submit Event 20A Declaration Report
+      description: "This API allows allows the PODS digital service to submit the Event 20A declaration report for a specific pension scheme.  \n \nFor the successful scenario the API returns a form bundle number and processing date.\n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1816"
+      operationId: post_RESTAdapter_pension_online_event20a_declaration_reports_pstr_
+      tags:
+      - API#1829
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '201':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1829_post_RESTAdapter_pension_online_event20a_declaration_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  formBundleNumber: '12345678912'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1829_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+      requestBody:
+        required: true
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/API1829_request'
+            example:
+              eventReportDetails:
+                er20aDetails:
+                  pSTR: 27660890RK
+                  reportStartDate: 2020-04-06
+                  reportEndDate: 2021-04-05
+                schemeMasterTrustDetails:
+                  ceaseDate: 2021-03-31
+                erDeclarationDetails:
+                  submittedBy: PSA
+                  submittedID: A0123456
+                  psaDeclaration:
+                    psaDeclaration1: Selected
+                    psaDeclaration2: Selected
+  /RESTAdapter/pension-online/member-event-reports/{pstr}:
+    post:
+      summary: API#1830 Create Compiled Member Event Report
+      description: "This API allows the per-member event data for a scheme to be compiled in ETMP in work-in-progress status.  \n \nFor the successful scenario the API stores a single-event-type member event report for a pension scheme. \n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1817"
+      operationId: post_RESTAdapter_pension_online_member_event_reports_pstr_
+      tags:
+      - API#1830
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '201':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1830_post_RESTAdapter_pension_online_member_event_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  formBundleNumber: '12345678912'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1830_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+      requestBody:
+        required: true
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/API1830_request'
+            example:
+              memberEventsDetails:
+                eventReportDetails:
+                  pSTR: 87219363YN
+                  reportStartDate: 2021-04-06
+                  reportEndDate: 2022-04-05
+                  eventType: Event2
+                eventDetails:
+                - memberDetail:
+                    memberStatus: New
+                    event:
+                      eventType: Event2
+                      individualDetails:
+                        title: Mr
+                        firstName: John
+                        middleName: A
+                        lastName: Smith
+                        nino: AA345678B
+                      personReceivedThePayment:
+                        title: Mr
+                        firstName: James
+                        middleName: Torner
+                        lastName: Mike
+                        nino: AA345678A
+                      paymentDetails:
+                        amountPaid: 123.01
+                        eventDate: 2021-05-30
+                - memberDetail:
+                    memberStatus: New
+                    event:
+                      eventType: Event2
+                      individualDetails:
+                        title: Mrs
+                        firstName: Joanna
+                        middleName: A
+                        lastName: Smith
+                        nino: AA345678C
+                      personReceivedThePayment:
+                        title: Mrs
+                        firstName: Julia
+                        middleName: Samantha
+                        lastName: Mike
+                        nino: AA345678B
+                      paymentDetails:
+                        amountPaid: 123.02
+                        eventDate: 2021-05-30
+  /RESTAdapter/pension-online/event20a-status-reports/{pstr}:
+    get:
+      summary: API#1831 Get Event 20A Report
+      description: "This API allows to retrieve the compiled Event 20A report data stored in ETMP.\n \nFor the successful scenario the API retrieves the Event 20A report for a given pension scheme (by PSTR).\n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1818"
+      operationId: get_RESTAdapter_pension_online_event20a_status_reports_pstr_
+      tags:
+      - API#1831
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - in: header
+        name: reportFormBundleNumber
+        description: Report Form Bundle Number - Used as an identifier in place of start date and version number
+        required: false
+        schema:
+          type: string
+          pattern: ^[0-9]{12}$
+        example: 124456789012
+      - in: header
+        name: reportStartDate
+        description: Report Start Date - Used as an identifier with version number in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+        example: 2021-03-05
+      - in: header
+        name: reportVersionNumber
+        description: Report Version Number - Used as an identifier with start date in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: '[0-9]{3}'
+        example: "001"
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '200':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1831_get_RESTAdapter_pension_online_event20a_status_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  schemeDetails:
+                    pSTR: 87219363YN
+                    schemeName: Abc Ltd
+                  er20aDetails:
+                    reportStartDate: 2021-04-06
+                    reportEndDate: 2022-04-05
+                    reportVersionNumber: '001'
+                    reportSubmittedDateAndTime: 2023-12-13T12:12:12Z
+                  schemeMasterTrustDetails:
+                    startDate: 2021-06-08
+                  erDeclarationDetails:
+                    submittedBy: PSP
+                    submittedID: '20000001'
+                    submittedName: ABCDEFGHIJKLMNOPQRSTUV
+                    pspDeclaration:
+                      authorisedPSAID: A4045157
+                      pspDeclaration1: Selected
+                      pspDeclaration2: Selected
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1831_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+  /RESTAdapter/pension-online/member-event-status-reports/{pstr}:
+    get:
+      summary: API#1832 Get Member Event Report
+      description: "This API allows Pension scheme administrators and practitioners  to review member-level event data that has been compiled in ETMP for their scheme before or after declaration. \n \nFor the successful scenario the API retrieves the compiled member event report for a specified pension scheme and event type. \n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1819"
+      operationId: get_RESTAdapter_pension_online_member_event_status_reports_pstr_
+      tags:
+      - API#1832
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - in: header
+        name: eventType
+        description: Event type - Mandatory. Must be one of the following:- Event2, Event3, Event4, Event5, Event6, Event7, Event8, Event8A, Event22, Event23, Event24
+        required: true
+        schema:
+          type: string
+          enum:
+          - 'Event2'
+          - 'Event3'
+          - 'Event4'
+          - 'Event5'
+          - 'Event6'
+          - 'Event7'
+          - 'Event8'
+          - 'Event8A'
+          - 'Event22'
+          - 'Event23'
+          - 'Event24'
+      - in: header
+        name: reportFormBundleNumber
+        description: Report Form Bundle Number - Used as an identifier in place of start date and version number
+        required: false
+        schema:
+          type: string
+          pattern: ^[0-9]{12}$
+        example: 124456789012
+      - in: header
+        name: reportStartDate
+        description: Report Start Date - Used as an identifier with version number in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+        example: 2021-03-05
+      - in: header
+        name: reportVersionNumber
+        description: Report Version Number - Used as an identifier with start date in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: '[0-9]{3}'
+        example: "001"
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '200':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1832_get_RESTAdapter_pension_online_member_event_status_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  schemeDetails:
+                    pSTR: 87219363YN
+                    schemeName: Abc Ltd
+                  eventReportDetails:
+                    reportStartDate: 2021-04-06
+                    reportEndDate: 2022-04-05
+                    reportStatus: Compiled
+                    reportVersionNumber: '001'
+                    reportSubmittedDateAndTime: 2023-12-13T12:12:12Z
+                    eventType: Event2
+                  eventDetails:
+                  - memberDetail:
+                      memberStatus: New
+                      event:
+                        eventType: Event2
+                        individualDetails:
+                          title: Mr
+                          firstName: John
+                          middleName: A
+                          lastName: Smith
+                          nino: AA345678B
+                        personReceivedThePayment:
+                          title: Mr
+                          firstName: James
+                          middleName: Torner
+                          lastName: Mike
+                          nino: AA345678A
+                        paymentDetails:
+                          amountPaid: 123.01
+                          eventDate: 2021-05-30
+                  - memberDetail:
+                      memberStatus: New
+                      event:
+                        eventType: Event2
+                        individualDetails:
+                          title: Mrs
+                          firstName: Joanna
+                          middleName: A
+                          lastName: Smith
+                          nino: AA345678C
+                        personReceivedThePayment:
+                          title: Mrs
+                          firstName: Julia
+                          middleName: Samantha
+                          lastName: Mike
+                          nino: AA345678B
+                        paymentDetails:
+                          amountPaid: 123.02
+                          eventDate: 2021-05-30
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1832_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+  /RESTAdapter/pension-online/event1-status-reports/{pstr}:
+    get:
+      summary: API#1833 Get Event 1 Report
+      description: "This API allows Pension scheme administrators  to review their compiled Event 1 report data before or after declaration.\n \nFor the successful scenario the API retrieves the compiled Event 1 report for a given pension scheme from ETMP. \n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1820"
+      operationId: get_RESTAdapter_pension_online_event1_status_reports_pstr_
+      tags:
+      - API#1833
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - in: header
+        name: reportFormBundleNumber
+        description: Report Form Bundle Number - Used as an identifier in place of start date and version number
+        required: false
+        schema:
+          type: string
+          pattern: ^[0-9]{12}$
+        example: 124456789012
+      - in: header
+        name: reportStartDate
+        description: Report Start Date - Used as an identifier with version number in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+        example: 2021-03-05
+      - in: header
+        name: reportVersionNumber
+        description: Report Version Number - Used as an identifier with start date in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: '[0-9]{3}'
+        example: "001"
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '200':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1833_get_RESTAdapter_pension_online_event1_status_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  processingDate: 2026-07-23T20:46:18Z
+                  schemeDetails:
+                    pSTR: 87219363YN
+                    schemeName: Abc Ltd
+                  eventReportDetails:
+                    reportFormBundleNumber: '123456789012'
+                    reportStartDate: 2021-04-06
+                    reportEndDate: 2022-04-05
+                    reportStatus: Compiled
+                    reportVersionNumber: '001'
+                    reportSubmittedDateAndTime: 2023-12-13T12:12:12Z
+                  event1Details:
+                  - memberStatus: New
+                    memberType: Individual
+                    individualMemberDetails:
+                      title: Mr
+                      firstName: John
+                      middleName: Mac
+                      lastName: Smith
+                      nino: AA999999A
+                      signedMandate: 'Yes'
+                      pmtMoreThan25PerFundValue: 'No'
+                      schemePayingSurcharge: 'Yes'
+                    unAuthorisedPaymentDetails:
+                      unAuthorisedPmtType1: Transfer to non-registered pensions scheme
+                      unAuthorisedPmtType2: Transfer to an Employer Financed retirement
+                        Benefit scheme (EFRB)
+                      freeTxtOrSchemeOrRecipientName: ABCDEFGHIJKLMNOPQRSTUV
+                      pstrOrReference: 20034565RX
+                      dateOfUnauthorisedPayment: 2020-06-30
+                      valueOfUnauthorisedPayment: 723
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1833_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+  /RESTAdapter/pension-online/event-status-reports/{pstr}:
+    get:
+      summary: API#1834 Get Event Summary Report
+      description: "This API provides a high-level view of all the event types and member event activity recorded for a pension scheme in a given reporting period. Administrators use this report to confirm which events have been compiled, their counts and charge amounts, and the overall status of the event report before or after declaration. \n \nFor the successful scenario the API retrieves the event summary report from ETMP for a pension scheme identified by PSTR. \n \nFor the unsuccessful scenario, the API will return error messages.\n \nEPID Reference:\n \nEPID1821"
+      operationId: get_RESTAdapter_pension_online_event_status_reports_pstr_
+      tags:
+      - API#1834
+      parameters:
+      - $ref: '#/components/parameters/correlationid'
+      - $ref: '#/components/parameters/X-Originating-System'
+      - $ref: '#/components/parameters/X-Receipt-Date'
+      - $ref: '#/components/parameters/X-Transmitting-System'
+      - in: header
+        name: reportFormBundleNumber
+        description: Report Form Bundle Number - Used as an identifier in place of start date and version number
+        required: false
+        schema:
+          type: string
+          pattern: ^[0-9]{12}$
+        example: 124456789012
+      - in: header
+        name: reportStartDate
+        description: Report Start Date - Used as an identifier with version number in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+        example: 2021-03-05
+      - in: header
+        name: reportVersionNumber
+        description: Report Version Number - Used as an identifier with start date in place of form bundle number
+        required: false
+        schema:
+          type: string
+          pattern: '[0-9]{3}'
+        example: "001"
+      - $ref: '#/components/parameters/pstrParam'
+      responses:
+        '200':
+          description: Successful Response
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API1834_get_RESTAdapter_pension_online_event_status_reports_pstr__SuccessResponse'
+              example:
+                success:
+                  schemeDetails:
+                    pSTR: 87219363YN
+                    schemeName: Abc Ltd
+                  eventReportDetails:
+                    reportFormBundleNumber: '123456789012'
+                    reportStartDate: 2021-04-06
+                    reportEndDate: 2022-04-05
+                    reportStatus: Compiled
+                    reportVersionNumber: '001'
+                    reportSubmittedDateAndTime: 2023-12-13T12:12:12Z
+                  eventDetails:
+                    event10:
+                    - recordVersion: '001'
+                      invRegScheme:
+                        startDateDetails:
+                          startDateOfInvReg: 2022-01-31
+                          contractsOrPolicies: 'Yes'
+                    event11:
+                      recordVersion: '001'
+                      unauthorisedPmtsDate: 2022-01-31
+                      contractsOrPoliciesDate: 2022-01-10
+                    event12:
+                      recordVersion: '001'
+                      twoOrMoreSchemesDate: 2022-01-02
+                    event13:
+                    - recordVersion: '001'
+                      schemeStructure: A single trust under which all of the assets
+                        are held for the benefit of all members of the scheme
+                      dateOfChange: 2022-01-02
+                    event14:
+                      recordVersion: '001'
+                      schemeMembers: 12 to 50
+                    event18:
+                      recordVersion: '001'
+                      chargeablePmt: 'Yes'
+                    event19:
+                    - recordVersion: '001'
+                      countryCode: GB
+                      dateOfChange: 2022-01-14
+                    event20:
+                    - recordVersion: '001'
+                      occSchemeDetails:
+                        startDateOfOccScheme: 2022-01-27
+                    eventWindUp:
+                      recordVersion: '001'
+                      dateOfWindUp: 2022-01-28
+                  memberEventsSummary:
+                    event2:
+                      recordVersion: '001'
+                      numberOfMembers: 150000
+                    event3:
+                      recordVersion: '002'
+                      numberOfMembers: 1000
+                    event4:
+                      recordVersion: '001'
+                      numberOfMembers: 1000
+                    event5:
+                      recordVersion: '004'
+                      numberOfMembers: 50000
+                    event6:
+                      recordVersion: '007'
+                      numberOfMembers: 10000
+                    event7:
+                      recordVersion: '002'
+                      numberOfMembers: 150000
+                    event8:
+                      recordVersion: '004'
+                      numberOfMembers: 1500
+                    event8A:
+                      recordVersion: '003'
+                      numberOfMembers: 150000
+                    event22:
+                      recordVersion: '004'
+                      numberOfMembers: 10000
+                    event23:
+                      recordVersion: '003'
+                      numberOfMembers: 150000
+                    event24:
+                      recordVersion: '001'
+                      numberOfMembers: 150000
+                  event1ChargeDetails:
+                    recordVersion: '002'
+                    numberOfMembers: 1000
+                    sscCharge:
+                      totalCharge: 10000.66
+                      previousPostedCharge: 67000
+                      deltaCharge: 8099.78
+                      chargeReference: '0123456789012345'
+                    fcmtCharge:
+                      totalCharge: 107889.66
+                      previousPostedCharge: 123456
+                      deltaCharge: 1299.78
+                      chargeReference: '0123456789012677'
+        '400':
+          description: Bad Request Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                400 Error Example:
+                  value:
+                    error:
+                      code: '400'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/API1834_UnprocessableEntityError'
+        '500':
+          description: Internal Server Error
+          headers:
+            correlationid:
+              $ref: '#/components/headers/correlationid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+              examples:
+                500 Error Example:
+                  value:
+                    error:
+                      code: '500'
+                      message: string
+                      logID: D82EBAB67AC6D7565C0682CA91BDC577
+components:
+  parameters:
+    correlationid:
+      name: correlationid
+      in: header
+      required: true
+      allowEmptyValue: false
+      style: "simple"
+      schema:
+        type: string
+        maxLength: 36
+        pattern: "^[0-9a-fA-F]{8}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{12}$"
+        example: d82ebab6-7ac6-d756-5c06-82ca91bdc577
+      description: "Unique alphanumeric number used for correlation purposes, generated by the originating system and conforming to 36-character UUID (formatted)."
+    X-Originating-System:
+      name: X-Originating-System
+      in: header
+      required: true
+      allowEmptyValue: false
+      style: "simple"
+      schema:
+        type: string
+        maxLength: 64
+        enum:
+        - MDTP
+      description: "System that is the originator of the message. Used to distinctly\
+        \ identifies the service.Eg:MDTP"
+    X-Receipt-Date:
+      name: X-Receipt-Date
+      in: header
+      required: true
+      allowEmptyValue: false
+      style: "simple"
+      schema:
+        type: string
+        format: date-time
+        maxLength: 40
+        example: "2026-07-23T20:46:18Z"
+      description: "The time the message was created by the system sending the message.\
+        \ The value should follow this date-time pattern, and be represented in the\
+        \ UTC time zone: yyyy-MM-ddTHH:mm:ssZ"
+    X-Transmitting-System:
+      name: X-Transmitting-System
+      in: header
+      required: true
+      allowEmptyValue: false
+      style: "simple"
+      schema:
+        type: string
+        maxLength: 64
+        enum:
+        - HIP
+      description: Intermediary system that performs the transmission of the message.
+    pstrParam:
+      in: path
+      name: pstr
+      description: Pension Scheme Tax reference number
+      required: true
+      allowEmptyValue: false
+      style: "simple"
+      schema:
+        type: string
+        pattern: ^[0-9]{8}[A-Z]{2}$
+      example: 02131383RE
+  headers:
+    correlationid:
+      description: "Unique alphanumeric number used for correlation purposes, generated by the originating system and conforming to 36-character UUID (formatted)."
+      schema:
+        type: string
+        maxLength: 36
+        pattern: "^[0-9a-fA-F]{8}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{4}[-][0-9a-fA-F]{12}$"
+  schemas:
+    SystemErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - logID
+          properties:
+            code:
+              type: string
+              enum:
+              - '400'
+              - '500'
+            message:
+              type: string
+              description: 'Constraint details are sourced from backend artefacts.'
+            logID:
+              type: string
+              description: 'Constraint details are sourced from backend artefacts.'
+    API1826_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `004` - Duplicate submission Acknowledgment reference
+                * `125` - Reporting period dates are incorrect
+                * `166` - Previous ER is in processing in ETMP
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '004'
+              - '125'
+              - '166'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1827_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `004` - Duplicate submission Acknowledgment reference
+                * `125` - Reporting period dates are incorrect
+                * `166` - Previous ER is in processing in ETMP
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '004'
+              - '125'
+              - '166'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1828_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `004` - Duplicate submission Acknowledgment reference
+                * `046` - Invalid PSAID <PSAID> 
+                * `049` - Invalid PSTR
+                * `058` - No relationship exists between the PSAID and the scheme 
+                * `090` - Invalid PSPID <PSPID> 
+                * `091` - No relationship exists between the PSPID <PSPID> and the Scheme <PSTR>
+                * `093` - PSP <PSPID> is not authorized by PSA <PSAID>
+                * `125` - Reporting period dates are incorrect
+                * `167` - No ER was found for the requested period
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '004'
+              - '046'
+              - '049'
+              - '058'
+              - '090'
+              - '091'
+              - '093'
+              - '125'
+              - '167'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1829_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `004` - Duplicate submission 
+                * `046` - Invalid PSAID <PSAID> 
+                * `090` - Invalid PSPID <PSPID> 
+                * `049` - Invalid PSTR
+                * `058` - No relationship exists between the PSAID and the scheme 
+                * `091` - No relationship exists between the PSPID <PSPID> and the Scheme <PSTR>
+                * `092` - PSAID is mandatory if the declaration is provided by PSP
+                * `093` - PSP <PSPID> is not authorized by PSA <PSAID> 
+                * `125` - Reporting period dates are incorrect
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '004'
+              - '046'
+              - '090'
+              - '049'
+              - '058'
+              - '091'
+              - '092'
+              - '093'
+              - '125'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1830_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `004` - Duplicate submission Acknowledgment reference
+                * `125` - Reporting period dates are incorrect
+                * `166` - Previous ER is in processing in ETMP
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '004'
+              - '125'
+              - '166'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1831_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `049` - Invalid PSTR
+                * `085` - Period Start date cannot be in future
+                * `167` - No ER was found for the requested period
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '049'
+              - '085'
+              - '167'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1832_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `049` - Invalid PSTR
+                * `085` - Period Start date cannot be in future
+                * `167` - No ER was found for the requested period
+                * `168` - No ER was found for the requested Form bundle number
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '049'
+              - '085'
+              - '167'
+              - '168'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1833_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `049` - Invalid PSTR
+                * `085` - Period Start date cannot be in future
+                * `167` - No ER was found for the requested period
+                * `168` - No ER was found for the requested Form bundle number
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '049'
+              - '085'
+              - '167'
+              - '168'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1834_ApplicationErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: object
+          required:
+          - processingDate
+          - code
+          - text
+          properties:
+            processingDate:
+              type: string
+              format: date-time
+            code:
+              type: string
+              description: |
+                Business validation error code (sourced from source artefacts):
+                * `003` - Request could not be processed
+                * `049` - Invalid PSTR
+                * `085` - Period Start date cannot be in future
+                * `167` - No ER was found for the requested period
+                * `168` - No ER was found for the requested form bundle number
+                * `999` - Technical System Error
+              enum:
+              - '003'
+              - '049'
+              - '085'
+              - '167'
+              - '168'
+              - '999'
+            text:
+              type: string
+              minLength: 1
+              maxLength: 160
+              description: Business validation error text corresponding to the code.
+    API1826_request:
+      title: Event Report Submission Request Schema
+      type: object
+      additionalProperties: false
+      properties:
+        eventReportDetails:
+          type: object
+          additionalProperties: false
+          properties:
+            reportStartDate:
+              $ref: '#/components/schemas/API1826_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1826_dateType'
+          required:
+          - reportStartDate
+          - reportEndDate
+        eventDetails:
+          type: object
+          minProperties: 1
+          additionalProperties: false
+          properties:
+            event10:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1826_versionType'
+                  invRegScheme:
+                    type: object
+                    description: "Either startDateDetails or ceaseDateDetails to be provided"
+                    properties:
+                      startDateDetails:
+                        type: object
+                        minProperties: 1
+                        additionalProperties: false
+                        properties:
+                          startDateOfInvReg:
+                            $ref: '#/components/schemas/API1826_dateType'
+                          contractsOrPolicies:
+                            type: string
+                            description: Possible values are  Yes or No
+                            enum:
+                            - 'Yes'
+                            - 'No'
+                      ceaseDateDetails:
+                        type: object
+                        minProperties: 1
+                        additionalProperties: false
+                        properties:
+                          ceaseDateOfInvReg:
+                            $ref: '#/components/schemas/API1826_dateType'
+                    additionalProperties: false
+            event11:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1826_versionType'
+                unauthorisedPmtsDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1826_dateType'
+                  - description: Date the scheme has changed its rules to entitle
+                      any person to require the making of unauthorised payments
+                contractsOrPoliciesDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1826_dateType'
+                  - description: Date the scheme has changed its rules to allow investments
+                      in assets other than contracts or policies of insurance
+            event12:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1826_versionType'
+                twoOrMoreSchemesDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1826_dateType'
+                  - description: The scheme was treated as two or more schemes immediately
+                      before 6 April 2006, and has changed its rules on
+              required:
+              - twoOrMoreSchemesDate
+            event13:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1826_versionType'
+                  schemeStructure:
+                    type: string
+                    enum:
+                    - A single trust under which all of the assets are held for the
+                      benefit of all members of the scheme
+                    - A group life/death in service scheme
+                    - A body corporate
+                    - Other
+                    description: 'Possible Values: 01 - A single trust under which
+                      all of the assets are held for the benefit of all members of
+                      the scheme 02 - A group life / death in service scheme 03 -
+                      A body corporate 04 - Other'
+                  schemeStructureOther:
+                    type: string
+                    pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                    description: Free text to provide the scheme structure name if
+                      04-other is selected for the pension scheme structure \u00C0
+                      for À, \u00FF for ÿ, \u2014 for — (EM DASH), \u2013 for – (EN
+                      DASH), \u2010 for -(HYPHEN), \u002d for -(HYPHEN_MINUS), \u005C
+                      for \
+                  dateOfChange:
+                    $ref: '#/components/schemas/API1826_dateType'
+                required:
+                - schemeStructure
+                - dateOfChange
+            event14:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1826_versionType'
+                schemeMembers:
+                  type: string
+                  description: Possible Values:01 for 0,02 for 1,03 for 2 to 11,04
+                    for 12 to 50,05 for 51 to 10000,06 for More than 10000
+                  enum:
+                  - '0'
+                  - '1'
+                  - 2 to 11
+                  - 12 to 50
+                  - 51 to 10,000
+                  - More than 10,000
+              required:
+              - schemeMembers
+            event18:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1826_versionType'
+                chargeablePmt:
+                  type: string
+                  description: Has the scheme made a scheme chargeable payment - income
+                    or gains from taxable property?Possible Value- Yes
+                  enum:
+                  - 'Yes'
+              required:
+              - chargeablePmt
+            event19:
+              type: array
+              items:
+                type: object
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1826_versionType'
+                  countryCode:
+                    type: string
+                    pattern: ^[A-Z]{2}$
+                  dateOfChange:
+                    $ref: '#/components/schemas/API1826_dateType'
+                additionalProperties: false
+                required:
+                - countryCode
+                - dateOfChange
+            event20:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1826_versionType'
+                  occSchemeDetails:
+                    type: object
+                    description: "Either startDateOfOccScheme or stopDateOfOccScheme to be provided"
+                    properties:
+                      startDateOfOccScheme:
+                        $ref: '#/components/schemas/API1826_dateType'
+                      stopDateOfOccScheme:
+                        $ref: '#/components/schemas/API1826_dateType'
+            eventWindUp:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1826_versionType'
+                dateOfWindUp:
+                  type: string
+                  pattern: ^[0-9]{4}-([0][1-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])$
+                  description: MDTP will provide with value 31-12-9999 in case where
+                    the previous  submitted Wind-up date is deleted
+              required:
+              - dateOfWindUp
+      required:
+      - eventReportDetails
+    API1826_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1826_versionType:
+      type: string
+      description: version number from 001 to 999
+      pattern: ^[0-9]{3}$
+    API1826_successResponse:
+      title: Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        formBundleNumber:
+          type: string
+          minLength: 1
+          maxLength: 255
+    API1826_post_RESTAdapter_pension_online_event_reports_regime_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1826_successResponse'
+    API1827_request:
+      title: Create Compiled Event 1 Report Request Schema
+      type: object
+      required:
+      - eventReportDetails
+      additionalProperties: false
+      properties:
+        eventReportDetails:
+          type: object
+          required:
+          - reportStartDate
+          - reportEndDate
+          additionalProperties: false
+          properties:
+            reportStartDate:
+              $ref: '#/components/schemas/API1827_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1827_dateType'
+        event1Details:
+          type: object
+          minProperties: 1
+          additionalProperties: false
+          properties:
+            event1Details:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  amendedVersion:
+                    $ref: '#/components/schemas/API1827_versionType'
+                  memberStatus:
+                    description: Possible values are New, Changed or Deleted
+                    type: string
+                    minLength: 1
+                    maxLength: 12
+                    enum:
+                    - New
+                    - Changed
+                    - Deleted
+                  memberType:
+                    description: Possible values are Individual or Employer
+                    type: string
+                    minLength: 1
+                    maxLength: 10
+                    enum:
+                    - Individual
+                    - Employer
+                  individualMemberDetails:
+                    description: This node is mandatory if the Member Type is 01-Individual
+                    type: object
+                    required:
+                    - firstName
+                    - lastName
+                    - nino
+                    additionalProperties: false
+                    properties:
+                      title:
+                        description: 'Possible values are 0001: Mr, 0002: Mrs, 0003:
+                          Miss, 0004: Ms, 0005: Dr 0006: Sir, 0009: Professor, 0010:
+                          Lord'
+                        type: string
+                        minLength: 1
+                        maxLength: 10
+                        enum:
+                        - Mr
+                        - Mrs
+                        - Miss
+                        - Ms
+                        - Dr
+                        - Sir
+                        - Professor
+                        - Lord
+                      firstName:
+                        $ref: '#/components/schemas/API1827_nameType'
+                      middleName:
+                        $ref: '#/components/schemas/API1827_nameType'
+                      lastName:
+                        $ref: '#/components/schemas/API1827_nameType'
+                      nino:
+                        type: string
+                        minLength: 9
+                        maxLength: 9
+                        pattern: ^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]?$
+                      signedMandate:
+                        $ref: '#/components/schemas/API1827_yesNoType'
+                      pmtMoreThan25PerFundValue:
+                        $ref: '#/components/schemas/API1827_yesNoType'
+                      schemePayingSurcharge:
+                        $ref: '#/components/schemas/API1827_yesNoType'
+                  employerMemDetails:
+                    description: This node is mandatory if the Member Type is 02-Employer
+                    type: object
+                    required:
+                    - compOrOrgName
+                    - crnNumber
+                    - addressDetails
+                    additionalProperties: false
+                    properties:
+                      compOrOrgName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                      crnNumber:
+                        type: string
+                        minLength: 7
+                        maxLength: 8
+                        pattern: ^[A-Za-z0-9 -]{1,8}$
+                      addressDetails:
+                        $ref: '#/components/schemas/API1827_addressDetailsType'
+                  unAuthorisedPaymentDetails:
+                    type: object
+                    required:
+                    - unAuthorisedPmtType1
+                    - dateOfUnauthorisedPayment
+                    - valueOfUnauthorisedPayment
+                    additionalProperties: false
+                    properties:
+                      unAuthorisedPmtType1:
+                        description: 'Possible Values are 100: Benefit in kind, 110:
+                          Transfer to non-registered pensions scheme, 120: Error in
+                          calculating tax free lump sums, 130: Benefits paid early
+                          other than on the grounds of ill-health, protected pension
+                          age or a winding up lump sum, 140: Refund of contributions,
+                          150: Overpayment of pension/written off, 200: Loans to or
+                          in respect of the employer exceeding 50% of the value of
+                          the fund, 300: Residential property held directly or indirectly
+                          by an investment-regulated pension scheme, 310: Tangible
+                          moveable property held directly or indirectly by an investment-regulated
+                          pension scheme, 320: Court Order Payment/Confiscation Order,
+                          330: Other'
+                        type: string
+                        enum:
+                        - Benefit in kind
+                        - Transfer to non-registered pensions scheme
+                        - Error in calculating tax free lump sums
+                        - Benefits paid early other than on the grounds of ill-health,
+                          protected pension age or a winding up lump sum
+                        - Refund of contributions
+                        - Overpayment of pension/written off
+                        - Loans to or in respect of the employer exceeding 50% of
+                          the value of the fund
+                        - Residential property held directly or indirectly by an investment-regulated
+                          pension scheme
+                        - Tangible moveable property held directly or indirectly by
+                          an investment-regulated pension scheme
+                        - Court Order Payment/Confiscation Order
+                        - Other
+                      unAuthorisedPmtType2:
+                        description: 'Possible Values are 110-1: Transfer to an Employer
+                          Financed retirement Benefit scheme (EFRB), 110-2: Transfer
+                          to a non-recognised pension scheme which is not a qualifying
+                          overseas pension scheme, 140-1: Widow and/or orphan, 140-2:
+                          Refund of contributions other, 150-1: Death of member, 150-2:
+                          Death of dependent, 150-3: Dependent no longer qualified
+                          for pension, 150-4: Overpayment of pension/written off other'
+                        type: string
+                        enum:
+                        - Transfer to an Employer Financed retirement Benefit scheme
+                          (EFRB)
+                        - Transfer to a non-recognised pension scheme which is not
+                          a qualifying overseas pension scheme
+                        - Widow and/or orphan
+                        - Refund of contributions other
+                        - Death of member
+                        - Death of dependent
+                        - Dependent no longer qualified for pension
+                        - Overpayment of pension/written off other
+                      freeTxtOrSchemeOrRecipientName:
+                        description: This field is applicable if Unauthorized Payment
+                          Type 1 is one of the following; 100 - Benefit in kind -
+                          Free text, 110 - Transfer to non-registered pensions scheme
+                          (Provide Scheme Name), 120 - Error in calculating tax free
+                          lump sums - Free text130 - Benefits paid early other than
+                          on the grounds of ill-health, protected pension age or a
+                          winding up lump sum - Free text,3 10 - Tangible moveable
+                          property held directly or indirectly by an investment-regulated
+                          pension scheme - Free Text, 320 - Court Order Payment/Confiscation
+                          Order (Provide Name of Receipnt Name), 330 - Other - Free
+                          Text
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                      pstrOrReference:
+                        description: This field is applicable if Unauthorized Payment
+                          Type 1 is one of the following.110 - Transfer to non-registered
+                          pensions scheme (Provide PSTR ID or Reference Number)
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                      pmtAmtOrLoanAmt:
+                        $ref: '#/components/schemas/API1827_monetaryValueType'
+                      fundValue:
+                        $ref: '#/components/schemas/API1827_monetaryValueType'
+                      dateOfUnauthorisedPayment:
+                        $ref: '#/components/schemas/API1827_dateType'
+                      valueOfUnauthorisedPayment:
+                        $ref: '#/components/schemas/API1827_monetaryValueType'
+                      residentialPropertyAddress:
+                        $ref: '#/components/schemas/API1827_addressDetailsType'
+                required:
+                 - memberStatus
+                 - memberType
+                 - unAuthorisedPaymentDetails  
+    API1827_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1827_versionType:
+      description: version number from 001 to 999
+      type: string
+      pattern: ^[0-9]{3}$
+    API1827_nameType:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z &`\-\''\.^]{1,35}$
+    API1827_addressDetailsType:
+      oneOf:
+      - type: object
+        required:
+        - addressLine1
+        - addressLine2
+        - postCode
+        - countryCode
+        properties:
+          addressLine1:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine2:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine3:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine4:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          postCode:
+            $ref: '#/components/schemas/API1827_UKPostCodeType'
+          countryCode:
+            $ref: '#/components/schemas/API1827_UKCountryCodeType'
+      - type: object
+        required:
+        - addressLine1
+        - addressLine2
+        - countryCode
+        properties:
+          addressLine1:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine2:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine3:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          addressLine4:
+            $ref: '#/components/schemas/API1827_addressLineType'
+          postCode:
+            $ref: '#/components/schemas/API1827_nonUKPostCodeType'
+          countryCode:
+            $ref: '#/components/schemas/API1827_nonUKCountryCodeType'
+    API1827_addressLineType:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 &!''‘’"“”(),./—–‐-]{1,35}$
+    API1827_UKPostCodeType:
+      description: Mandatory for UK Address
+      type: string
+      minLength: 1
+      maxLength: 10
+      pattern: ^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$|BFPO\s?[0-9]{1,3}$
+    API1827_nonUKPostCodeType:
+      description: Not Mandatory for Non UK Address
+      type: string
+      minLength: 1
+      maxLength: 10
+      pattern: ^[A-Za-z0-9 ]{1,10}$
+    API1827_UKCountryCodeType:
+      description: UK Country Codes
+      type: string
+      minLength: 2
+      maxLength: 2
+      enum:
+      - GB
+    API1827_nonUKCountryCodeType:
+      description: Non UK Country Codes
+      type: string
+      minLength: 2
+      maxLength: 2
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AN
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CS
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FC
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TP
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - UM
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+    API1827_yesNoType:
+      description: Possible values are No or Yes
+      type: string
+      minLength: 2
+      maxLength: 5
+      enum:
+      - 'No'
+      - 'Yes'
+    API1827_monetaryValueType:
+      type: number
+      minimum: 0
+      maximum: 99999999999.99
+    API1827_successResponse:
+      title: Create Compiled Event 1 Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - successes
+      properties:
+        successes:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - processingDate
+            - formBundleNumber
+            properties:
+              processingDate:
+                type: string
+                description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+                format: date-time
+              formBundleNumber:
+                type: string
+                minLength: 1
+                maxLength: 255
+    API1828_request:
+      title: Submit Event Declaration Report Request Schema
+      type: object
+      required:
+      - declarationDetails
+      additionalProperties: false
+      properties:
+        declarationDetails:
+          type: object
+          required:
+          - erDetails
+          - erDeclarationDetails
+          additionalProperties: false
+          properties:
+            erDetails:
+              type: object
+              required:
+              - pSTR
+              - reportStartDate
+              - reportEndDate
+              additionalProperties: false
+              properties:
+                pSTR:
+                  type: string
+                  pattern: '[0-9]{8}[A-Z]{2}'
+                reportStartDate:
+                  $ref: '#/components/schemas/API1828_dateType'
+                reportEndDate:
+                  $ref: '#/components/schemas/API1828_dateType'
+            erDeclarationDetails:
+              type: object
+              required:
+              - submittedBy
+              - submittedID
+              additionalProperties: false
+              properties:
+                submittedBy:
+                  type: string
+                  enum:
+                  - PSA
+                  - PSP
+                submittedID:
+                  type: string
+                  pattern: '[A-Za-z0-9]{8}'
+            psaDeclaration:
+              type: object
+              required:
+              - psaDeclaration1
+              - psaDeclaration2
+              additionalProperties: false
+              properties:
+                psaDeclaration1:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+                psaDeclaration2:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+            pspDeclaration:
+              description: PSP declaration is mandatory if the ER is submitted by
+                PSP
+              type: object
+              required:
+              - authorisedPSAID
+              - pspDeclaration1
+              - pspDeclaration2
+              additionalProperties: false
+              properties:
+                authorisedPSAID:
+                  type: string
+                  pattern: A[0-9]{7}
+                pspDeclaration1:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+                pspDeclaration2:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+    API1828_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1828_successResponse:
+      title: Submit Event Declaration Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        formBundleNumber:
+          type: string
+          minLength: 1
+          maxLength: 255
+    API1828_post_RESTAdapter_pension_online_event_declaration_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1828_successResponse'
+    API1829_request:
+      title: Submit Event 20A Declaration Report Request Schema
+      type: object
+      required:
+      - eventReportDetails
+      additionalProperties: false
+      properties:
+        eventReportDetails:
+          type: object
+          required:
+          - er20aDetails
+          - schemeMasterTrustDetails
+          - erDeclarationDetails
+          additionalProperties: false
+          properties:
+            er20aDetails:
+              type: object
+              required:
+              - pSTR
+              - reportStartDate
+              - reportEndDate
+              additionalProperties: false
+              properties:
+                pSTR:
+                  type: string
+                  pattern: '[0-9]{8}[A-Z]{2}'
+                reportStartDate:
+                  $ref: '#/components/schemas/API1829_dateType'
+                reportEndDate:
+                  $ref: '#/components/schemas/API1829_dateType'
+            schemeMasterTrustDetails:
+              oneOf:
+              - type: object
+                required:
+                - startDate
+                additionalProperties: false
+                properties:
+                  startDate:
+                    $ref: '#/components/schemas/API1829_dateType'
+              - type: object
+                required:
+                - ceaseDate
+                additionalProperties: false
+                properties:
+                  ceaseDate:
+                    $ref: '#/components/schemas/API1829_dateType'
+            erDeclarationDetails:
+              type: object
+              required:
+              - submittedBy
+              - submittedID
+              additionalProperties: false
+              properties:
+                submittedBy:
+                  type: string
+                  enum:
+                  - PSA
+                  - PSP
+                submittedID:
+                  type: string
+                  pattern: '[A-Za-z0-9]{8}'
+                psaDeclaration:
+                  type: object
+                  required:
+                  - psaDeclaration1
+                  - psaDeclaration2
+                  additionalProperties: false
+                  properties:
+                    psaDeclaration1:
+                      type: string
+                      enum:
+                      - Selected
+                      - Not Selected
+                    psaDeclaration2:
+                      type: string
+                      enum:
+                      - Selected
+                      - Not Selected
+                pspDeclaration:
+                  description: PSP declaration is mandatory if the ER is submitted
+                    by PSP
+                  type: object
+                  required:
+                  - authorisedPSAID
+                  - pspDeclaration1
+                  - pspDeclaration2
+                  additionalProperties: false
+                  properties:
+                    authorisedPSAID:
+                      type: string
+                      pattern: A[0-9]{7}
+                    pspDeclaration1:
+                      type: string
+                      enum:
+                      - Selected
+                      - Not Selected
+                    pspDeclaration2:
+                      type: string
+                      enum:
+                      - Selected
+                      - Not Selected
+    API1829_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1829_successResponse:
+      title: Submit Event 20A Declaration Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        formBundleNumber:
+          type: string
+          minLength: 1
+          maxLength: 255
+    API1829_post_RESTAdapter_pension_online_event20a_declaration_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1829_successResponse'
+    API1830_request:
+      title: Create Compile Member Event Request Schema
+      type: object
+      additionalProperties: false
+      required:
+      - memberEventsDetails
+      properties:
+        memberEventsDetails:
+          type: object
+          additionalProperties: false
+          required:
+          - eventReportDetails
+          properties:
+            eventReportDetails:
+              type: object
+              required:
+              - pSTR
+              - reportStartDate
+              - reportEndDate
+              - eventType
+              additionalProperties: false
+              properties:
+                pSTR:
+                  type: string
+                  pattern: '[0-9]{8}[A-Z]{2}'
+                reportStartDate:
+                  $ref: '#/components/schemas/API1830_dateType'
+                reportEndDate:
+                  $ref: '#/components/schemas/API1830_dateType'
+                eventType:
+                  type: string
+                  enum:
+                  - Event2
+                  - Event3
+                  - Event4
+                  - Event5
+                  - Event6
+                  - Event7
+                  - Event8
+                  - Event8A
+                  - Event22
+                  - Event23
+                  - Event24
+            eventDetails:
+              type: array
+              minItems: 1
+              title: eventDetails
+              items:
+                type: object
+                properties:
+                  memberDetail:
+                    type: object
+                    required:
+                    - memberStatus
+                    - event
+                    additionalProperties: false
+                    properties:
+                      amendedVersion:
+                        $ref: '#/components/schemas/API1830_versionType'
+                      memberStatus:
+                        type: string
+                        enum:
+                        - New
+                        - Changed
+                        - Deleted
+                      event:
+                        oneOf:
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - personReceivedThePayment
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event2
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            personReceivedThePayment:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - amountPaid
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                amountPaid:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event3
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - reasonBenefitTaken
+                              - amountBenefit
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                reasonBenefitTaken:
+                                  description: Possible values are E3-01 - Ill Health,
+                                    E3-02 - Protected Pension Age, E3-03 - Other
+                                  type: string
+                                  enum:
+                                  - Ill Health
+                                  - Protected Pension Age
+                                  - Other
+                                amountBenefit:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                freeText:
+                                  $ref: '#/components/schemas/API1830_freeTextType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event4
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - amountPaid
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                amountPaid:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event5
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - annualRate
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                annualRate:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event6
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - amountCrystalised
+                              - typeOfProtection
+                              - eventDate
+                              - freeText
+                              additionalProperties: false
+                              properties:
+                                amountCrystalised:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                typeOfProtection:
+                                  description: This field is applicable for Event
+                                    Type 6, Event Type 8 and Event Type 8A. Possible
+                                    values are E6-01 - Enhanced life time allowance,
+                                    E6-02 - Enhanced protection, E6-03 - Fixed protection,
+                                    E6-04 - Fixed protection 2014, E6-05 - Fixed protection
+                                    2016, E6-06 - Individual protection 2014, E6-07
+                                    - Individual protection 2016
+                                  type: string
+                                  enum:
+                                  - Enhanced life time allowance
+                                  - Enhanced protection
+                                  - Fixed protection
+                                  - Fixed protection 2014
+                                  - Fixed protection 2016
+                                  - Individual protection 2014
+                                  - Individual protection 2016
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                freeText:
+                                  $ref: '#/components/schemas/API1830_freeTextType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event7
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - amountLumpSum
+                              - amountCrystalised
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                amountLumpSum:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                amountCrystalised:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event8
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - typeOfProtection
+                              - amountLumpSum
+                              - eventDate
+                              - freeText
+                              additionalProperties: false
+                              properties:
+                                typeOfProtection:
+                                  description: Possible values are E8-01 - Primary
+                                    Protection, E8-02 - Enhanced protection
+                                  type: string
+                                  enum:
+                                  - Primary Protection
+                                  - Enhanced protection
+                                amountLumpSum:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                freeText:
+                                  $ref: '#/components/schemas/API1830_freeTextType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event8A
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - eventDate
+                              additionalProperties: false
+                              properties:
+                                reasonBenefitTaken:
+                                  description: Possible values are E8A-01 - Member
+                                    where payment of a stand-alone lump sum (100 per
+                                    lump sum) and the member had protected lump sum
+                                    rights of more than £375,000 with either primary
+                                    protection or enhanced protection, E8A-02 - Member
+                                    where payment of a scheme specific lump sum protection
+                                    and the lump sum is more than 7.5 per of the lifetime
+                                    allowance
+                                  type: string
+                                  enum:
+                                  - Member where payment of a stand-alone lump sum
+                                    (100 per lump sum) and the member had protected
+                                    lump sum rights of more than £375,000 with either
+                                    primary protection or enhanced protection
+                                  - Member where payment of a scheme specific lump
+                                    sum protection and the lump sum is more than 7.5
+                                    per of the lifetime allowance
+                                typeOfProtection:
+                                  description: Possible values are E8-01 - Primary
+                                    Protection, E8-02 - Enhanced protection
+                                  type: string
+                                  enum:
+                                  - Primary Protection
+                                  - Enhanced protection
+                                amountLumpSum:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                eventDate:
+                                  $ref: '#/components/schemas/API1830_dateType'
+                                freeText:
+                                  $ref: '#/components/schemas/API1830_freeTextType'
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event22
+                              - Event23
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: object
+                              required:
+                              - monetaryAmount
+                              - taxYearEndingDate
+                              additionalProperties: false
+                              properties:
+                                schemeSpecificLumpSum:
+                                  $ref: '#/components/schemas/API1830_yesOnlyType'
+                                monetaryAmount:
+                                  $ref: '#/components/schemas/API1830_amountType'
+                                taxYearEndingDate:
+                                  allOf:
+                                  - description: Event 22 - Aggregate Pension Input
+                                      Amounts for the scheme, Event 23 - Aggregate
+                                      Pension Input Amounts for money purchase arrangements
+                                      under the scheme (£)
+                                  - $ref: '#/components/schemas/API1830_dateType'
+                        - type: object
+                          required:
+                          - eventType
+                          - individualDetails
+                          - paymentDetails
+                          additionalProperties: false
+                          properties:
+                            eventType:
+                              type: string
+                              enum:
+                              - Event24
+                            individualDetails:
+                              $ref: '#/components/schemas/API1830_individualDetailsType'
+                            paymentDetails:
+                              type: "object"
+                              required:
+                              - "amountCrystalised"
+                              - "taxYearEndingDate"
+                              - "memberHoldProtection"
+                              - "availableLumpSumExceeded"
+                              properties:
+                                memberHoldProtection:
+                                  $ref: "#/components/schemas/API1830_yesNoType"
+                                preCommenceReference:
+                                  type: "string"
+                                  minLength: 1
+                                  maxLength: 15
+                                pensionCreditReference:
+                                  type: "string"
+                                  minLength: 1
+                                  maxLength: 15
+                                nonResidenceReference:
+                                  type: "string"
+                                  minLength: 1
+                                  maxLength: 15
+                                overseasReference:
+                                  type: "string"
+                                  minLength: 1
+                                  maxLength: 15
+                                availableLumpSumExceeded:
+                                  $ref: "#/components/schemas/API1830_yesNoType"
+                                availableLumpSumDBAExceeded:
+                                  $ref: "#/components/schemas/API1830_yesNoType"
+                                schemeSpecificLumpSum:
+                                  $ref: "#/components/schemas/API1830_yesOnlyType"
+                                amountCrystalised:
+                                  $ref: "#/components/schemas/API1830_amountType"
+                                typeOfProtection:
+                                  description: "Possible values are E24-01 - Enhanced\
+                                    \ protection, E24-02 - Enhanced protection with\
+                                    \ protected lump sum rights of more thn 375,000,\
+                                    \ E24-03 - Primary Protection, E24-04 - Primary\
+                                    \ protection with protected lump sum rights of\
+                                    \ more than 375,000, E24-05 - Fixed protection\
+                                    \ , E24-06 - Fixed protection 2014, E24-07 - Fixed\
+                                    \ protection 2016, E24-08 - Individual protection\
+                                    \ 2014, E24-09 - Individual protection 2016"
+                                  type: "string"
+                                  enum:
+                                  - "Enhanced protection"
+                                  - "Enhanced protection with protected lump sum rights\
+                                    \ of more than 375,000"
+                                  - "Primary Protection"
+                                  - "Primary protection with protected lump sum rights\
+                                    \ of more than 375,000"
+                                  - "Fixed protection"
+                                  - "Fixed protection 2014"
+                                  - "Fixed protection 2016"
+                                  - "Individual protection 2014"
+                                  - "Individual protection 2016"
+                                reasonBenefitTaken:
+                                  description: "Possible values are E24-01 - A stand-alone\
+                                    \ lump sum, E24-02 - An uncrystalised funds pension\
+                                    \ lump sum, E24-03 - A trivial commutation lump\
+                                    \ sum, E24-04 - A small lump sum, E24-05 - A winding-up\
+                                    \ lump sum, E24-06 - A defined benefit lump sum\
+                                    \ death benefit, E24-07 - A pension protection\
+                                    \ lump sum death benefit, E24-08 - A uncrystallised\
+                                    \ funds lump sum death benefit, E24-09 - An annuity\
+                                    \ protection lump sum death benefit, E24-10 -\
+                                    \ A drawdown pension fund lump sum death benefit,\
+                                    \ E24-11 - A flexi-access drawdown lump sum death\
+                                    \ benefit, E24-12 - Serious ill health lump sum"
+                                  type: "string"
+                                  enum:
+                                  - "A stand-alone lump sum"
+                                  - "An uncrystalised funds pension lump sum"
+                                  - "A trivial commutation lump sum"
+                                  - "A small lump sum"
+                                  - "A winding-up lump sum"
+                                  - "A defined benefit lump sum death benefit"
+                                  - "A pension protection lump sum death benefit"
+                                  - "A uncrystallised funds lump sum death benefit"
+                                  - "An annuity protection lump sum death benefit"
+                                  - "A drawdown pension fund lump sum death benefit"
+                                  - "A flexi-access drawdown lump sum death benefit"
+                                  - "Serious ill health lump sum"
+                                monetaryAmount:
+                                  $ref: "#/components/schemas/API1830_amountType"
+                                taxYearEndingDate:
+                                  $ref: "#/components/schemas/API1830_dateType"
+                                freeText:
+                                  $ref: "#/components/schemas/API1830_freeTextType"
+                                taxedAtMarginalRate:
+                                    description: Required if 'Yes'
+                                    type: string
+                                    enum:
+                                    - 'Yes'
+                                    - 'No'
+                                payeReference:
+                                    description: Required if taxedAtMarginalRate is 'Yes'
+                                    type: string
+                                    minLength: 1
+                                    maxLength: 12
+                              additionalProperties: false
+                required:
+                 - memberDetail
+    API1830_amountType:
+      type: number
+      minimum: 0
+      maximum: 99999999999.99
+      multipleOf: 0.01
+    API1830_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1830_yesNoType:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+    API1830_yesOnlyType:
+      type: string
+      enum:
+      - 'Yes'
+    API1830_freeTextType:
+      type: string
+      minLength: 1
+      maxLength: 160
+      pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+    API1830_individualDetailsType:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - nino
+      properties:
+        title:
+          type: string
+          enum:
+          - Mr
+          - Mrs
+          - Miss
+          - Ms
+          - Dr
+          - Sir
+          - Professor
+          - Lord
+        firstName:
+          $ref: '#/components/schemas/API1830_nameType'
+        middleName:
+          $ref: '#/components/schemas/API1830_nameType'
+        lastName:
+          $ref: '#/components/schemas/API1830_nameType'
+        nino:
+          type: string
+          pattern: '[A-Z]{2}[0-9]{6}[A-Z]{1}'
+          description: 'Format example : AA999999A'
+      additionalProperties: false
+    API1830_nameType:
+      type: string
+      pattern: ^[a-zA-Z &`\-\''\.^]{1,35}$
+    API1830_versionType:
+      description: version number from 001 to 999
+      type: string
+      pattern: ^[0-9]{3}$
+    API1830_successResponse:
+      title: Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      - formBundleNumber
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        formBundleNumber:
+          type: string
+          minLength: 1
+          maxLength: 12
+    API1830_post_RESTAdapter_pension_online_member_event_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1830_successResponse'
+    API1831_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1831_successResponse:
+      title: Get Event 20A Report Success Response Schema
+      type: object
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        schemeDetails:
+          type: object
+          required:
+          - pSTR
+          - schemeName
+          additionalProperties: false
+          properties:
+            pSTR:
+              type: string
+              pattern: '[0-9]{8}[A-Z]{2}'
+            schemeName:
+              type: string
+              minLength: 1
+              maxLength: 160
+        er20aDetails:
+          type: object
+          required:
+          - reportStartDate
+          - reportEndDate
+          - reportVersionNumber
+          - reportSubmittedDateAndTime
+          additionalProperties: false
+          properties:
+            reportStartDate:
+              $ref: '#/components/schemas/API1831_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1831_dateType'
+            reportVersionNumber:
+              type: string
+              pattern: '[0-9]{3}'
+            reportSubmittedDateAndTime:
+              type: string
+              pattern: '[2-9][0-9]{3}-(01|02|03|04|05|06|07|08|09|10|11|12)-([0][1-9]|[1-2][0-9]|[3][0-1])T([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9]Z'
+        schemeMasterTrustDetails:
+          oneOf:
+          - type: object
+            required:
+            - startDate
+            properties:
+              startDate:
+                $ref: '#/components/schemas/API1831_dateType'
+          - type: object
+            required:
+            - ceaseDate
+            properties:
+              ceaseDate:
+                $ref: '#/components/schemas/API1831_dateType'
+        erDeclarationDetails:
+          type: object
+          required:
+          - submittedBy
+          - submittedID
+          - submittedName
+          additionalProperties: false
+          properties:
+            submittedBy:
+              type: string
+              enum:
+              - PSA
+              - PSP
+            submittedID:
+              type: string
+              pattern: '[A-Za-z0-9]{8}'
+            submittedName:
+              type: string
+              minLength: 8
+              maxLength: 160
+            psaDeclaration:
+              description: PSA Declaration is mandatory if the ER20A report is submitted
+                by PSA
+              type: object
+              required:
+              - psaDeclaration1
+              - psaDeclaration2
+              additionalProperties: false
+              properties:
+                psaDeclaration1:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+                psaDeclaration2:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+            pspDeclaration:
+              description: PSA Declaration is mandatory if the ER20A report is submitted
+                by PSP
+              type: object
+              required:
+              - authorisedPSAID
+              - pspDeclaration1
+              - pspDeclaration2
+              additionalProperties: false
+              properties:
+                authorisedPSAID:
+                  type: string
+                  pattern: A[0-9]{7}
+                pspDeclaration1:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+                pspDeclaration2:
+                  type: string
+                  enum:
+                  - Selected
+                  - Not Selected
+      additionalProperties: false
+      required:
+      - processingDate
+      - schemeDetails
+      - er20aDetails
+      - schemeMasterTrustDetails
+      - erDeclarationDetails
+    API1831_get_RESTAdapter_pension_online_event20a_status_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1831_successResponse'
+    API1832_amountType:
+      type: number
+      minimum: 0
+      maximum: 99999999999.99
+      multipleOf: 0.01
+    API1832_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1832_freeTextType:
+      type: string
+      minLength: 1
+      maxLength: 160
+      pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+    API1832_individualDetailsType:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - nino
+      properties:
+        title:
+          type: string
+          enum:
+          - Mr
+          - Mrs
+          - Miss
+          - Ms
+          - Dr
+          - Sir
+          - Professor
+          - Lord
+        firstName:
+          $ref: '#/components/schemas/API1832_nameType'
+        middleName:
+          $ref: '#/components/schemas/API1832_nameType'
+        lastName:
+          $ref: '#/components/schemas/API1832_nameType'
+        nino:
+          type: string
+          pattern: '[A-Z]{2}[0-9]{6}[A-Z]{1}'
+          description: 'Format example : AA999999A'
+      additionalProperties: false
+    API1832_nameType:
+      type: string
+      pattern: ^[a-zA-Z &`\-\''\.^]{1,35}$
+    API1832_versionType:
+      description: version number from 001 to 999
+      type: string
+      pattern: ^[0-9]{3}$
+    API1832_yesNoType:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+    API1832_yesOnlyType:
+      type: string
+      enum:
+      - 'Yes'
+    API1832_string15Type:
+      type: string
+      minLength: 1
+      maxLength: 15
+    API1832_successResponse:
+      title: Get Member Event Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      - schemeDetails
+      - eventReportDetails
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        schemeDetails:
+          type: object
+          required:
+          - pSTR
+          - schemeName
+          additionalProperties: false
+          properties:
+            pSTR:
+              type: string
+              pattern: '[0-9]{8}[A-Z]{2}'
+            schemeName:
+              type: string
+              minLength: 1
+              maxLength: 160
+        eventReportDetails:
+          type: object
+          required:
+          - reportStartDate
+          - reportEndDate
+          - reportStatus
+          - reportVersionNumber
+          - reportSubmittedDateAndTime
+          additionalProperties: false
+          properties:
+            reportStartDate:
+              $ref: '#/components/schemas/API1832_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1832_dateType'
+            reportStatus:
+              type: string
+              enum:
+              - Compiled
+              - Submitted
+            reportVersionNumber:
+              type: string
+              pattern: '[0-9]{3}'
+            reportSubmittedDateAndTime:
+              type: string
+              pattern: '[2-9][0-9]{3}-(01|02|03|04|05|06|07|08|09|10|11|12)-([0][1-9]|[1-2][0-9]|[3][0-1])T([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9]Z'
+            eventType:
+              type: string
+              enum:
+              - Event2
+              - Event3
+              - Event4
+              - Event5
+              - Event6
+              - Event7
+              - Event8
+              - Event8A
+              - Event22
+              - Event23
+              - Event24
+        eventDetails:
+          type: array
+          minItems: 1
+          title: eventDetails
+          items:
+            type: object
+            required:
+            - memberDetail
+            additionalProperties: false
+            properties:
+              memberDetail:
+                type: object
+                required:
+                - memberStatus
+                - event
+                additionalProperties: false
+                properties:
+                  amendedVersion:
+                    $ref: '#/components/schemas/API1832_versionType'
+                  memberStatus:
+                    type: string
+                    enum:
+                    - New
+                    - Changed
+                    - Deleted
+                  event:
+                    oneOf:
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - personReceivedThePayment
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event2
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        personReceivedThePayment:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - amountPaid
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            amountPaid:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event3
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - reasonBenefitTaken
+                          - amountBenefit
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            reasonBenefitTaken:
+                              description: Possible values are E3-01 - Ill Health,
+                                E3-02 - Protected Pension Age, E3-03 - Other
+                              type: string
+                              enum:
+                              - Ill Health
+                              - Protected Pension Age
+                              - Other
+                            amountBenefit:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            freeText:
+                              $ref: '#/components/schemas/API1832_freeTextType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event4
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - amountPaid
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            amountPaid:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event5
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - annualRate
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            annualRate:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event6
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - amountCrystalised
+                          - typeOfProtection
+                          - eventDate
+                          - freeText
+                          additionalProperties: false
+                          properties:
+                            amountCrystalised:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            typeOfProtection:
+                              description: This field is applicable for Event Type
+                                6, Event Type 8 and Event Type 8A. Possible values
+                                are E6-01 - Enhanced life time allowance, E6-02 -
+                                Enhanced protection, E6-03 - Fixed protection, E6-04
+                                - Fixed protection 2014, E6-05 - Fixed protection
+                                2016, E6-06 - Individual protection 2014, E6-07 -
+                                Individual protection 2016
+                              type: string
+                              enum:
+                              - Enhanced life time allowance
+                              - Enhanced protection
+                              - Fixed protection
+                              - Fixed protection 2014
+                              - Fixed protection 2016
+                              - Individual protection 2014
+                              - Individual protection 2016
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            freeText:
+                              $ref: '#/components/schemas/API1832_freeTextType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event7
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - amountLumpSum
+                          - amountCrystalised
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            amountLumpSum:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            amountCrystalised:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event8
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - typeOfProtection
+                          - amountLumpSum
+                          - eventDate
+                          - freeText
+                          additionalProperties: false
+                          properties:
+                            typeOfProtection:
+                              description: Possible values are E8-01 - Primary Protection,
+                                E8-02 - Enhanced protection
+                              type: string
+                              enum:
+                              - Primary Protection
+                              - Enhanced protection
+                            amountLumpSum:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            freeText:
+                              $ref: '#/components/schemas/API1832_freeTextType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event8A
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - eventDate
+                          additionalProperties: false
+                          properties:
+                            reasonBenefitTaken:
+                              description: Possible values are E8A-01 - Member where
+                                payment of a stand-alone lump sum (100 per lump sum)
+                                and the member had protected lump sum rights of more
+                                than £375,000 with either primary protection or enhanced
+                                protection, E8A-02 - Member where payment of a scheme
+                                specific lump sum protection and the lump sum is more
+                                than 7.5 per of the lifetime allowance
+                              type: string
+                              enum:
+                              - Member where payment of a stand-alone lump sum (100
+                                per lump sum) and the member had protected lump sum
+                                rights of more than £375,000 with either primary protection
+                                or enhanced protection
+                              - Member where payment of a scheme specific lump sum
+                                protection and the lump sum is more than 7.5 per of
+                                the lifetime allowance
+                            typeOfProtection:
+                              description: Possible values are E8-01 - Primary Protection,
+                                E8-02 - Enhanced protection
+                              type: string
+                              enum:
+                              - Primary Protection
+                              - Enhanced protection
+                            amountLumpSum:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            eventDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            freeText:
+                              $ref: '#/components/schemas/API1832_freeTextType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event22
+                          - Event23
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: object
+                          required:
+                          - taxYearEndingDate
+                          additionalProperties: false
+                          properties:
+                            monetaryAmount:
+                              $ref: '#/components/schemas/API1832_amountType'
+                            taxYearEndingDate:
+                              $ref: '#/components/schemas/API1832_dateType'
+                            schemeSpecificLumpSum:
+                              $ref: '#/components/schemas/API1832_yesOnlyType'
+                    - type: object
+                      required:
+                      - eventType
+                      - individualDetails
+                      - paymentDetails
+                      additionalProperties: false
+                      properties:
+                        eventType:
+                          type: string
+                          enum:
+                          - Event24
+                        individualDetails:
+                          $ref: '#/components/schemas/API1832_individualDetailsType'
+                        paymentDetails:
+                          type: "object"
+                          properties:
+                            amountCrystalised:
+                              $ref: "#/components/schemas/API1832_amountType"
+                            memberHoldProtection:
+                              $ref: "#/components/schemas/API1832_yesNoType"
+                            preCommenceReference:
+                              $ref: "#/components/schemas/API1832_string15Type"
+                            pensionCreditReference:
+                              $ref: "#/components/schemas/API1832_string15Type"
+                            nonResidenceReference:
+                              $ref: "#/components/schemas/API1832_string15Type"
+                            overseasReference:
+                              $ref: "#/components/schemas/API1832_string15Type"
+                            availableLumpSumExceeded:
+                              $ref: "#/components/schemas/API1832_yesNoType"
+                            availableLumpSumDBAExceeded:
+                              $ref: "#/components/schemas/API1832_yesNoType"
+                            schemeSpecificLumpSum:
+                              $ref: "#/components/schemas/API1832_yesOnlyType"
+                            typeOfProtection:
+                              description: "E24-01 - Enhanced protection, E24-02 -\
+                                \ Enhanced protection with protected lump sum rights\
+                                \ of more thn 375,000, E24-03 - Primary Protection,\
+                                \ E24-04 - Primary protection with protected lump\
+                                \ sum rights of more thn 375,000, E24-05 - Fixed protection\
+                                \ , E24-06 - Fixed protection 2014, E24-07 - Fixed\
+                                \ protection 2016, E24-08 - Individual protection\
+                                \ 2014, E24-09 - Individual protection 2016"
+                              type: "string"
+                              enum:
+                              - "Enhanced protection"
+                              - "Enhanced protection with protected lump sum rights\
+                                \ of more than 375,000"
+                              - "Primary Protection"
+                              - "Primary protection with protected lump sum rights\
+                                \ of more than 375,000"
+                              - "Fixed protection"
+                              - "Fixed protection 2014"
+                              - "Fixed protection 2016"
+                              - "Individual protection 2014"
+                              - "Individual protection 2016"
+                            reasonBenefitTaken:
+                              description: "E24-01 - A stand-alone lump sum, E24-02\
+                                \ - An uncrystalised funds pension lump sum, E24-03\
+                                \ - A trivial commutation lump sum, E24-04 - A small\
+                                \ lump sum, E24-05 - A winding-up lump sum, E24-06\
+                                \ - A defined benefit lump sum death benefit, E24-07\
+                                \ - A pension protection lump sum death benefit, E24-08\
+                                \ - A uncrystallised funds lump sum death benefit,\
+                                \ E24-09 - An annuity protection lump sum death benefit,\
+                                \ E24-10 - A drawdown pension fund lump sum death\
+                                \ benefit, E24-11 - A flexi-access drawdown lump sum\
+                                \ death benefit, E24-12 - Serious ill health lump\
+                                \ sum"
+                              type: "string"
+                              enum:
+                              - "A stand-alone lump sum"
+                              - "An uncrystalised funds pension lump sum"
+                              - "A trivial commutation lump sum"
+                              - "A small lump sum"
+                              - "A winding-up lump sum"
+                              - "A defined benefit lump sum death benefit"
+                              - "A pension protection lump sum death benefit"
+                              - "A uncrystallised funds lump sum death benefit"
+                              - "An annuity protection lump sum death benefit"
+                              - "A drawdown pension fund lump sum death benefit"
+                              - "A flexi-access drawdown lump sum death benefit"
+                              - "Serious ill health lump sum"
+                            freeText:
+                              $ref: "#/components/schemas/API1832_freeTextType"
+                            monetaryAmount:
+                              $ref: "#/components/schemas/API1832_amountType"
+                            taxYearEndingDate:
+                              $ref: "#/components/schemas/API1832_dateType"
+                            taxedAtMarginalRate:
+                              type: "string"
+                              description: Required if 'Yes'
+                              enum:
+                              - "Yes"
+                              - "No"
+                            payeReference:
+                              type: "string"
+                              description: Required if taxedAtMarginalRate is 'Yes'
+                              minLength: 1
+                              maxLength: 12
+                          required:
+                          - "amountCrystalised"
+                          - "memberHoldProtection"
+                          - "availableLumpSumExceeded"
+                          - "taxYearEndingDate"
+    API1832_get_RESTAdapter_pension_online_member_event_status_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1832_successResponse'
+    API1833_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1833_versionType:
+      description: version number from 001 to 999
+      type: string
+      pattern: ^[0-9]{3}$
+    API1833_nameType:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z &`\-\''\.^]{1,35}$
+    API1833_addressDetailsType:
+      oneOf:
+      - type: object
+        required:
+        - addressLine1
+        - addressLine2
+        - postCode
+        - countryCode
+        properties:
+          addressLine1:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine2:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine3:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine4:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          postCode:
+            $ref: '#/components/schemas/API1833_UKPostCodeType'
+          countryCode:
+            $ref: '#/components/schemas/API1833_UKCountryCodeType'
+      - type: object
+        required:
+        - addressLine1
+        - addressLine2
+        - countryCode
+        properties:
+          addressLine1:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine2:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine3:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          addressLine4:
+            $ref: '#/components/schemas/API1833_addressLineType'
+          postCode:
+            $ref: '#/components/schemas/API1833_nonUKPostCodeType'
+          countryCode:
+            $ref: '#/components/schemas/API1833_nonUKCountryCodeType'
+    API1833_addressLineType:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: ^[A-Za-z0-9 &!''‘’"“”(),./—–‐-]{1,35}$
+    API1833_UKPostCodeType:
+      description: Mandatory for UK Address
+      type: string
+      minLength: 1
+      maxLength: 10
+      pattern: ^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$|BFPO\s?[0-9]{1,3}$
+    API1833_nonUKPostCodeType:
+      description: Not Mandatory for Non UK Address
+      type: string
+      minLength: 1
+      maxLength: 10
+      pattern: ^[A-Za-z0-9 ]{1,10}$
+    API1833_UKCountryCodeType:
+      description: UK Country Codes
+      type: string
+      minLength: 2
+      maxLength: 2
+      enum:
+      - GB
+    API1833_nonUKCountryCodeType:
+      description: Non UK Country Codes
+      type: string
+      minLength: 2
+      maxLength: 2
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AN
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CS
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FC
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TP
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - UM
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+    API1833_yesNoType:
+      description: Possible values are No or Yes
+      type: string
+      minLength: 2
+      maxLength: 5
+      enum:
+      - 'No'
+      - 'Yes'
+    API1833_monetaryValueType:
+      type: number
+      minimum: 0
+      maximum: 99999999999.99
+    API1833_successResponse:
+      title: Get Event 1 Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - processingDate
+      - schemeDetails
+      - eventReportDetails
+      properties:
+        processingDate:
+          type: string
+          description: 'The date the message was processed (Constraint details are sourced from backend artefacts.)'
+          format: date-time
+        schemeDetails:
+          type: object
+          required:
+          - pSTR
+          - schemeName
+          additionalProperties: false
+          properties:
+            pSTR:
+              type: string
+              pattern: '[0-9]{8}[A-Z]{2}'
+            schemeName:
+              type: string
+              minLength: 1
+              maxLength: 160
+        eventReportDetails:
+          type: object
+          required:
+          - reportFormBundleNumber
+          - reportStartDate
+          - reportEndDate
+          - reportVersionNumber
+          - reportSubmittedDateAndTime
+          additionalProperties: false
+          properties:
+            reportFormBundleNumber:
+              type: string
+              pattern: ^[0-9]{12}$
+            reportStartDate:
+              $ref: '#/components/schemas/API1833_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1833_dateType'
+            reportStatus:
+              description: Possible values are Compiled or Submitted
+              type: string
+              enum:
+              - Compiled
+              - Submitted
+            reportVersionNumber:
+              type: string
+              pattern: '[0-9]{3}'
+            reportSubmittedDateAndTime:
+              type: string
+              pattern: '[2-9][0-9]{3}-(01|02|03|04|05|06|07|08|09|10|11|12)-([0][1-9]|[1-2][0-9]|[3][0-1])T([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9]Z'
+        event1Details:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              amendedVersion:
+                $ref: '#/components/schemas/API1833_versionType'
+              memberStatus:
+                description: Possible values are New, Changed or Deleted
+                type: string
+                minLength: 1
+                maxLength: 12
+                enum:
+                - New
+                - Changed
+                - Deleted
+              memberType:
+                description: Possible values are Individual or Employer
+                type: string
+                minLength: 1
+                maxLength: 10
+                enum:
+                - Individual
+                - Employer
+              individualMemberDetails:
+                description: This node is mandatory if the Member Type is 01-Individual
+                type: object
+                required:
+                - firstName
+                - lastName
+                - nino
+                additionalProperties: false
+                properties:
+                  title:
+                    description: 'Possible values are 0001: Mr, 0002: Mrs, 0003: Miss,
+                      0004: Ms, 0005: Dr 0006: Sir, 0009: Professor, 0010: Lord'
+                    type: string
+                    minLength: 1
+                    maxLength: 10
+                    enum:
+                    - Mr
+                    - Mrs
+                    - Miss
+                    - Ms
+                    - Dr
+                    - Sir
+                    - Professor
+                    - Lord
+                  firstName:
+                    $ref: '#/components/schemas/API1833_nameType'
+                  middleName:
+                    $ref: '#/components/schemas/API1833_nameType'
+                  lastName:
+                    $ref: '#/components/schemas/API1833_nameType'
+                  nino:
+                    type: string
+                    minLength: 9
+                    maxLength: 9
+                    pattern: ^((?!(BG|GB|KN|NK|NT|TN|ZZ)|(D|F|I|Q|U|V)[A-Z]|[A-Z](D|F|I|O|Q|U|V))[A-Z]{2})[0-9]{6}[A-D]?$
+                  signedMandate:
+                    $ref: '#/components/schemas/API1833_yesNoType'
+                  pmtMoreThan25PerFundValue:
+                    $ref: '#/components/schemas/API1833_yesNoType'
+                  schemePayingSurcharge:
+                    $ref: '#/components/schemas/API1833_yesNoType'
+              employerMemberDetails:
+                description: This node is mandatory if the Member Type is 02-Employer
+                type: object
+                required:
+                - compOrOrgName
+                - crnNumber
+                - addressDetails
+                additionalProperties: false
+                properties:
+                  compOrOrgName:
+                    type: string
+                    minLength: 1
+                    maxLength: 160
+                    pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                  crnNumber:
+                    type: string
+                    minLength: 7
+                    maxLength: 8
+                    pattern: ^[A-Za-z0-9 -]{1,8}$
+                  addressDetails:
+                    $ref: '#/components/schemas/API1833_addressDetailsType'
+              unAuthorisedPaymentDetails:
+                type: object
+                required:
+                - unAuthorisedPmtType1
+                - dateOfUnauthorisedPayment
+                - valueOfUnauthorisedPayment
+                additionalProperties: false
+                properties:
+                  unAuthorisedPmtType1:
+                    description: 'Possible Values are 100: Benefit in kind, 110: Transfer
+                      to non-registered pensions scheme, 120: Error in calculating
+                      tax free lump sums, 130: Benefits paid early other than on the
+                      grounds of ill-health, protected pension age or a winding up
+                      lump sum, 140: Refund of contributions, 150: Overpayment of
+                      pension/written off, 200: Loans to or in respect of the employer
+                      exceeding 50% of the value of the fund, 300: Residential property
+                      held directly or indirectly by an investment-regulated pension
+                      scheme, 310: Tangible moveable property held directly or indirectly
+                      by an investment-regulated pension scheme, 320: Court Order
+                      Payment/Confiscation Order, 330: Other'
+                    type: string
+                    enum:
+                    - Benefit in kind
+                    - Transfer to non-registered pensions scheme
+                    - Error in calculating tax free lump sums
+                    - Benefits paid early other than on the grounds of ill-health,
+                      protected pension age or a winding up lump sum
+                    - Refund of contributions
+                    - Overpayment of pension/written off
+                    - Loans to or in respect of the employer exceeding 50% of the
+                      value of the fund
+                    - Residential property held directly or indirectly by an investment-regulated
+                      pension scheme
+                    - Tangible moveable property held directly or indirectly by an
+                      investment-regulated pension scheme
+                    - Court Order Payment/Confiscation Order
+                    - Other
+                  unAuthorisedPmtType2:
+                    description: 'Possible Values are 110-1: Transfer to an Employer
+                      Financed retirement Benefit scheme (EFRB), 110-2: Transfer to
+                      a non-recognised pension scheme which is not a qualifying overseas
+                      pension scheme, 140-1: Widow and/or orphan, 140-2: Refund of
+                      contributions other, 150-1: Death of member, 150-2: Death of
+                      dependent, 150-3: Dependent no longer qualified for pension,
+                      150-4: Overpayment of pension/written off other'
+                    type: string
+                    enum:
+                    - Transfer to an Employer Financed retirement Benefit scheme (EFRB)
+                    - Transfer to a non-recognised pension scheme which is not a qualifying
+                      overseas pension scheme
+                    - Widow and/or orphan
+                    - Refund of contributions other
+                    - Death of member
+                    - Death of dependent
+                    - Dependent no longer qualified for pension
+                    - Overpayment of pension/written off other
+                  freeTxtOrSchemeOrRecipientName:
+                    description: This field is applicable if Unauthorized Payment
+                      Type 1 is one of the following; 100 - Benefit in kind - Free
+                      text, 110 - Transfer to non-registered pensions scheme (Provide
+                      Scheme Name), 120 - Error in calculating tax free lump sums
+                      - Free text130 - Benefits paid early other than on the grounds
+                      of ill-health, protected pension age or a winding up lump sum
+                      - Free text,3 10 - Tangible moveable property held directly
+                      or indirectly by an investment-regulated pension scheme - Free
+                      Text, 320 - Court Order Payment/Confiscation Order (Provide
+                      Name of Receipnt Name), 330 - Other - Free Text
+                    type: string
+                    minLength: 1
+                    maxLength: 160
+                    pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                  pstrOrReference:
+                    description: This field is applicable if Unauthorized Payment
+                      Type 1 is one of the following.110 - Transfer to non-registered
+                      pensions scheme (Provide PSTR ID or Reference Number)
+                    type: string
+                    minLength: 1
+                    maxLength: 160
+                    pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                  pmtAmtOrLoanAmt:
+                    allOf:
+                    - description: This field is applicable if Unauthorized Payment
+                        Type 1 is one of the following; 200 - Loans to or in respect
+                        of the employer exceeding 50% of the value of the fund (Provide
+                        Loan Amout), 320 - Court Order Payment/Confiscation Order
+                        (Provide payment amount)
+                    - $ref: '#/components/schemas/API1833_monetaryValueType'
+                  fundValue:
+                    allOf:
+                    - description: This field is applicable if Unauthorized Payment
+                        Type 1 is one of the following; 200 - Loans to or in respect
+                        of the employer exceeding 50% of the value of the fund (Provide
+                        Value of the Fund)
+                    - $ref: '#/components/schemas/API1833_monetaryValueType'
+                  dateOfUnauthorisedPayment:
+                    $ref: '#/components/schemas/API1833_dateType'
+                  valueOfUnauthorisedPayment:
+                    $ref: '#/components/schemas/API1833_monetaryValueType'
+                  residentialPropertyAddress:
+                    allOf:
+                    - description: This node is applicable if Unauthorised Payment
+                        Type 1 is 300
+                    - $ref: '#/components/schemas/API1833_addressDetailsType'
+            required:
+            - memberStatus
+            - memberType
+            - unAuthorisedPaymentDetails
+    API1833_get_RESTAdapter_pension_online_event1_status_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1833_successResponse'
+    API1834_amountType:
+      type: number
+      minimum: -99999999999.99
+      maximum: 99999999999.99
+      multipleOf: 0.01
+    API1834_dateType:
+      type: string
+      pattern: ^(((19|20)([2468][048]|[13579][26]|0[48])|2000)[-]02[-]29|((19|20)[0-9]{2}[-](0[469]|11)[-](0[1-9]|1[0-9]|2[0-9]|30)|(19|20)[0-9]{2}[-](0[13578]|1[02])[-](0[1-9]|[12][0-9]|3[01])|(19|20)[0-9]{2}[-]02[-](0[1-9]|1[0-9]|2[0-8])))$
+    API1834_event1ChargeType:
+      type: object
+      description: Charge details for event1
+      additionalProperties: false
+      properties:
+        totalCharge:
+          $ref: '#/components/schemas/API1834_amountType'
+        previousPostedCharge:
+          $ref: '#/components/schemas/API1834_amountType'
+        deltaCharge:
+          $ref: '#/components/schemas/API1834_amountType'
+        chargeReference:
+          type: string
+          pattern: ^[0-9A-Z]{1,16}$
+    API1834_memberEventType:
+      type: object
+      description: Details for a member event
+      additionalProperties: false
+      required:
+      - recordVersion
+      - numberOfMembers
+      properties:
+        recordVersion:
+          $ref: '#/components/schemas/API1834_versionType'
+        numberOfMembers:
+          $ref: '#/components/schemas/API1834_numberOfMembersType'
+    API1834_numberOfMembersType:
+      type: integer
+      minimum: 0
+      maximum: 999999
+    API1834_versionType:
+      description: Version number from 001 to 999
+      type: string
+      pattern: ^[0-9]{3}$
+    API1834_successResponse:
+      title: Get Event Summary Report Success Response Schema
+      type: object
+      additionalProperties: false
+      required:
+      - schemeDetails
+      - eventReportDetails
+      properties:
+        schemeDetails:
+          type: object
+          required:
+          - pSTR
+          - schemeName
+          additionalProperties: false
+          properties:
+            pSTR:
+              type: string
+              pattern: '[0-9]{8}[A-Z]{2}'
+            schemeName:
+              type: string
+              minLength: 1
+              maxLength: 160
+        eventReportDetails:
+          type: object
+          required:
+          - reportFormBundleNumber
+          - reportStartDate
+          - reportEndDate
+          - reportStatus
+          - reportVersionNumber
+          - reportSubmittedDateAndTime
+          additionalProperties: false
+          properties:
+            reportFormBundleNumber:
+              type: string
+              pattern: ^[0-9]{12}$
+            reportStartDate:
+              $ref: '#/components/schemas/API1834_dateType'
+            reportEndDate:
+              $ref: '#/components/schemas/API1834_dateType'
+            reportStatus:
+              description: Possible values are Compiled or Submitted
+              type: string
+              enum:
+              - Compiled
+              - Submitted
+            reportVersionNumber:
+              type: string
+              pattern: '[0-9]{3}'
+            reportSubmittedDateAndTime:
+              type: string
+              pattern: '[2-9][0-9]{3}-(01|02|03|04|05|06|07|08|09|10|11|12)-([0][1-9]|[1-2][0-9]|[3][0-1])T([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9]Z'
+        eventDetails:
+          type: object
+          minProperties: 1
+          additionalProperties: false
+          properties:
+            event10:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1834_versionType'
+                  invRegScheme:
+                    type: object
+                    description: "Either startDateDetails or ceaseDateDetails provided"
+                    properties:
+                      startDateDetails:
+                        type: object
+                        minProperties: 1
+                        additionalProperties: false
+                        properties:
+                          startDateOfInvReg:
+                            $ref: '#/components/schemas/API1834_dateType'
+                          contractsOrPolicies:
+                            type: string
+                            description: Possible values are Yes or No
+                            enum:
+                            - 'Yes'
+                            - 'No'
+                      ceaseDateDetails:
+                        type: object
+                        minProperties: 1
+                        additionalProperties: false
+                        properties:
+                          ceaseDateOfInvReg:
+                            $ref: '#/components/schemas/API1834_dateType'
+                    additionalProperties: false
+                required:
+                  - recordVersion
+            event11:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1834_versionType'
+                unauthorisedPmtsDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1834_dateType'
+                  - description: Date the scheme has changed its rules to entitle
+                      any person to require the making of unauthorised payments
+                contractsOrPoliciesDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1834_dateType'
+                  - description: Date the scheme has changed its rules to allow investments
+                      in assets other than contracts or policies of insurance
+              required:
+              - recordVersion
+            event12:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1834_versionType'
+                twoOrMoreSchemesDate:
+                  allOf:
+                  - $ref: '#/components/schemas/API1834_dateType'
+                  - description: The scheme was treated as two or more schemes immediately
+                      before 6 April 2006, and has changed its rules on
+              required:
+              - recordVersion
+              - twoOrMoreSchemesDate
+            event13:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1834_versionType'
+                  schemeStructure:
+                    type: string
+                    enum:
+                    - A single trust under which all of the assets are held for the
+                      benefit of all members of the scheme
+                    - A group life/death in service scheme
+                    - A body corporate
+                    - Other
+                    description: 'Possible values: 01 - A single trust under which
+                      all of the assets are held for the benefit of all members of
+                      the scheme, 02 - A group life / death in service scheme, 03
+                      - A body corporate 04 - Other'
+                  schemeStructureOther:
+                    type: string
+                    pattern: ^[a-zA-Z0-9\s\\u00C0-\\u00FF!#$%&'‘’\\"“”«»()*+,.\/:;=?@\\\[\\\]£€¥\\u005C\\u2014\\u2013\\u2010\\u002d]{1,160}$
+                    description: Free text to provide the scheme structure name if
+                      04-other is selected for the pension scheme structure \u00C0
+                      for À, \u00FF for ÿ, \u2014 for — (EM DASH), \u2013 for – (EN
+                      DASH), \u2010 for -(HYPHEN), \u002d for -(HYPHEN_MINUS), \u005C
+                      for \'
+                  dateOfChange:
+                    $ref: '#/components/schemas/API1834_dateType'
+                required:
+                - recordVersion
+                - schemeStructure
+                - dateOfChange
+            event14:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1834_versionType'
+                schemeMembers:
+                  type: string
+                  description: 'Possible values: 01 for 0, 02 for 1, 03 for 2 to 11,
+                    04 for 12 to 50, 05 for 51 to 10000, 06 for More than 10000'
+                  enum:
+                  - '0'
+                  - '1'
+                  - 2 to 11
+                  - 12 to 50
+                  - 51 to 10,000
+                  - More than 10,000
+              required:
+              - recordVersion
+              - schemeMembers
+            event18:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1834_versionType'
+                chargeablePmt:
+                  type: string
+                  description: Has the scheme made a scheme chargeable payment - income
+                    or gains from taxable property? Possible values are Yes or No
+                  enum:
+                  - 'Yes'
+                  - 'false'
+              required:
+              - recordVersion
+              - chargeablePmt
+            event19:
+              type: array
+              items:
+                type: object
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1834_versionType'
+                  countryCode:
+                    type: string
+                    pattern: ^[A-Z]{2}$
+                  dateOfChange:
+                    $ref: '#/components/schemas/API1834_dateType'
+                additionalProperties: false
+                required:
+                - recordVersion
+                - countryCode
+                - dateOfChange
+            event20:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  recordVersion:
+                    $ref: '#/components/schemas/API1834_versionType'
+                  occSchemeDetails:
+                    type: object
+                    description: "Either startDateOfOccScheme or stopDateOfOccScheme to be provided"
+                    properties:
+                      startDateOfOccScheme:
+                        $ref: '#/components/schemas/API1834_dateType'
+                      stopDateOfOccScheme:
+                        $ref: '#/components/schemas/API1834_dateType'
+                required:
+                - recordVersion
+            eventWindUp:
+              type: object
+              additionalProperties: false
+              properties:
+                recordVersion:
+                  $ref: '#/components/schemas/API1834_versionType'
+                dateOfWindUp:
+                  allOf:
+                  - $ref: '#/components/schemas/API1834_dateType'
+                  - description: MDTP will provide with value 31-12-9999 in case where
+                      the previously submitted Wind-up date is deleted
+              required:
+              - recordVersion
+              - dateOfWindUp
+        memberEventsSummary:
+          type: object
+          description: Provides a summary of the member events. If no events have
+            occured this section will not be present in the response.
+          minProperties: 1
+          additionalProperties: false
+          properties:
+            event2:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event3:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event4:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event5:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event6:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event7:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event8:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event8A:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event22:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event23:
+              $ref: '#/components/schemas/API1834_memberEventType'
+            event24:
+              $ref: '#/components/schemas/API1834_memberEventType'
+        event1ChargeDetails:
+          type: object
+          description: Provides a summary of charges related to Event 1
+          minProperties: 1
+          additionalProperties: false
+          required:
+          - recordVersion
+          - numberOfMembers
+          properties:
+            recordVersion:
+              $ref: '#/components/schemas/API1834_versionType'
+            numberOfMembers:
+              $ref: '#/components/schemas/API1834_numberOfMembersType'
+            sscCharge:
+              $ref: '#/components/schemas/API1834_event1ChargeType'
+            fcmtCharge:
+              $ref: '#/components/schemas/API1834_event1ChargeType'
+    API1834_get_RESTAdapter_pension_online_event_status_reports_pstr__SuccessResponse:
+      type: object
+      required:
+      - success
+      properties:
+        success:
+          $ref: '#/components/schemas/API1834_successResponse'
+  responses:
+    UnauthorizedError:
+      description: Unauthorized
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+    NotFoundError:
+      description: Not Found
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+    ForbiddenError:
+      description: Forbidden
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+    API1826_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1826_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1827_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1827_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1828_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1828_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1829_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1829_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1830_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1830_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1831_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1831_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1832_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1832_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1833_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1833_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'
+    API1834_UnprocessableEntityError:
+      description: Unprocessable Entity
+      headers:
+        correlationid:
+          $ref: '#/components/headers/correlationid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/API1834_ApplicationErrorResponse'
+          example:
+            errors:
+              processingDate: 2026-07-23T00:00:00Z
+              code: '003'
+              text: 'Request could not be processed'

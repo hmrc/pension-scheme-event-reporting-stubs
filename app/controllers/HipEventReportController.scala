@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import controllers.HipEventReportController.*
 import play.api.Logging
 import play.api.libs.json.*
-import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import schemaValidator.HipEpidValidator
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.{APIResponses, JsonUtils, PstrIDs}
@@ -34,7 +34,7 @@ class HipEventReportController @Inject()(
                                           cc: ControllerComponents,
                                           jsonUtils: JsonUtils,
                                           hipEpidValidator: HipEpidValidator
-                                     ) 
+                                        )
   extends BackendController(cc)
     with APIResponses
     with Logging {
@@ -45,7 +45,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1826RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(createCompileEventReportSummarySuccessResponse)
+              Created(Json.obj("success" -> createCompileEventReportSummarySuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1826 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -61,7 +61,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1827RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(Json.obj("success" -> compileEventOneReportSuccessResponse))
+              Created(Json.obj("successes" -> compileEventOneReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1827 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -77,7 +77,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1830RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(compileMemberEventReportSuccessResponse)
+              Created(Json.obj("success" -> compileMemberEventReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1830 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -94,35 +94,33 @@ class HipEventReportController @Inject()(
 
     if (reportType.isEmpty) {
       BadRequest(missingReportTypeResponse)
-    }
-    else if (fromDate.isEmpty) {
+    } else if (fromDate.isEmpty) {
       BadRequest(missingFromDateResponse)
-    }
-    else if (toDate.isEmpty) {
+    } else if (toDate.isEmpty) {
       BadRequest(missingToDateResponse)
-    }
-    else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
       BadRequest(invalidPstrResponse)
-    }
-    else if (!fromDate.matches(datePattern)) {
+    } else if (!fromDate.matches(datePattern)) {
       BadRequest(invalidFromDateResponse)
-    }
-    else if (!toDate.matches(datePattern)) {
+    } else if (!toDate.matches(datePattern)) {
       BadRequest(invalidToDateResponse)
-    }
-    else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
+    } else if (LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate))) {
       BadRequest(toDateNotInRangeResponse)
-    }
-    else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
+    } else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
       BadRequest(fromDateNotInRangeResponse)
-    }
-    else {
+    } else {
       val jsValue: JsValue =
         jsonUtils
           .readJsonIfFileFound(s"conf/resources/data/getOverview/$pstr.json")
           .getOrElse(defaultOverview(fromDate, toDate))
 
-      Ok(filterOverview(jsValue, fromDate, toDate, reportType))
+      hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1557ResponseSchema) match {
+        case errors if errors.isEmpty =>
+          Ok(Json.obj("success" -> filterOverview(jsValue, fromDate, toDate, reportType)))
+        case errors =>
+          logger.error(s"\n\n\n\nHIP #1557 validation errors: \n${errors.mkString("\n")}\n\n\n")
+          BadRequest(errors.mkString("\n"))
+      }
     }
   }
 
@@ -132,7 +130,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1828RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(submitEventDeclarationReportSuccessResponse)
+              Created(Json.obj("success" -> submitEventDeclarationReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1828 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -148,7 +146,7 @@ class HipEventReportController @Inject()(
         case Some(jsValue) =>
           hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1829RequestSchema) match {
             case errors if errors.isEmpty =>
-              Ok(submitEvent20ADeclarationReportSuccessResponse)
+              Created(Json.obj("success" -> submitEvent20ADeclarationReportSuccessResponse))
             case errors =>
               logger.error(s"\n\n\n\nHIP #1829 validation errors: \n${errors.mkString("\n")}\n\n\n")
               BadRequest(errors.mkString("\n"))
@@ -165,33 +163,21 @@ class HipEventReportController @Inject()(
       Forbidden(invalidRequestResponse)
     } else if (!startDate.matches(datePattern)) {
       BadRequest(invalidStartDateResponse)
-    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$"""))
+    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
       NotFound(invalidPstrResponse)
-    else {
+    } else {
       jsonUtils.readJsonIfFileFound(s"conf/resources/data/getVersions/$pstr/$startDate.json") match {
-        case Some(jsValue) => 
-          Ok(jsValue)
+        case Some(jsValue) =>
+          hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1537ResponseSchema) match {
+            case errors if errors.isEmpty =>
+              Ok(Json.obj("success" -> jsValue))
+            case errors =>
+              logger.error(s"\n\n\n\nHIP #1537 validation errors: \n${errors.mkString("\n")}\n\n\n")
+              BadRequest(errors.mkString("\n"))
+          }
         case None =>
           NotFound(noDataErrorResponse)
       }
-    }
-  }
-
-  def getER20AVersions(pstr: String, startDate: String): Action[AnyContent] = Action {
-    val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
-    if (pstr.isEmpty || startDate.isEmpty) {
-      Forbidden(invalidRequestResponse)
-    } else if (!startDate.matches(datePattern)) {
-      BadRequest(invalidStartDateResponse)
-    } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$"""))
-      NotFound(invalidPstrResponse)
-    else {
-      val jsValue: JsValue =
-        jsonUtils
-          .readJsonIfFileFound(s"conf/resources/data/getVersions/$pstr/$startDate.json")
-          .getOrElse(Json.parse("[{}]"))
-
-      Ok(jsValue)
     }
   }
 
@@ -208,7 +194,7 @@ class HipEventReportController @Inject()(
               case Some(jsValue) =>
                 hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1832ResponseSchema) match {
                   case errors if errors.isEmpty =>
-                    Ok(jsValue)
+                    Ok(Json.obj("success" -> jsValue))
                   case errors =>
                     logger.error(s"\n\n\n\nHIP #1832 validation errors for $eventType: \n${errors.mkString("\n\n")}\n\n\n")
                     BadRequest(errors.mkString("\n"))
@@ -247,7 +233,7 @@ class HipEventReportController @Inject()(
               case Some(jsValue) =>
                 hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1833ResponseSchema) match {
                   case errors if errors.isEmpty =>
-                    Ok(jsValue)
+                    Ok(Json.obj("success" -> jsValue))
                   case errors =>
                     logger.error(s"\n\n\n\nHIP #1833 validation errors: \n${errors.mkString("\n")}\n\n\n")
                     BadRequest(errors.mkString("\n"))
@@ -266,7 +252,6 @@ class HipEventReportController @Inject()(
   }
 
   def api1834GET(pstr: String): Action[AnyContent] = Action { implicit request =>
-    val path = "conf/resources/data/api1834"
     val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
 
     (
@@ -277,13 +262,13 @@ class HipEventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           NotFound(invalidPstrResponse)
         else {
-          jsonUtils.readJsonIfFileFound(s"$path/$pstr-${startDate.take(4)}-$version.json") match {
+          jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1834/$pstr-${startDate.take(4)}-$version.json") match {
             case None =>
               NotFound
             case Some(jsValue) =>
               hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1834ResponseSchema) match {
                 case errors if errors.isEmpty =>
-                  Ok(jsValue)
+                  Ok(Json.obj("success" -> jsValue))
                 case errors =>
                   logger.error(s"\n\n\n\nHIP #1834 validation errors: \n${errors.mkString("\n")}\n\n\n")
                   BadRequest(errors.mkString("\n"))
@@ -301,52 +286,45 @@ class HipEventReportController @Inject()(
 
   def api1831GET(pstr: String): Action[AnyContent] = Action {
     implicit request =>
-      val path = "conf/resources/data/api1831"
-
       (
         request.headers.get("reportVersionNumber"),
         request.headers.get("reportStartDate"),
         request.headers.get("reportFormBundleNumber")
       ) match {
-        case (Some(_), Some(_), None) =>
-          eventResponseByPstr(pstr, path)
-        case (None, None, Some(_)) =>
-          eventResponseByPstr(pstr, path)
+        case (Some(_), Some(_), None) | (None, None, Some(_)) =>
+          pstr match {
+            case PstrIDs.INTERNAL_SERVER_ERROR =>
+              InternalServerError(serverError)
+            case PstrIDs.SERVICE_UNAVAILABLE =>
+              ServiceUnavailable(serviceUnavailable)
+            case PstrIDs.DUPLICATE_SUBMISSION =>
+              Conflict(duplicateSubmission)
+            case PstrIDs.INVALID_PAYLOAD =>
+              BadRequest(invalidPayload)
+            case PstrIDs.REQUEST_NOT_PROCESSED =>
+              UnprocessableEntity(unprocessableEntity)
+            case value if value.matches("""^34000[0-9]{3}IN$""") =>
+              BadRequest(invalidPstrResponse)
+            case _ =>
+              jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1831/$pstr.json") match {
+                case Some(jsValue) =>
+                  hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1831ResponseSchema) match {
+                    case errors if errors.isEmpty =>
+                      Ok(Json.obj("success" -> jsValue))
+                    case errors =>
+                      logger.error(s"\n\n\n\nHIP #1826 validation errors: \n${errors.mkString("\n")}\n\n\n")
+                      BadRequest(errors.mkString("\n"))
+                  }
+                case None =>
+                  NotFound(invalidPstrResponse)
+              }
+          }
         case (None, _, _) =>
           BadRequest(invalidVersionResponse)
         case _ =>
           BadRequest(invalidStartDateResponse)
       }
   }
-
-  private def eventResponseByPstr(pstr: String, path: String): Result =
-    pstr match {
-      case PstrIDs.INTERNAL_SERVER_ERROR =>
-        InternalServerError(serverError)
-      case PstrIDs.SERVICE_UNAVAILABLE =>
-        ServiceUnavailable(serviceUnavailable)
-      case PstrIDs.DUPLICATE_SUBMISSION =>
-        Conflict(duplicateSubmission)
-      case PstrIDs.INVALID_PAYLOAD =>
-        BadRequest(invalidPayload)
-      case PstrIDs.REQUEST_NOT_PROCESSED =>
-        UnprocessableEntity(unprocessableEntity)
-      case value if value.matches("""^34000[0-9]{3}IN$""") =>
-        BadRequest(invalidPstrResponse)
-      case _ =>
-        jsonUtils.readJsonIfFileFound(s"$path/$pstr.json") match {
-          case Some(jsValue) =>
-            hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1831ResponseSchema) match {
-              case errors if errors.isEmpty =>
-                Ok(jsValue)
-              case errors =>
-                logger.error(s"\n\n\n\nHIP #1826 validation errors: \n${errors.mkString("\n")}\n\n\n")
-                BadRequest(errors.mkString("\n"))
-            }
-          case None =>
-            NotFound(invalidPstrResponse)
-        }
-    }
 
 
   private case class Overview(
@@ -370,7 +348,8 @@ class HipEventReportController @Inject()(
             (o.periodEndDate.isBefore(compareEndDate) || o.periodEndDate.isEqual(compareEndDate))
         )
         Json.toJson(filteredSeqOverview)
-      case JsError(_) => throw new RuntimeException("Unable to read json")
+      case JsError(_) =>
+        throw new RuntimeException("Unable to read json")
     }
   }
 }

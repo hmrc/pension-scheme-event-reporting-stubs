@@ -65,14 +65,14 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileEventReportSummary" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validEventReportSummaryRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileEventReportSummary(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
-        contentAsJson(result) mustBe createCompileEventReportSummarySuccessResponse
+        status(result) mustBe CREATED
+        contentAsJson(result) mustBe Json.obj("success" -> createCompileEventReportSummarySuccessResponse)
       }
     }
 
@@ -89,14 +89,14 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileEventOneReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validEventOneReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileEventOneReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
-        contentAsJson(result) mustBe Json.obj("success" -> compileEventOneReportSuccessResponse)
+        status(result) mustBe CREATED
+        contentAsJson(result) mustBe Json.obj("successes" -> compileEventOneReportSuccessResponse)
       }
     }
 
@@ -113,14 +113,14 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "compileMemberEventReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validMemberEventReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.compileMemberEventReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
-        contentAsJson(result) mustBe compileMemberEventReportSuccessResponse
+        status(result) mustBe CREATED
+        contentAsJson(result) mustBe Json.obj("success" -> compileMemberEventReportSuccessResponse)
       }
     }
 
@@ -143,7 +143,7 @@ class HipEventReportControllerSpec extends SpecBase {
       running() { _ =>
         val result = controller.getOverview(pstr = "24000015IN", fromDate = "2019-04-06", toDate = "2021-04-05", reportType = "ER")(getRequest)
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -249,7 +249,7 @@ class HipEventReportControllerSpec extends SpecBase {
           running() { _ =>
             val result = controller.api1832GET(pstr = "24000041IN")(fakeRequest(event))
             status(result) mustBe OK
-            contentAsJson(result) mustBe validData
+            contentAsJson(result) mustBe Json.obj("success" -> validData)
           }
         }
     }
@@ -271,7 +271,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1831GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -289,7 +289,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1831GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -432,7 +432,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1834GET(pstr = "24000015IN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -486,7 +486,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.api1833GET(pstr = "87219363YN")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -522,14 +522,14 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "submitEventDeclarationReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validSubmitEventDeclarationReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { _ =>
         val result = controller.submitEventDeclarationReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
-        contentAsJson(result) mustBe submitEventDeclarationReportSuccessResponse
+        status(result) mustBe CREATED
+        contentAsJson(result) mustBe Json.obj("success" -> submitEventDeclarationReportSuccessResponse)
       }
     }
 
@@ -546,15 +546,15 @@ class HipEventReportControllerSpec extends SpecBase {
 
   "submitEvent20ADeclarationReport" must {
 
-    "return 200 for a valid request" in {
+    "return 201 for a valid request" in {
       val validData = readJsonFromFile(filePath = "/resources/data/validSubmitEvent20ADeclarationReportRequest.json")
       val postRequest = fakeRequest.withJsonBody(validData)
       running() { app =>
         val controller = app.injector.instanceOf[HipEventReportController]
         val result = controller.submitEvent20ADeclarationReport(pstr = "test-pstr")(postRequest)
 
-        status(result) mustBe OK
-        contentAsJson(result) mustBe submitEvent20ADeclarationReportSuccessResponse
+        status(result) mustBe CREATED
+        contentAsJson(result) mustBe Json.obj("success" -> submitEvent20ADeclarationReportSuccessResponse)
       }
     }
 
@@ -578,7 +578,7 @@ class HipEventReportControllerSpec extends SpecBase {
         val result = controller.getERVersions(pstr = "24000015IN", startDate = "2020-04-06")(getRequest)
 
         status(result) mustBe OK
-        contentAsJson(result) mustBe validData
+        contentAsJson(result) mustBe Json.obj("success" -> validData)
       }
     }
 
@@ -617,70 +617,6 @@ class HipEventReportControllerSpec extends SpecBase {
       running() { _ =>
         val invalidPstr = "24000007IN"
         val result = controller.getERVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
-
-        status(result) mustBe NOT_FOUND
-        contentAsJson(result) mustBe invalidPstrResponse
-      }
-    }
-  }
-
-  "getER20AVersions" must {
-    "return 200 for a valid request" in {
-      val validData = readJsonFromFile(filePath = "/resources/data/getVersions/24000015IN/2021-04-01.json")
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "2021-04-01")(getRequest)
-
-        status(result) mustBe OK
-        contentAsJson(result) mustBe validData
-      }
-    }
-
-    "return 200 for a valid request for default value" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "2022-04-01")(getRequest)
-
-        status(result) mustBe OK
-        contentAsJson(result) mustBe Json.parse(Json.parse("[{}]").toString())
-      }
-    }
-
-    "must return a FORBIDDEN if startDate is empty" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "")(getRequest)
-
-        status(result) mustBe FORBIDDEN
-        contentAsJson(result) mustBe invalidRequestResponse
-      }
-    }
-
-    "must return a FORBIDDEN if pstr is empty" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getER20AVersions(pstr = "", startDate = "2022-04-01")(getRequest)
-
-        status(result) mustBe FORBIDDEN
-        contentAsJson(result) mustBe invalidRequestResponse
-      }
-    }
-
-    "must return a Bad Request if startDate invalid" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val result = controller.getER20AVersions(pstr = "24000015IN", startDate = "Invalid fromDate")(getRequest)
-
-        status(result) mustBe BAD_REQUEST
-        contentAsJson(result) mustBe invalidStartDateResponse
-      }
-    }
-
-    "must return Not Found if invalid PSTR response" in {
-      val getRequest = fakeRequest
-      running() { _ =>
-        val invalidPstr = "24000007IN"
-        val result = controller.getER20AVersions(pstr = invalidPstr, startDate = "2022-04-05")(getRequest)
 
         status(result) mustBe NOT_FOUND
         contentAsJson(result) mustBe invalidPstrResponse
