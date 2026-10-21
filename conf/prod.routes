@@ -9,7 +9,7 @@ GET         /etmp/RESTAdapter/pension-online/reports/:pstr/ER/versions          
 #1557 IF
 GET         /pension-online/reports/overview/pods/:pstr/:reportType                         controllers.EventReportController.getOverview(pstr: String, fromDate: String, toDate: String, reportType: String)
 #1557 HIP
-GET         /etmp/RESTAdapter/pension-online/reports/overview/pods/:pstr/:reportType        controllers.HipEventReportController.getOverview(pstr: String, fromDate: String, toDate: String, reportType: String)
+GET         /etmp/RESTAdapter/pension-online/reports/overview/:pstr/:reportType        controllers.HipEventReportController.getOverview(pstr: String, fromDate: String, toDate: String, reportType: String)
 
 #1826 IF
 POST        /pension-online/event-reports/pods/:pstr                                        controllers.EventReportController.compileEventReportSummary(pstr: String)
