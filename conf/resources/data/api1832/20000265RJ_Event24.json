@@ -1,0 +1,73 @@
+{
+  "processingDate": "2023-12-15T12:30:46Z",
+  "schemeDetails": {
+    "pSTR": "20000265RJ",
+    "schemeName": "Abc Ltd"
+  },
+  "eventReportDetails": {
+    "reportStartDate": "2021-04-06",
+    "reportEndDate": "2022-04-05",
+    "reportStatus": "Compiled",
+    "reportVersionNumber": "001",
+    "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
+    "eventType": "Event24"
+  },
+  "eventDetails": [
+    {
+      "memberDetail": {
+        "memberStatus": "New",
+        "amendedVersion": "002",
+        "event": {
+          "eventType": "Event24",
+          "individualDetails": {
+            "firstName": "John",
+            "lastName": "Smith",
+            "nino": "AA345678B"
+          },
+          "paymentDetails": {
+            "memberHoldProtection": "Yes",
+            "preCommenceReference": "ABCDEF123456",
+            "availableLumpSumDBAExceeded": "No",
+            "availableLumpSumExceeded": "Yes",
+            "schemeSpecificLumpSum": "Yes",
+            "amountCrystalised": 23.09,
+            "typeOfProtection": "Enhanced protection",
+            "reasonBenefitTaken": "A stand-alone lump sum",
+            "taxYearEndingDate": "2023-09-22",
+            "freeText": "123456ABCDEF",
+            "taxedAtMarginalRate": "Yes",
+            "payeReference": "123/ABCDE"
+          }
+        }
+      }
+    },
+    {
+      "memberDetail": {
+        "memberStatus": "Changed",
+        "amendedVersion": "003",
+        "event": {
+          "eventType": "Event24",
+          "individualDetails": {
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "nino": "AA827463D"
+          },
+          "paymentDetails": {
+            "memberHoldProtection": "Yes",
+            "preCommenceReference": "ABCDEF123456",
+            "pensionCreditReference": "GHIJKL789012",
+            "nonResidenceReference": "MNOPQR123456",
+            "overseasReference": "MNOPQR789012",
+            "availableLumpSumExceeded": "No",
+            "availableLumpSumDBAExceeded": "Yes",
+            "amountCrystalised": 223.44,
+            "typeOfProtection": "Enhanced protection",
+            "reasonBenefitTaken": "A stand-alone lump sum",
+            "taxYearEndingDate": "2023-09-22",
+            "freeText": "123456ABCDEF"
+          }
+        }
+      }
+    }
+  ]
+}
