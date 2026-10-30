@@ -275,7 +275,6 @@ class HipEventReportController @Inject()(
                     BadRequest(errors.mkString("\n"))
                 }
               case None =>
-                println(s"\n\n$fileNameAndPstr\n\n")
                 NotFound(invalidPstrResponse)
             }
           }
