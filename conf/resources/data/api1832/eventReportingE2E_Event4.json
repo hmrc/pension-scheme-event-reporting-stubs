@@ -1,7 +1,7 @@
 {
   "processingDate": "2023-12-15T12:30:46Z",
   "schemeDetails": {
-    "pSTR": "20000265RJ",
+    "pSTR": "<PSTR>",
     "schemeName": "Abc Ltd"
   },
   "eventReportDetails": {
@@ -10,7 +10,7 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event7"
+    "eventType": "Event4"
   },
   "eventDetails": [
     {
@@ -18,17 +18,16 @@
         "memberStatus": "New",
         "amendedVersion": "002",
         "event": {
-          "eventType": "Event7",
+          "eventType": "Event4",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Richard",
-            "middleName": "S",
-            "lastName": "Trudy",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "Johnson",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "amountLumpSum": 2000.77,
-            "amountCrystalised": 599.33,
+            "amountPaid": 401.41,
             "eventDate": "2021-05-30"
           }
         }
@@ -39,17 +38,16 @@
         "memberStatus": "Changed",
         "amendedVersion": "003",
         "event": {
-          "eventType": "Event7",
+          "eventType": "Event4",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Richard",
-            "middleName": "S",
-            "lastName": "TrudyChanged",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "JohnsonChanged",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "amountLumpSum": 2000.78,
-            "amountCrystalised": 599.33,
+            "amountPaid": 402.42,
             "eventDate": "2021-05-30"
           }
         }
@@ -60,17 +58,16 @@
         "memberStatus": "Deleted",
         "amendedVersion": "004",
         "event": {
-          "eventType": "Event7",
+          "eventType": "Event4",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Richard",
-            "middleName": "S",
-            "lastName": "TrudyDeleted",
+            "firstName": "Henry",
+            "middleName": "I",
+            "lastName": "JohnsonDeleted",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "amountLumpSum": 2000.79,
-            "amountCrystalised": 599.33,
+            "amountPaid": 403.43,
             "eventDate": "2021-05-30"
           }
         }

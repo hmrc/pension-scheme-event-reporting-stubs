@@ -1,7 +1,7 @@
 {
   "processingDate": "2023-12-15T12:30:46Z",
   "schemeDetails": {
-    "pSTR": "20000265RJ",
+    "pSTR": "<PSTR>",
     "schemeName": "Abc Ltd"
   },
   "eventReportDetails": {
@@ -10,7 +10,7 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event5"
+    "eventType": "Event7"
   },
   "eventDetails": [
     {
@@ -18,16 +18,17 @@
         "memberStatus": "New",
         "amendedVersion": "002",
         "event": {
-          "eventType": "Event5",
+          "eventType": "Event7",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Kevin",
-            "middleName": "L",
-            "lastName": "Mount",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "Trudy",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "annualRate": 505.51,
+            "amountLumpSum": 2000.77,
+            "amountCrystalised": 599.33,
             "eventDate": "2021-05-30"
           }
         }
@@ -38,16 +39,17 @@
         "memberStatus": "Changed",
         "amendedVersion": "003",
         "event": {
-          "eventType": "Event5",
+          "eventType": "Event7",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Kevin",
-            "middleName": "L",
-            "lastName": "MountChanged",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "TrudyChanged",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "annualRate": 506.51,
+            "amountLumpSum": 2000.78,
+            "amountCrystalised": 599.33,
             "eventDate": "2021-05-30"
           }
         }
@@ -58,16 +60,17 @@
         "memberStatus": "Deleted",
         "amendedVersion": "004",
         "event": {
-          "eventType": "Event5",
+          "eventType": "Event7",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "Kevin",
-            "middleName": "L",
-            "lastName": "MountDeleted",
+            "firstName": "Richard",
+            "middleName": "S",
+            "lastName": "TrudyDeleted",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "annualRate": 507.51,
+            "amountLumpSum": 2000.79,
+            "amountCrystalised": 599.33,
             "eventDate": "2021-05-30"
           }
         }

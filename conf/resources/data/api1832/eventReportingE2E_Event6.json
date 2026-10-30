@@ -1,7 +1,7 @@
 {
   "processingDate": "2023-12-15T12:30:46Z",
   "schemeDetails": {
-    "pSTR": "20000265RJ",
+    "pSTR": "<PSTR>",
     "schemeName": "Abc Ltd"
   },
   "eventReportDetails": {
@@ -10,7 +10,7 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event3"
+    "eventType": "Event6"
   },
   "eventDetails": [
     {
@@ -18,19 +18,19 @@
         "amendedVersion": "002",
         "memberStatus": "New",
         "event": {
-          "eventType": "Event3",
+          "eventType": "Event6",
           "individualDetails": {
             "title": "Mrs",
-            "firstName": "Gemma",
-            "middleName": "H",
-            "lastName": "Ioannis",
+            "firstName": "Sarah",
+            "middleName": "T",
+            "lastName": "Urqhart",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "reasonBenefitTaken": "Other",
-            "amountBenefit": 933.97,
+            "amountCrystalised": 600.67,
+            "typeOfProtection": "Enhanced life time allowance",
             "eventDate": "2021-05-30",
-            "freeText": "Sample description"
+            "freeText": "Sample text"
           }
         }
       }
@@ -40,19 +40,19 @@
         "amendedVersion": "003",
         "memberStatus": "Changed",
         "event": {
-          "eventType": "Event3",
+          "eventType": "Event6",
           "individualDetails": {
             "title": "Mrs",
-            "firstName": "Gemma",
-            "middleName": "H",
-            "lastName": "IoannisChanged",
+            "firstName": "Sarah",
+            "middleName": "T",
+            "lastName": "UrqhartChanged",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "reasonBenefitTaken": "Other",
-            "amountBenefit": 133.98,
+            "amountCrystalised": 600.67,
+            "typeOfProtection": "Enhanced life time allowance",
             "eventDate": "2021-05-30",
-            "freeText": "Sample description"
+            "freeText": "Sample text"
           }
         }
       }
@@ -62,19 +62,19 @@
         "amendedVersion": "004",
         "memberStatus": "Deleted",
         "event": {
-          "eventType": "Event3",
+          "eventType": "Event6",
           "individualDetails": {
             "title": "Mrs",
-            "firstName": "Gemma",
-            "middleName": "H",
-            "lastName": "IoannisDeleted",
+            "firstName": "Sarah",
+            "middleName": "T",
+            "lastName": "UrqhartDeleted",
             "nino": "AA345678C"
           },
           "paymentDetails": {
-            "reasonBenefitTaken": "Other",
-            "amountBenefit": 133.99,
+            "amountCrystalised": 600.67,
+            "typeOfProtection": "Enhanced life time allowance",
             "eventDate": "2021-05-30",
-            "freeText": "Sample description"
+            "freeText": "Sample text"
           }
         }
       }
