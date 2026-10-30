@@ -1,7 +1,7 @@
 {
   "processingDate": "2023-12-15T12:30:46Z",
   "schemeDetails": {
-    "pSTR": "20000265RJ",
+    "pSTR": "<PSTR>",
     "schemeName": "Abc Ltd"
   },
   "eventReportDetails": {
@@ -10,24 +10,23 @@
     "reportStatus": "Compiled",
     "reportVersionNumber": "001",
     "reportSubmittedDateAndTime": "2023-12-13T12:12:12Z",
-    "eventType": "Event22"
+    "eventType": "Event23"
   },
   "eventDetails": [
     {
       "memberDetail": {
         "memberStatus": "New",
-        "amendedVersion": "002",
         "event": {
-          "eventType": "Event22",
+          "eventType": "Event23",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "John",
-            "middleName": "A",
-            "lastName": "Smith",
+            "firstName": "Xavier",
+            "middleName": "Y",
+            "lastName": "Ziegler",
             "nino": "AA345678B"
           },
           "paymentDetails": {
-            "monetaryAmount": 123.99,
+            "monetaryAmount": 17.38,
             "taxYearEndingDate": "2021-05-30"
           }
         }
@@ -38,16 +37,16 @@
         "memberStatus": "Changed",
         "amendedVersion": "003",
         "event": {
-          "eventType": "Event22",
+          "eventType": "Event23",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "John",
-            "middleName": "A",
-            "lastName": "SmithChanged",
+            "firstName": "Xavier",
+            "middleName": "Y",
+            "lastName": "Ziegler",
             "nino": "AA345678B"
           },
           "paymentDetails": {
-            "monetaryAmount": 123.99,
+            "monetaryAmount": 17.38,
             "taxYearEndingDate": "2021-05-30"
           }
         }
@@ -58,16 +57,16 @@
         "memberStatus": "Deleted",
         "amendedVersion": "004",
         "event": {
-          "eventType": "Event22",
+          "eventType": "Event23",
           "individualDetails": {
             "title": "Mr",
-            "firstName": "John",
-            "middleName": "A",
-            "lastName": "SmithDeleted",
+            "firstName": "Xavier",
+            "middleName": "Y",
+            "lastName": "Ziegler",
             "nino": "AA345678B"
           },
           "paymentDetails": {
-            "monetaryAmount": 123.99,
+            "monetaryAmount": 17.38,
             "taxYearEndingDate": "2021-05-30"
           }
         }
