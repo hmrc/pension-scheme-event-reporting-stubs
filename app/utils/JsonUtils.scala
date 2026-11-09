@@ -25,23 +25,12 @@ import scala.io.Source
 
 class JsonUtils @Inject()(environment: Environment) {
 
-  def readJsonIfFileFound(
-                           filePath: String,
-                           optionPstr: Option[String] = None
-                         ): Option[JsValue] =
+  def readJsonIfFileFound(filePath: String): Option[JsValue] =
     environment.getExistingFile(filePath) match {
       case Some(schemaFile) =>
-        val inputStream: FileInputStream =
-          new FileInputStream(schemaFile)
-        val jsonString: String =
-          DateHelper.replacePlaceholderJson(readStreamToString(inputStream))
-
-        optionPstr match {
-          case Some(pstr) =>
-            Some(Json.parse(jsonString.replace("<PSTR>", pstr)))
-          case _ =>
-            Some(Json.parse(jsonString))
-        }
+        val inputStream = new FileInputStream(schemaFile)
+        val jsonString: String = DateHelper.replacePlaceholderJson(readStreamToString(inputStream))
+        Some(Json.parse(jsonString))
       case _ =>
         None
     }

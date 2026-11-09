@@ -23,7 +23,7 @@ import play.api.libs.json.*
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import schemaValidator.HipEpidValidator
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import utils.{APIResponses, EventReportE2EData, JsonUtils, PstrIDs}
+import utils.{APIResponses, JsonUtils, PstrIDs}
 
 import java.time.LocalDate
 import javax.inject.Singleton
@@ -109,18 +109,9 @@ class HipEventReportController @Inject()(
     } else if (LocalDate.parse(fromDate).isAfter(LocalDate.now())) {
       BadRequest(fromDateNotInRangeResponse)
     } else {
-      val fileNameAndPstr: (String, Option[String]) =
-        if (EventReportE2EData.pstrs.contains(pstr))
-          ("eventReportingE2E", Some(pstr))
-        else
-          (pstr, None)
-
       val jsValue: JsValue =
         jsonUtils
-          .readJsonIfFileFound(
-            filePath   = s"conf/resources/data/getOverview/${fileNameAndPstr._1}.json",
-            optionPstr = fileNameAndPstr._2
-          )
+          .readJsonIfFileFound(s"conf/resources/data/getOverview/$pstr.json")
           .getOrElse(defaultOverview(fromDate, toDate))
 
       hipEpidValidator.validateJson(jsValue, hipEpidValidator.api1557ResponseSchema) match {
@@ -175,16 +166,7 @@ class HipEventReportController @Inject()(
     } else if (notFoundPSTR.contains(pstr) || pstr.matches("""^34000[0-9]{3}IN$""")) {
       NotFound(invalidPstrResponse)
     } else {
-      val fileNameAndPstr: (String, Option[String]) =
-        if (EventReportE2EData.pstrs.contains(pstr))
-          ("eventReportingE2E", Some(pstr))
-        else
-          (pstr, None)
-
-      jsonUtils.readJsonIfFileFound(
-        filePath   = s"conf/resources/data/getVersions/${fileNameAndPstr._1}/$startDate.json",
-        optionPstr = fileNameAndPstr._2
-      ) match {
+      jsonUtils.readJsonIfFileFound(s"conf/resources/data/getVersions/$pstr/$startDate.json") match {
         case Some(jsValue) =>
           hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1537ResponseSchema) match {
             case errors if errors.isEmpty =>
@@ -207,31 +189,21 @@ class HipEventReportController @Inject()(
         request.headers.get("reportStartDate")
       ) match {
         case (Some(eventType), _, _) if Set("Event2", "Event3", "Event4", "Event5", "Event6", "Event7", "Event8", "Event8A", "Event22", "Event23", "Event24").contains(eventType) =>
-          pstr match {
-            case _ if pstr == "24000041IN" | EventReportE2EData.pstrs.contains(pstr) =>
-              val fileNameAndPstr: (String, Option[String]) =
-                if (pstr == "24000041IN")
-                  (pstr, None)
-                else
-                  ("eventReportingE2E", Some(pstr))
-
-              jsonUtils.readJsonIfFileFound(
-                filePath   = s"conf/resources/data/api1832/${fileNameAndPstr._1}_$eventType.json",
-                optionPstr = fileNameAndPstr._2
-              ) match {
-                case Some(jsValue) =>
-                  hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1832ResponseSchema) match {
-                    case errors if errors.isEmpty =>
-                      Ok(Json.obj("success" -> jsValue))
-                    case errors =>
-                      logger.error(s"\n\n\n\nHIP #1832 validation errors for $eventType: \n${errors.mkString("\n\n")}\n\n\n")
-                      BadRequest(errors.mkString("\n"))
-                  }
-                case None =>
-                  NotFound(invalidPstrResponse)
-              }
-            case _ =>
-              UnprocessableEntity(reportNotFoundResponse)
+          if (pstr == "24000041IN") {
+            jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1832/${pstr}_$eventType.json") match {
+              case Some(jsValue) =>
+                hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1832ResponseSchema) match {
+                  case errors if errors.isEmpty =>
+                    Ok(Json.obj("success" -> jsValue))
+                  case errors =>
+                    logger.error(s"\n\n\n\nHIP #1832 validation errors for $eventType: \n${errors.mkString("\n\n")}\n\n\n")
+                    BadRequest(errors.mkString("\n"))
+                }
+              case None =>
+                NotFound(invalidPstrResponse)
+            }
+          } else {
+            UnprocessableEntity(reportNotFoundResponse)
           }
         case (Some(_), Some(_), Some(_)) =>
           UnprocessableEntity(reportNotFoundResponse)
@@ -246,6 +218,7 @@ class HipEventReportController @Inject()(
 
   def api1833GET(pstr: String): Action[AnyContent] = Action {
     implicit request =>
+      
       val notFoundPSTR = Seq("24000007IN", "24000006IN", "24000002IN")
       
       (
@@ -253,19 +226,10 @@ class HipEventReportController @Inject()(
         request.headers.get("reportStartDate")
       ) match {
         case (Some(_), Some(_)) =>
-          if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern)) {
+          if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
             NotFound(invalidPstrResponse)
-          } else {
-            val fileNameAndPstr: (String, Option[String]) =
-              if (EventReportE2EData.pstrs.contains(pstr))
-                ("eventReportingE2E", Some(pstr))
-              else
-                (pstr, None)
-
-            jsonUtils.readJsonIfFileFound(
-              filePath   = s"conf/resources/data/api1833/${fileNameAndPstr._1}.json",
-              optionPstr = fileNameAndPstr._2
-            ) match {
+          else {
+            jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1833/$pstr.json") match {
               case Some(jsValue) =>
                 hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1833ResponseSchema) match {
                   case errors if errors.isEmpty =>
@@ -298,16 +262,7 @@ class HipEventReportController @Inject()(
         if (notFoundPSTR.contains(pstr) || pstr.matches(perfTestPstrPattern))
           NotFound(invalidPstrResponse)
         else {
-          val fileNameAndPstr: (String, Option[String]) =
-            if (EventReportE2EData.pstrs.contains(pstr))
-              ("eventReportingE2E", Some(pstr))
-            else
-              (pstr, None)
-
-          jsonUtils.readJsonIfFileFound(
-            filePath   = s"conf/resources/data/api1834/${fileNameAndPstr._1}-${startDate.take(4)}-$version.json",
-            optionPstr = fileNameAndPstr._2
-          ) match {
+          jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1834/$pstr-${startDate.take(4)}-$version.json") match {
             case None =>
               NotFound
             case Some(jsValue) =>
@@ -351,16 +306,7 @@ class HipEventReportController @Inject()(
             case value if value.matches("""^34000[0-9]{3}IN$""") =>
               BadRequest(invalidPstrResponse)
             case _ =>
-              val fileNameAndPstr: (String, Option[String]) =
-                if (EventReportE2EData.pstrs.contains(pstr))
-                  ("eventReportingE2E", Some(pstr))
-                else
-                  (pstr, None)
-
-              jsonUtils.readJsonIfFileFound(
-                filePath   = s"conf/resources/data/api1831/${fileNameAndPstr._1}.json",
-                optionPstr = fileNameAndPstr._2
-              ) match {
+              jsonUtils.readJsonIfFileFound(s"conf/resources/data/api1831/$pstr.json") match {
                 case Some(jsValue) =>
                   hipEpidValidator.validateJson(Json.obj("success" -> jsValue), hipEpidValidator.api1831ResponseSchema) match {
                     case errors if errors.isEmpty =>
