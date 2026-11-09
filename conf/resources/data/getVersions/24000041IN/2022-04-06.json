@@ -3,13 +3,8 @@
     "reportFormBundleNumber": "123456785012",
     "reportVersion": 3,
     "reportStatus": "Compiled",
-    "compilationOrSubmissionDate": "2020-04-01T09:30:47Z",
-    "psaDetails": {
-      "psaOrganisationOrPartnershipDetails": {
-        "organisationOrPartnershipName": "XYZ Limited"
-      }
-    }
-  },
+    "compilationOrSubmissionDate": "2020-04-01T09:30:47Z"
+    },
   {
     "reportFormBundleNumber": "123456785012",
     "reportVersion": 2,
